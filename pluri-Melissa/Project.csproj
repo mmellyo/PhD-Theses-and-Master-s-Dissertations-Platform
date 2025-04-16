@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="img\betterbg.png" />
+    <None Remove="img\bg.png" />
+    <None Remove="img\lock.png" />
+    <None Remove="img\lock24.png" />
+    <None Remove="img\logoTheses.png" />
+    <None Remove="img\user.png" />
+    <None Remove="img\USTHBlogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MailKit" Version="4.11.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="9.0.4" />
+    <PackageReference Include="MySql.Data" Version="9.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\betterbg.png" />
+    <Resource Include="img\bg.png" />
+    <Resource Include="img\lock.png" />
+    <Resource Include="img\lock24.png" />
+    <Resource Include="img\logoTheses.png" />
+    <Resource Include="img\user.png" />
+    <Resource Include="img\USTHBlogo.png" />
+  </ItemGroup>
+
+</Project>
