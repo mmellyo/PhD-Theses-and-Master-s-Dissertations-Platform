@@ -21,9 +21,10 @@ namespace Project.Services
     {
         private readonly WindowMapper _windodwMapper;
         private object args;
+        private Window _currentWindow;
 
         //constructor
-        public WindowManager(WindowMapper windowMapper) 
+        public WindowManager(WindowMapper windowMapper)
         {
             _windodwMapper = windowMapper;
         }
@@ -34,25 +35,46 @@ namespace Project.Services
         //implementation 
         public void ShowWindow(ViewModelBase viewModel)
         {
+
+
             var windowType = _windodwMapper.GetWindowTypeForViewModel(viewModel.GetType());
-            
+
             if (windowType != null)
             {
                 var window = Activator.CreateInstance(windowType) as Window;
                 window.DataContext = viewModel;
                 window.Show();
                 window.Closed += (object? sender, EventArgs args) => CloseWindow();
+
+                // Track the current window
+                _currentWindow = window;
+
+
             }
         }
 
 
         public void CloseWindow()
         {
-            Application.Current.Windows
-         .OfType<Window>()
-         .SingleOrDefault(w => w.IsActive)?.Close();
+            if (_currentWindow != null)
+            {
+                var windowToClose = _currentWindow;
+                _currentWindow = null;
+
+
+                // this exits the whole app...
+                //  windowToClose.Close();
+
+
+                // to improve : 
+                 windowToClose.Hide();   //This keeps the window instance alive but invisible
+
+               
+                 
+                
+            }
         }
     }
+}
    
 
-}

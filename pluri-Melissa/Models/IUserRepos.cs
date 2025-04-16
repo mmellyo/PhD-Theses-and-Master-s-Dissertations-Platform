@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Project.Models
 {
+
+    //all methods related to user : 
+
+
+
     interface IUserRepos
     {
         //login

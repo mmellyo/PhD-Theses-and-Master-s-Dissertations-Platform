@@ -40,6 +40,8 @@ namespace Project.ViewModels
 
 
         // getters / setters
+        public string Email { get; set; }
+
         public bool IsViewVisible
         {
             get => _isViewVisible;
@@ -49,20 +51,6 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(IsViewVisible));
             }
         }
-
-
-        //Added  Email property in EMAILVERIFICATIONVM and store it in the ViewModelLocator
-        public string Email { get; set; }
-
-        /*public string Email
-        {
-            get => _email;
-            set
-            {
-                _email = value;
-                OnPropertyChanged(nameof(Email));
-            }
-        }*/
 
         public string InputCode
         {
@@ -93,7 +81,6 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(InputVerificationCode));
             }
         }
-
         public string CodeStatusMessage
         {
             get => _codeStatusMessage;
@@ -126,7 +113,6 @@ namespace Project.ViewModels
 
             //fields
             _windowManager = windowManager;
-            //ItemService = itemService;
             _viewModelLocator = viewModelLocator;
 
             _emailVerificationRepo = new EmailVerificationRepo();
@@ -140,7 +126,7 @@ namespace Project.ViewModels
 
 
 
-            // commands
+            //******************************************** COMMAND SEND EMAIL
             SendEmailCommand = new ViewModelCommand(
             execute: obj =>
             {
@@ -155,9 +141,17 @@ namespace Project.ViewModels
                 }
                 else
                 {
+                    if (_emailVerificationRepo.IsEmailTaken(Email))
+                    {
+                        MessageBox.Show("An account with this email already exists. Try logging in instead.", "Email Taken", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    }
+
                     try
                     {
 
+
+                   
                         string verificationCode = _emailVerificationRepo.GenerateVerificationCode();
                         _emailVerificationModel.SetVerificationCode(verificationCode);  // Store the code in the model
                         string storedCode = _emailVerificationModel.GetVerificationCode(); //just to make sure
@@ -184,6 +178,8 @@ namespace Project.ViewModels
         );
 
 
+
+            //******************************************** COMMAND VERIFY CODE
             VerifyCodeCommand = new ViewModelCommand(
             execute: obj =>
             {
@@ -216,11 +212,17 @@ namespace Project.ViewModels
 
                     //Assigns the entered email to the SignUpViewModel
                     _viewModelLocator.SignUpViewModel.Email = Email;
+  
+                   
+                    _windowManager.CloseWindow(); 
 
+                 
                     // Switch the window to SignUpViewModel
                     _windowManager.ShowWindow(_viewModelLocator.SignUpViewModel);
 
-                    _windowManager.CloseWindow();
+                    IsViewVisible = false;
+
+
                 }
             }
             // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6

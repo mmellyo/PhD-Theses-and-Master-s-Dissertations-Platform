@@ -258,7 +258,7 @@
                                 FontSize="18"
                                 Content="entre code"
                                 Foreground="White"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth0">
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0" >
 
                         <Button.Style>
                             <Style TargetType="Button">

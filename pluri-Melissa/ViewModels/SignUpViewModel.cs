@@ -6,10 +6,13 @@ using Project.Models;
 using Project.Repos;
 using Project.Services;
 
+
 namespace Project.ViewModels
 {
     public class SignUpViewModel : ViewModelBase
     {
+
+        // fields 
         private string _username;
         private string _signUpPassword;
         private string _errorMessage;
@@ -17,6 +20,16 @@ namespace Project.ViewModels
         private UserModel _userModel;
         private bool _isViewVisible = true;
         private IUserRepos _userRepos;
+        private EmailVerificationRepo _emailVerificationRepo;
+
+
+
+
+        //setters/getters
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+        public string Email { get; set; }
+
 
 
 
@@ -30,15 +43,6 @@ namespace Project.ViewModels
             }
         }
 
-
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-        public string Email { get; set; }
-
-
-
-
-
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -48,8 +52,6 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
-
-
 
         public bool IsViewVisible
         {
@@ -66,10 +68,9 @@ namespace Project.ViewModels
 
         // COMMANDS
         public ICommand SignUpCommand { get; }
-
-        //  public IItemService ItemService { get; set; }
         //public ICommand AddItemCommand { get; set; }
         //public ICommand SignUpCommand { get; set; }
+
 
 
 
@@ -77,25 +78,16 @@ namespace Project.ViewModels
         // Constructor
         public SignUpViewModel()
         {
-            // ItemService = itemService;
-
-
-            //test commands
-            // AddItemCommand = new ViewModelCommand(
-            //execute: _ => { ItemService.AddItem(); },
-            // canExecute: _ => true
-
-            // );
-
             _userModel = new UserModel();
             _userRepos = new UserRepos();
+            _emailVerificationRepo = new EmailVerificationRepo();
 
 
-
-            //commands
+            //******************************************** COMMAND SIGN UP
             SignUpCommand = new ViewModelCommand(
             execute: obj =>
             {
+                
                 if (Password != ConfirmPassword)
                 {
                     MessageBox.Show("Passwords do not match! Please re-enter to confirm.", "Passwords do not match", MessageBoxButton.OK, MessageBoxImage.Error);

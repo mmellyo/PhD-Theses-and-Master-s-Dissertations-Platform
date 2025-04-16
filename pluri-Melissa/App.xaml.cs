@@ -26,6 +26,8 @@ namespace Project
             services.AddSingleton<IWindowManager, WindowManager>();
 
             services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<WelcomeViewModel>();
+
 
 
             // services.AddSingleton<IItemService, ItemService>();
@@ -37,7 +39,10 @@ namespace Project
         protected override void OnStartup(StartupEventArgs e)
         {
             var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<EmailVerificationViewModel>());
+
+
+            //start window (keep it at the welcomeVM)
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();

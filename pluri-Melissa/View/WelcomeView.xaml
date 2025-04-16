@@ -1,0 +1,280 @@
+﻿<Window x:Class="Project.View.WelcomeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Project.View"
+        xmlns:viewModel="clr-namespace:Project.ViewModels" xmlns:CC="clr-namespace:Project.CustomControls"
+    
+        mc:Ignorable="d"
+        Title="WelcomeView" Height="700" Width="1238"
+         WindowStyle="None"
+         ResizeMode="NoResize"
+         WindowStartupLocation="CenterScreen"
+         MouseDown="Window_MouseDown"
+         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         Background="{x:Null}"
+        AllowsTransparency="True">
+
+
+
+      
+
+        <Border>
+            <Border.Background>
+                <ImageBrush ImageSource="/img/betterbg.png"
+                          Stretch="None"/>
+            </Border.Background>
+            <Border BorderThickness="0">
+                <!--BORDER-->
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+
+                        <GradientStop Color="#FF282A37" Offset="0"/>
+                        <GradientStop Color="#282a37" Offset="0.5"/>
+                        <GradientStop Color="#99282a37" Offset="1"/>
+                        <!--<GradientStop Color="#282A37" Offset="0"/>
+                    <GradientStop Color="#4d6cd1" Offset="0.5"/>
+                    <GradientStop Color="White" Offset="1"/>-->
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+
+
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
+                        <GradientStop Color="#FF282a37" Offset="0.5"/>
+                        <GradientStop Color="#282a37" Offset="0.4"/>
+                        <GradientStop Color="#99282a37" Offset="0"/>
+                        <!--<GradientStop Color="#7493fa" Offset="0" />
+                        <GradientStop Color="#3b5abf" Offset="0.4" />
+                        <GradientStop Color="#282A37" Offset="0.5"/>-->
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="25"/>
+                        </Grid.ColumnDefinitions>
+
+
+                   
+
+
+
+
+                        <materialDesign:PopupBox
+                         Grid.Column="3"
+                        PlacementMode="RightAndAlignBottomEdges"
+                        StaysOpen="False" 
+                        Foreground="#4C4E5D" Width="41" RenderTransformOrigin="-0.073,0.474" Grid.ColumnSpan="2" Margin="547,10,0,0">
+
+                            <StackPanel>
+                                <StackPanel
+                                Margin="16 10 0 6"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                                    <TextBlock VerticalAlignment="Center" Text="Dark Mode"/>
+                                    <ToggleButton Cursor="Hand" ToolTip="Enable Dark Mode" Margin="12 0 8 0" x:Name="themeToggle" IsChecked="{Binding IsDarktheme}" Click="toggleTheme"/>
+                                </StackPanel>
+                                <Button ToolTip="Having trouble logging in?" Margin="0 8 0 0" Content="Help me" />
+                                <Button x:Name="button_exit" ToolTip="Close app" Content="Exit" Click="exitApp" />
+                                <Button x:Name="button_minimize" ToolTip="Minimize" Content="Minimize Window" Click="click_Minimize"/>
+                            </StackPanel>
+
+                        </materialDesign:PopupBox>
+                    </Grid>
+
+
+
+                    <StackPanel
+                    Width="619"
+                    Orientation="Vertical"
+                    Margin="0,170,0,-655" HorizontalAlignment="Left">
+
+
+                    <TextBlock
+                        FontSize="28" FontWeight="ExtraBold" FontFamily="Verdana"
+                        Margin="20 10 0 10"
+                        HorizontalAlignment="Center" 
+                        Width="250" 
+                        TextWrapping="Wrap"
+                        Foreground="White"
+                        >
+                        <Run Text="welcome to" Foreground="White" />
+                
+
+                        </TextBlock>
+                        
+                        
+                    <Image Source="/img/logoTheses.png" Width="350" Height="100" Grid.Column="0" Margin="0,0,0,50" />
+
+
+
+                    <TextBlock   Text="  Your gateway to academic inspiration."
+                                 Foreground="White"
+                                 TextWrapping="Wrap"
+                                 
+                                 FontSize="25" FontWeight="ExtraBold" FontFamily="Verdana"
+                                 Margin="0,0,0,15" Width="563"/>
+
+                    <TextBlock 
+                                 Foreground="White"
+                                 TextWrapping="Wrap"
+             
+                                 FontSize="20" FontWeight="Bold" FontFamily="Arial"
+                                 Margin="70,0,70,0" Width="455">
+                                 
+                                 <Run Text="Browse, research, and explore insights from" Foreground="White" />
+                                 <Run Text="USTHB Master’s and Doctoral theses" Foreground="#1d77ec" />
+                                  <Run Text="to fuel your academic journey." Foreground="White" />
+                    </TextBlock>
+
+                </StackPanel>
+
+
+
+
+                    <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center" 
+                            Margin="600,200,40,-562"
+                            Width="500"
+           >
+                    <TextBlock 
+                             Foreground="White"
+                             TextWrapping="Wrap"
+             
+                             FontSize="20" FontWeight="Bold" FontFamily="Arial"
+                             Margin="115,0,70,0" >
+             
+                             <Run Text="If you already have an acount" Foreground="White" />
+                    </TextBlock>
+
+                    <Button x:Name="GoToLogin"
+                             Command="{Binding GoToLogin}"
+                             Margin="0 5 0 0"
+                             Height="50" Width="300"
+                             FontSize="18"
+                             Content="Log in"
+                             Foreground="White"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#1a8aec"/>
+                                <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="25"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#7cbbf2" BlurRadius="30" ShadowDepth="5" Opacity="0.5" Direction="270"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#409ff2"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="260" Height="30"
+                     CornerRadius="15"
+                     Background="{TemplateBinding Background}">
+                                    <Grid>
+                                        <ContentPresenter 
+                         Content="{TemplateBinding Content}"
+                         VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+
+
+
+
+                    <TextBlock 
+                          Foreground="White"
+                          TextWrapping="Wrap"
+             
+                          FontSize="20" FontWeight="Bold" FontFamily="Arial"
+                          Margin="180,40,70,0" >
+             
+                          <Run Text="If you are new" Foreground="White" />
+                    </TextBlock>
+
+
+                    <Button x:Name="GoToSignup"
+                             Command="{Binding GoToSignup}"
+                             Margin="0 5 0 0"
+                             Height="50" Width="300"
+                             FontSize="18"
+                             Content="Sign Up"
+                             Foreground="White"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#1a8aec"/>
+                                <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="25"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#7cbbf2" BlurRadius="30" ShadowDepth="5" Opacity="0.5" Direction="270"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#409ff2"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="260" Height="30"
+ CornerRadius="15"
+ Background="{TemplateBinding Background}">
+                                    <Grid>
+                                        <ContentPresenter 
+     Content="{TemplateBinding Content}"
+     VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+
+
+
+                </StackPanel>
+
+
+
+
+
+
+                </Grid>
+
+
+            </Border>
+        </Border>
+
+       
+  
+
+</Window>

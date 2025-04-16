@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Project.Models;
 using Project.Repos;
 using Org.BouncyCastle.Bcpg;
+using System.Windows;
 
 namespace Project.ViewModels
 {
@@ -23,6 +24,15 @@ namespace Project.ViewModels
         private UserModel usermodel;
         private IUserRepos userRepos;
 
+
+
+
+        //setters/getters
+        public string LoginPassword { get; set; }
+        public string LoginEmail { get; set; }
+
+
+
         public string Username
         {
             get => _username;
@@ -33,16 +43,6 @@ namespace Project.ViewModels
             }
         }
 
-        public string LoginPassword
-        {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged(nameof(LoginPassword));
-            }
-        }
-
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -50,16 +50,6 @@ namespace Project.ViewModels
             {
                 _errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));  // Notify the UI of the property change
-            }
-        }
-
-        public string LoginEmail
-        {
-            get => _loginemail;
-            set
-            {
-                _loginemail = value;
-                OnPropertyChanged(nameof(LoginEmail));
             }
         }
 
@@ -74,6 +64,8 @@ namespace Project.ViewModels
         }
 
 
+
+
         //COMMANDS
         public ICommand LoginCommand { get; }
 
@@ -84,16 +76,43 @@ namespace Project.ViewModels
 
 
 
+
+
         //constructs
         public LoginViewModel()
         {
             usermodel = new UserModel();
             userRepos = new UserRepos();
-            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
-            RecoverPasswordCommand = new ViewModelCommand(p => ExecuteRecoverPasswordCommand("", ""));
+
+
+            //******************************************** COMMAND LOGIN
+            LoginCommand = new ViewModelCommand(
+            execute: obj =>
+            {
+                string enteredEmail = LoginEmail;
+                var isValidUser = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
+
+
+                if (isValidUser)
+                {
+                    MessageBox.Show("loggin in successfully");
+
+                    // Store the user in session
+                    //usermodel. SetCurrentUserEmail(LoginEmail);
+                    IsViewVisible = false;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid email or password");
+
+                }
+            },
+           canExecute: obj =>true
+        );
+
+
+
         }
-
-
 
         private bool CanExecuteLoginCommand(object obj)
         {
@@ -129,6 +148,9 @@ namespace Project.ViewModels
         }
 
 
+
+
+        //RecoverPasswordCommand = new ViewModelCommand(p => ExecuteRecoverPasswordCommand("", ""));
 
         /// not yet:
         private void ExecuteRecoverPasswordCommand(string username, string email)

@@ -48,6 +48,8 @@ namespace Project.Repos
                 command.Parameters.Add("@user_password", MySqlDbType.VarChar).Value = hashedPassword;
                 command.Parameters.Add("@user_role", MySqlDbType.VarChar).Value = user.user_role;
 
+
+                ///not used : 
                 // Conditionally add user_uni if not null or empty
                 if (!string.IsNullOrEmpty(user.user_uni))
                 {
@@ -173,27 +175,6 @@ namespace Project.Repos
             }
         }
 
-
-        private bool IsEmailTaken(string email)
-        {
-            using (var connection = GetConnection())  
-            using (var command = new MySqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-
-                //returns the number of rows matching the email
-                command.CommandText = "SELECT COUNT(*) FROM `User` WHERE user_email = @user_email";
-
-                //prevent SQL injection
-                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
-
-                // the count of records with that email
-                int userCount = Convert.ToInt32(command.ExecuteScalar());
-        
-                return userCount > 0;
-            }
-        }
 
 
 

@@ -21,7 +21,9 @@ namespace Project.Services
             Registermapping<EmailVerificationViewModel, EmailVerificationView>();
             Registermapping<SignUpViewModel, SignUp>();
             Registermapping<LoginViewModel, Login>();
+            Registermapping<WelcomeViewModel, WelcomeView>();
 
+            
         }
 
 

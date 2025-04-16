@@ -26,7 +26,10 @@ namespace Project.Services
 
         public EmailVerificationViewModel EmailVerificationViewModel => _provider.GetRequiredService<EmailVerificationViewModel>() ;
         public SignUpViewModel SignUpViewModel => _provider.GetRequiredService<SignUpViewModel>();
-       // public EmailVerificationViewModel LoginViewModel => _provider.GetRequiredService<LoginViewModel>();
+        public LoginViewModel LoginViewModel => _provider.GetRequiredService<LoginViewModel>();
+        public WelcomeViewModel WelcomeViewModel => _provider.GetRequiredService<WelcomeViewModel>();
+
+        
 
     }
 }
