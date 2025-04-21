@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="gestion.Views.rechercheResultat"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:gestion.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="1050"
+             Background="Transparent">
+    <Grid Background="White" Width="1050" Height="75">
+        <TextBlock x:Name="tNom" HorizontalAlignment="Left" Margin="65,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Montserrat Bold" FontSize="20" RenderTransformOrigin="0.549,0.144"><Run Text="Nom complet de la these"/><Run Language="fr-fr" Text=","/></TextBlock>
+        <TextBlock x:Name="mCle" HorizontalAlignment="Left" Margin="65,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Montserrat Medium" FontSize="16" RenderTransformOrigin="0.549,0.144" Foreground="#FF9A9A9A" Text="Mot cles de la these"/>
+        <TextBlock x:Name="aNom" HorizontalAlignment="Left" Margin="65,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Montserrat Medium" FontSize="16" RenderTransformOrigin="0.549,0.144" Foreground="#FF9A9A9A"><Run Text="Nom complet de"/><Run Text="s "/><Run Language="fr-fr" Text="a"/><Run Text="uteurs"/><Run Text=","/></TextBlock>
+    </Grid>
+</UserControl>
