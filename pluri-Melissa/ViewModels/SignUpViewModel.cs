@@ -21,6 +21,9 @@ namespace Project.ViewModels
         private bool _isViewVisible = true;
         private IUserRepos _userRepos;
         private EmailVerificationRepo _emailVerificationRepo;
+        private readonly IUserSessionService _userSession;
+        private readonly IWindowManager _windowManager;
+        private readonly ViewModelLocator _viewModelLocator;
 
 
 
@@ -76,8 +79,13 @@ namespace Project.ViewModels
 
 
         // Constructor
-        public SignUpViewModel()
+        public SignUpViewModel(IUserSessionService userSession, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
+
+            //fields
+            _userSession = userSession;
+            _windowManager = windowManager;
+            _viewModelLocator = viewModelLocator;
             _userModel = new UserModel();
             _userRepos = new UserRepos();
             _emailVerificationRepo = new EmailVerificationRepo();
@@ -101,11 +109,19 @@ namespace Project.ViewModels
                     user_password = this.Password,
                     user_role = "user" //later :P
                 };
-
+                _userSession.Email = this.Email;
                 //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
 
                 bool success = repo.SignUp(user);
                 MessageBox.Show(success ? "User registered!" : "Registration failed.");
+
+                //if (success) { _userSession.Email = this.Email; }
+
+
+                _windowManager.CloseWindow();
+
+                // Switch the window to SignUpViewModel
+                _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
             },
             canExecute: obj => true
         );

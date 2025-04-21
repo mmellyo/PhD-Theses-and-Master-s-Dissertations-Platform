@@ -28,6 +28,7 @@ namespace Project
             services.AddSingleton<IWindowManager, WindowManager>();
 
             services.AddSingleton<ICommentService, CommentService>();
+            services.AddSingleton<IUserSessionService, UserSessionService>();
 
 
             _serviceProvider = services.BuildServiceProvider();
@@ -39,7 +40,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<CommentViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<EmailVerificationViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();

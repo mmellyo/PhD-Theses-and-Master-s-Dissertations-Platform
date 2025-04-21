@@ -7,22 +7,27 @@ using Microsoft.ML;
 using System.Windows.Input;
 using Project.Models;
 using Project.Services;
+using Project.Repos;
 
 namespace Project.ViewModels
 {
     public class CommentViewModel : ViewModelBase
     {
         private readonly MLContext _mlContext;
+        private readonly UserModel _userModel;
+        private readonly IUserSessionService _userSession;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
 
         public ICommentService CommentService { get; }
-        private ICommentService commentService {  get; set; } 
 
         private string _result;
         private string _comment;
 
         // getters / setters
+
+        public string Email { get; set; }
+
         public string Comment
         {
             get => _comment;
@@ -47,14 +52,20 @@ namespace Project.ViewModels
         public ICommand AddCommentCommand { get; } 
 
         // constructor
-        public CommentViewModel(ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        public CommentViewModel(IUserSessionService userSession, ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
             //fields
+            _userModel = new UserModel();
+            _userSession = userSession;
+
+
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             CommentService = commentService;
             _mlContext = new MLContext();
 
+
+            Email = _userSession.Email;
 
             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
@@ -88,11 +99,12 @@ namespace Project.ViewModels
                         });
 
                         string sentiment = prediction.Prediction ? "Positive" : "Negative";
-                        Result = $"The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
+                        Result = $"the user is : {Email}\n The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
 
                         if ( sentiment == "Positive")
                         {
-                            CommentService.AddComment(Comment);
+
+                            CommentService.AddComment(Email, Comment);
                         }
                     
                     }

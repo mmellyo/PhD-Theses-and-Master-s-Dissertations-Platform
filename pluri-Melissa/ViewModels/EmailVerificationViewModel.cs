@@ -214,11 +214,14 @@ namespace Project.ViewModels
                     _viewModelLocator.SignUpViewModel.Email = Email;
   
                    
-                    _windowManager.CloseWindow(); 
+                    _windowManager.CloseWindow();
 
-                 
+
                     // Switch the window to SignUpViewModel
                     _windowManager.ShowWindow(_viewModelLocator.SignUpViewModel);
+
+                    
+
 
                     IsViewVisible = false;
 
