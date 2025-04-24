@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Project.View.userControls;
+using Project.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +19,9 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class Home : Window
+    public partial class HomePage : Window
     {
-        public Home()
+        public HomePage()
         {
             InitializeComponent();
         }

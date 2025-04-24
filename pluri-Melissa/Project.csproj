@@ -9,11 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\angle-right.svg" />
     <None Remove="img\betterbg.png" />
     <None Remove="img\bg.png" />
+    <None Remove="img\chevron-right.png" />
+    <None Remove="img\group.png" />
+    <None Remove="img\home.png" />
     <None Remove="img\lock.png" />
     <None Remove="img\lock24.png" />
     <None Remove="img\logoTheses.png" />
+    <None Remove="img\question.png" />
     <None Remove="img\user.png" />
     <None Remove="img\USTHBlogo.png" />
   </ItemGroup>
@@ -25,14 +30,20 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="9.0.4" />
     <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\angle-right.svg" />
     <Resource Include="img\betterbg.png" />
     <Resource Include="img\bg.png" />
+    <Resource Include="img\chevron-right.png" />
+    <Resource Include="img\group.png" />
+    <Resource Include="img\home.png" />
     <Resource Include="img\lock.png" />
     <Resource Include="img\lock24.png" />
     <Resource Include="img\logoTheses.png" />
+    <Resource Include="img\question.png" />
     <Resource Include="img\user.png" />
     <Resource Include="img\USTHBlogo.png" />
   </ItemGroup>

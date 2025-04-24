@@ -1,7 +1,10 @@
 ﻿<Application x:Class="Project.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Project">
+             xmlns:local="clr-namespace:Project"
+             xmlns:utils="clr-namespace:Project.Utils"
+             xmlns:services="clr-namespace:Project.Services"
+             >
 
 
 
@@ -9,12 +12,20 @@
 
 
     <Application.Resources>
+        
         <ResourceDictionary>
+            <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+            <services:ViewModelLocator x:Key="ViewModelLocator" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="/View/Styles/SearchBarStyle.xaml"/>
+                <ResourceDictionary Source="/View/Styles/PrimaryButton.xaml"/>
+                <ResourceDictionary Source="/View/Styles/secondaryButton.xaml"/>
+                <ResourceDictionary Source="/View/Styles/tertiaryButton.xaml"/>
+                <ResourceDictionary Source="/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
