@@ -8,6 +8,10 @@ namespace Project.Models
 {
     public class UserModel
     {
+        public UserModel()
+        {
+        }
+
         public string user_id { get; set; }
         public string user_name { get; set; }
         public string user_uni   { get; set; }
