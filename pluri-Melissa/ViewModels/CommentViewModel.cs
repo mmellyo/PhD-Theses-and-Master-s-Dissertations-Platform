@@ -14,8 +14,13 @@ namespace Project.ViewModels
     public class CommentViewModel : ViewModelBase
     {
         private readonly MLContext _mlContext;
+
+       
+
         private readonly UserModel _userModel;
         private readonly IUserSessionService _userSession;
+        private readonly UserRepos _userRepos;
+        private readonly EmailVerificationRepo _emailVerificationRepo;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
 
@@ -27,6 +32,8 @@ namespace Project.ViewModels
         // getters / setters
 
         public string Email { get; set; }
+        public int TheseId { get; set; }
+        public string Username { get; }
 
         public string Comment
         {
@@ -57,17 +64,23 @@ namespace Project.ViewModels
             //fields
             _userModel = new UserModel();
             _userSession = userSession;
+            _userRepos = new UserRepos();
 
+            _emailVerificationRepo = new EmailVerificationRepo();
 
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             CommentService = commentService;
             _mlContext = new MLContext();
+            
 
+            // Email = _userSession.Email;
 
-            Email = _userSession.Email;
+            //***************************** TEST
+            Username = _userRepos.GetUsernameFromEmail("test@etu.usthb.dz");
+            TheseId = 1;
 
-            AddCommentCommand = new ViewModelCommand(
+             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
                 {
                     try
@@ -99,14 +112,27 @@ namespace Project.ViewModels
                         });
 
                         string sentiment = prediction.Prediction ? "Positive" : "Negative";
-                        Result = $"the user is : {Email}\n The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
+                        Result = $" The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
+
+
+
+
 
                         if ( sentiment == "Positive")
                         {
+ 
+                            CommentService.AddComment(Username, Comment);
 
-                            CommentService.AddComment(Email, Comment);
+
+                        } else if (sentiment == "Negative")
+                        {
+                            _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
                         }
-                    
+
+
+
+
+
                     }
                     catch (Exception ex)
                     {

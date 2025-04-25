@@ -9,6 +9,9 @@ namespace Project.Models
     public class Comment
     {
         public string Email { get; set; }
+        public string Username { get; set; }
         public string CommentText { get; set; }
+        public int TheseId { get; set; }
+
     }
 }

@@ -29,8 +29,9 @@ namespace Project.Services
         public LoginViewModel LoginViewModel => _provider.GetRequiredService<LoginViewModel>();
         public WelcomeViewModel WelcomeViewModel => _provider.GetRequiredService<WelcomeViewModel>();
         public CommentViewModel CommentViewModel => _provider.GetRequiredService<CommentViewModel>();
+        public MODCommentViewModel MODCommentViewModel => _provider.GetRequiredService<MODCommentViewModel>();
 
-
+        
 
     }
 }

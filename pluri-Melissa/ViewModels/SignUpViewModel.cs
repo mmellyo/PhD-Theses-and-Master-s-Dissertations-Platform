@@ -119,7 +119,7 @@ namespace Project.ViewModels
 
 
                 _windowManager.CloseWindow();
-
+                
                 // Switch the window to SignUpViewModel
                 _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
             },

@@ -39,8 +39,12 @@ namespace Project
             var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
 
 
+
+
+
+
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<EmailVerificationViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<MODCommentViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();
