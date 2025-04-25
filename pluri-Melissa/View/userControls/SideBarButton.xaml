@@ -42,13 +42,13 @@
         <Button Background="Transparent"
                 BorderThickness="0"
                 Padding="5"
-                Height="30"
+                Height="40"
                 HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Center"
                 Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Style="{StaticResource TertiaryButtonStyle}">
 
-            <Grid>
+            <Grid VerticalAlignment="Center" Height="40" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -56,7 +56,7 @@
                 </Grid.ColumnDefinitions>
 
                 
-                <Viewbox Grid.Column="0" Width="10" Height="10">
+                <Viewbox Grid.Column="0" Width="13" Height="13" Margin="0,1,5,0">
                     <Path Style="{StaticResource SidebarBluePathStyle}" Data="{Binding icon, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Viewbox>
 
@@ -65,10 +65,10 @@
                            FontSize="12"
                            VerticalAlignment="Center"
                            Style="{StaticResource SidebarButtonTextStyle}"
-                           Margin="5,0,5,0"
+                           Margin="5,0,0,0"
                            TextTrimming="CharacterEllipsis"/>
                 <Viewbox Grid.Column="2">
-                    <Path Style="{StaticResource SidebarGrayPathStyle}" Stretch="Uniform" Data="M6.079,22.5a1.5,1.5,0,0,1,.44-1.06l7.672-7.672a2.5,2.5,0,0,0,0-3.536L6.529,2.565A1.5,1.5,0,0,1,8.65.444l7.662,7.661a5.506,5.506,0,0,1,0,7.779L8.64,23.556A1.5,1.5,0,0,1,6.079,22.5Z"/>
+                    <Path Style="{StaticResource SidebarGrayPathStyle}" Margin="10,39" Data="M6.079,22.5a1.5,1.5,0,0,1,.44-1.06l7.672-7.672a2.5,2.5,0,0,0,0-3.536L6.529,2.565A1.5,1.5,0,0,1,8.65.444l7.662,7.661a5.506,5.506,0,0,1,0,7.779L8.64,23.556A1.5,1.5,0,0,1,6.079,22.5Z"/>
                 </Viewbox>
                 
             </Grid>

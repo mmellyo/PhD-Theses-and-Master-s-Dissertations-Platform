@@ -18,9 +18,9 @@ namespace Project.View.userControls
     /// <summary>
     /// Interaction logic for profileSide.xaml
     /// </summary>
-    public partial class SideBar : UserControl
+    public partial class SideBar_admin : UserControl
     {
-        public SideBar()
+        public SideBar_admin()
         {
             InitializeComponent();
         }

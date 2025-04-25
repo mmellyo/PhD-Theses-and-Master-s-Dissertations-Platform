@@ -4,7 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
+using Project.Services;
+using Project.View;
 
 namespace Project.ViewModels
 {
@@ -28,29 +32,38 @@ namespace Project.ViewModels
         }
 
         public ICommand ToggleHomeCommand { get; }
-        public ICommand NavigateHomeOption1Command { get; }
-        public ICommand NavigateHomeOption2Command { get; }
+        public ICommand NavigateReportedCommentsCommand { get; }
+        public ICommand NavigateAutoFlaggedCommentsCommand { get; }
         public ICommand NavigateHomeOption3Command { get; }
         public ICommand NavigateSearchCommand { get; }
         public ICommand NavigateSettingsCommand { get; }
         public ICommand NavigateHelpCommand { get; }
+        public ICommand NavigateReportsCommand { get; }
+        public ICommand NavigateInboxCommand { get; }
 
-        public SideBarViewModel()
+        private readonly IWindowManager _windowManager;
+        private readonly ViewModelLocator _viewModelLocator;
+
+        public SideBarViewModel(IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
-            ToggleHomeCommand = new ViewModelCommand(_ => IsHomeExpanded = ! IsHomeExpanded);
-            NavigateHelpCommand = new ViewModelCommand(_ => NavigateTo("Help"));
-            NavigateSearchCommand = new ViewModelCommand(_ => NavigateTo("Search"));
-            NavigateSettingsCommand = new ViewModelCommand(_ => NavigateTo("Settings"));
-            NavigateHomeOption1Command = new ViewModelCommand(_ => NavigateTo("HomeOption1"));
-            NavigateHomeOption2Command = new ViewModelCommand(_ => NavigateTo("HomeOption2"));
-            NavigateHomeOption3Command = new ViewModelCommand(_ => NavigateTo("HomeOption3"));
+            _windowManager = windowManager;
+            _viewModelLocator = viewModelLocator;
 
+            NavigateReportedCommentsCommand = new ViewModelCommand(_ =>
+            {
+                _windowManager.CloseWindow();
+                _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
+            });
+            NavigateReportedCommentsCommand = new ViewModelCommand(_ => NavigateTo(_viewModelLocator.MODCommentViewModel));
+
+            ToggleHomeCommand = new ViewModelCommand(_ => IsHomeExpanded = ! IsHomeExpanded);
+            
         }
 
-        private void NavigateTo (string destination)
+        private void NavigateTo (ViewModelBase viewModel)
         {
-            //Navigation Logic (when i have the windows)
-            Console.WriteLine($"Navigating to {destination}");
+            _windowManager.CloseWindow();
+            _windowManager.ShowWindow(viewModel);
         }
     }
 }

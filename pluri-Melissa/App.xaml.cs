@@ -22,7 +22,7 @@ namespace Project
         {
             services.AddSingleton<ArticleCardViewModel>();
             services.AddSingleton<HomePageViewModel>();
-
+            services.AddSingleton<MODCommentViewModel>();
             services.AddSingleton<ViewModelLocator>();
             services.AddSingleton<WindowMapper>();
             services.AddSingleton<SideBarViewModel>();
