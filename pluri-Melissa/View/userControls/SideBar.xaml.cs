@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Project.custom
+namespace Project.View.userControls
 {
     /// <summary>
     /// Interaction logic for profileSide.xaml
     /// </summary>
-    public partial class profileSide : UserControl
+    public partial class SideBar : UserControl
     {
-        public profileSide()
+        public SideBar()
         {
-         
+            InitializeComponent();
         }
     }
 }

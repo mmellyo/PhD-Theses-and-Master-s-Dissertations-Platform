@@ -17,11 +17,18 @@ namespace Project.Services
 
     public class ViewModelLocator
     {
-        private readonly IServiceProvider _provider;
+        private static IServiceProvider _provider;
 
-        public ViewModelLocator(IServiceProvider provider)
-        { 
+        public static void Init(IServiceProvider provider)
+        {
             _provider = provider;
+        }
+
+        public ViewModelLocator()
+        {
+            // parameterless constructor for XAML
+            if (_provider == null)
+                throw new InvalidOperationException("ViewModelLocator has not been initialized.");
         }
 
         public EmailVerificationViewModel EmailVerificationViewModel => _provider.GetRequiredService<EmailVerificationViewModel>() ;
@@ -31,7 +38,8 @@ namespace Project.Services
         public CommentViewModel CommentViewModel => _provider.GetRequiredService<CommentViewModel>();
         public MODCommentViewModel MODCommentViewModel => _provider.GetRequiredService<MODCommentViewModel>();
 
-        
+        public SideBarViewModel SideBarViewModel => _provider.GetRequiredService<SideBarViewModel>();
+        public HomePageViewModel HomePageViewModel => _provider.GetRequiredService<HomePageViewModel>();
 
     }
 }

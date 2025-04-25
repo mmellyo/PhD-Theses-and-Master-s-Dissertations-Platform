@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Project.View.userControls.SideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View.userControls"
+             xmlns:viewmodels="clr-namespace:Project.ViewModels" 
+             xmlns:utils="clr-namespace:Project.Utils"
+             xmlns:svg="http://schemas.sharpvectors.org/wpf"
+             d:DataContext="{d:DesignInstance Type=viewmodels:SideBarViewModel}"
+             mc:Ignorable="d" 
+             Height="700" Width="240">
+    <UserControl.Resources>
+        <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
+        <Style x:Key="FlatExpanderStyle" TargetType="Expander">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Expander">
+                        <StackPanel>
+                            <!-- Custom Header (No built-in toggle arrow) -->
+                            <ToggleButton x:Name="HeaderSite"
+                                      Content="{TemplateBinding Header}"
+                                      FontWeight="Bold"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Focusable="False"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                          />
+
+                            <ContentPresenter x:Name="ExpandSite"
+                                          Margin="10,0,0,0"
+                                          Visibility="Collapsed"
+                                              ContentSource="Content"/>
+                        </StackPanel>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="HeaderSite" Property="IsChecked" Value="True">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                           
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+
+    <Grid Background="White">
+
+        <StackPanel>
+
+            <Image Source="pack://application:,,,/img/logoTheses.png" 
+                   Margin="40,12"/>
+
+            <local:SideBarButton icon="M23.121,9.069,15.536,1.483a5.008,5.008,0,0,0-7.072,0L.879,9.069A2.978,2.978,0,0,0,0,11.19v9.817a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V11.19A2.978,2.978,0,0,0,23.121,9.069ZM15,22.007H9V18.073a3,3,0,0,1,6,0Zm7-1a1,1,0,0,1-1,1H17V18.073a5,5,0,0,0-10,0v3.934H3a1,1,0,0,1-1-1V11.19a1.008,1.008,0,0,1,.293-.707L9.878,2.9a3.008,3.008,0,0,1,4.244,0l7.585,7.586A1.008,1.008,0,0,1,22,11.19Z" content="Accueil" 
+                                 Command="{Binding ToggleHomeCommand}" Width="210" Margin="0,50,0,0"/>
+
+            <StackPanel x:Name="ExpandableContent" Visibility="{Binding IsHomeExpanded, Converter={StaticResource BoolVisibilityConverter}}" Margin="20,10,0,10">
+                <local:SideBarSubButton arrow="pack://application:,,,/img/chevron-right.png"  content="Option 1" Command="{Binding NavigateHomeOption1Command}" Width="153"/>
+                <local:SideBarSubButton arrow="pack://application:,,,/img/chevron-right.png" content="Option 2" Command="{Binding NavigateHomeOption2Command}" Width="153"/>
+                <local:SideBarSubButton arrow="pack://application:,,,/img/chevron-right.png" content="Option 3" Command="{Binding NavigateHomeOption3Command}" Width="153"/> 
+            </StackPanel>
+
+
+
+            <local:SideBarButton  content="Recherche" Command="{Binding NavigateSearchCommand}" Width="210" Margin="0,5"/>
+
+            <local:SideBarButton  content="Profile" Command="{Binding NavigateProfileCommand}" Width="210" Margin="0,5"/>
+
+            <local:SideBarButton  content="Aide" Command="{Binding NavigateHelpCommand}" Width="210" Margin="0,5"/>
+
+
+            <local:SideBarButton content="Validation" Command="{Binding NavigateSettingsCommand}" Width="210" Margin="0,200"/>
+
+
+
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>
