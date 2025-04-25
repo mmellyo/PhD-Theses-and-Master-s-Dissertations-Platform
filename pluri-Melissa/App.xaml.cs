@@ -18,19 +18,17 @@ namespace Project
         {
             services.AddSingleton<EmailVerificationViewModel>();
             services.AddSingleton<SignUpViewModel>();
+            services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<WelcomeViewModel>();
+            services.AddSingleton<CommentViewModel>();
+
 
             services.AddSingleton<ViewModelLocator>();
             services.AddSingleton<WindowMapper>();
-            
-
             services.AddSingleton<IWindowManager, WindowManager>();
 
-            services.AddSingleton<LoginViewModel>();
-            services.AddSingleton<WelcomeViewModel>();
-
-
-
-            // services.AddSingleton<IItemService, ItemService>();
+            services.AddSingleton<ICommentService, CommentService>();
+            services.AddSingleton<IUserSessionService, UserSessionService>();
 
 
             _serviceProvider = services.BuildServiceProvider();
@@ -41,8 +39,12 @@ namespace Project
             var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
 
 
+
+
+
+
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<MODCommentViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();

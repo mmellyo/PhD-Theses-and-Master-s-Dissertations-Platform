@@ -14,7 +14,6 @@ namespace Project.Services
     {
         void ShowWindow(ViewModelBase viewModel);
         void CloseWindow();
-
     }
 
     public class WindowManager : IWindowManager
@@ -74,6 +73,8 @@ namespace Project.Services
                 
             }
         }
+
+        
     }
 }
    
