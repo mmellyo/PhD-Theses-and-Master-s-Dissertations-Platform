@@ -17,6 +17,9 @@ namespace Project.Models
         public void SendVerificationEmail(string recipientEmail, string verificationCode);
         public bool IsEmailTaken(string email);
 
+        public void SendCommentToAdmin(string recipientEmail, string verificationCode,  int TheseId);
+
+
 
     }
 }

@@ -21,6 +21,7 @@ namespace Project.Repos
 
     class EmailVerificationRepo : RepoBase, IEmailVerificationRepo
     {
+
         public string GenerateVerificationCode()
         {
             Random random = new Random();
@@ -35,16 +36,14 @@ namespace Project.Repos
         {
             try
             {
-                // Ensure the verification code is generated before sending the email
-                // Generate the verification code before sending the email
 
                 MailMessage mail = new MailMessage();
 
 
-                // Set sender and recipient
+
                 mail.From = new MailAddress("theses.usthb@gmail.com");
 
-                mail.To.Add(recipientEmail); // Correctly use recipientEmail variable
+                mail.To.Add(recipientEmail);
                 mail.Subject = "Email Verification Code";
 
                 // Create the email body with the verification code
@@ -89,5 +88,10 @@ namespace Project.Repos
             }
         }
 
+
+        public void SendCommentToAdmin(string UserName, string UserComment, int TheseId)
+        {
+            string Commenter = UserName;
+        }
     }
 }

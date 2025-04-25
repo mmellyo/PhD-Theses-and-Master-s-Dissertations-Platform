@@ -1,0 +1,129 @@
+﻿<Window x:Class="Project.View.ThesesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project.View"
+        mc:Ignorable="d"
+        Title="ThesesView" Height="450" Width="800">
+    
+
+        <StackPanel>
+            <TextBox 
+                  
+                    MinWidth="30"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="0,30,0,16"
+                    x:Name="Comment"
+                     Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
+            
+            <Button
+                    x:Name="AddCommentCommand"
+                   
+                    HorizontalAlignment="Center"
+                    Content="Add Comment" 
+                Command="{Binding AddCommentCommand}"  
+                    Margin="0,10,0,16" />
+
+        <ListView ItemsSource="{Binding CommentService.Comments}" 
+          Height="150" Width="300">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                <Run Text="{Binding Email,  UpdateSourceTrigger=PropertyChanged }" FontWeight="Bold" Foreground="Blue"/>
+                <Run Text=": " />
+                <Run Text="{Binding CommentText,  UpdateSourceTrigger=PropertyChanged}" Foreground="Black"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
+
+
+        <StackPanel>
+
+            <TextBlock
+
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"
+                x:Name="Result">
+            </TextBlock>
+        </StackPanel>
+
+
+    </StackPanel>
+
+
+   
+    
+
+
+
+
+
+
+
+
+    <!-- <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock 
+        Grid.Column="1" 
+        Grid.Row="1" 
+        Text="COMMENTS ANALYSIS"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center"
+        Grid.ColumnSpan="5"
+        FontSize="24">
+        </TextBlock>
+
+        <TextBlock 
+            Grid.Row="2" 
+            Grid.Column="1"
+            Text="Comment">
+        </TextBlock>
+
+        <TextBox 
+        Grid.Row="2"
+        Grid.Column="2"
+        MinWidth="30"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center"
+        Grid.ColumnSpan="1"
+        x:Name="Comment"
+         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
+
+        <Button
+    x:Name="Analyse"
+    Grid.Row="3"
+    Grid.Column="1"
+    HorizontalAlignment="Center"
+    Content="Analyse" Command="{Binding Analyse}"  
+    Margin="0,0,0,16" Grid.RowSpan="2" />
+
+        <TextBlock
+        Grid.Row="4"
+        Grid.Column="3"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center"
+        Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"
+        x:Name="Result">
+        </TextBlock>
+    </Grid>-->
+        
+</Window>

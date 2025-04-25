@@ -29,6 +29,7 @@
     <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="9.0.4" />
+    <PackageReference Include="Microsoft.ML" Version="4.0.2" />
     <PackageReference Include="MySql.Data" Version="9.2.0" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
@@ -46,6 +47,12 @@
     <Resource Include="img\question.png" />
     <Resource Include="img\user.png" />
     <Resource Include="img\USTHBlogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MLModel\CommentModel.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

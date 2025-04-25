@@ -47,6 +47,7 @@ namespace Project.Repos
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user.user_email;
                 command.Parameters.Add("@user_password", MySqlDbType.VarChar).Value = hashedPassword;
                 command.Parameters.Add("@user_role", MySqlDbType.VarChar).Value = user.user_role;
+                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = GetUsernameFromEmail(user.user_email);
 
 
                 ///not used : 
@@ -145,9 +146,10 @@ namespace Project.Repos
         //Method to Assign user's Role (still working on it)
         public string AssignUserRole(string email)
         {
+            if(email.Equals("milissa.ameryahia@etu.usthb.dz"))
             if (string.IsNullOrEmpty(email))
             {
-                return "Unknown";
+                return "Admin";
             }
 
             // Check if email contains @ symbol
@@ -163,7 +165,7 @@ namespace Project.Repos
             // Check if domain contains edu or etu
             if (domain.Contains("edu"))
             {
-                return "teacher";
+                return "Memeber";
             }
             else if (domain.Contains("etu"))
             {
@@ -176,7 +178,20 @@ namespace Project.Repos
         }
 
 
+        public string GetUsernameFromEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return string.Empty;
 
+            // Split the email before the '@'
+            var atSplit = email.Split('@');
+            if (atSplit.Length < 2)
+                return string.Empty;
+
+            // Replace '.' with '_' in the username part
+            string usernamePart = atSplit[0].Replace('.', '_');
+            return usernamePart;
+        }
 
     }
 
