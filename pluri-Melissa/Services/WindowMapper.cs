@@ -24,6 +24,9 @@ namespace Project.Services
             Registermapping<WelcomeViewModel, WelcomeView>();
             Registermapping<HomePageViewModel, AdminSpace>();
             Registermapping<MODCommentViewModel, MODcommentView>();
+            Registermapping<CommentViewModel, ThesesView>();
+
+
 
 
         }

@@ -19,7 +19,7 @@
                      Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
             
             <Button
-                    x:Name="AddCommentCommand"
+                    x:Name="AddComment"
                    
                     HorizontalAlignment="Center"
                     Content="Add Comment" 
@@ -31,7 +31,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
-                <Run Text="{Binding Email,  UpdateSourceTrigger=PropertyChanged }" FontWeight="Bold" Foreground="Blue"/>
+                <Run Text="{Binding Username,  UpdateSourceTrigger=PropertyChanged }" FontWeight="Bold" Foreground="Blue"/>
                 <Run Text=": " />
                 <Run Text="{Binding CommentText,  UpdateSourceTrigger=PropertyChanged}" Foreground="Black"/>
                     </TextBlock>

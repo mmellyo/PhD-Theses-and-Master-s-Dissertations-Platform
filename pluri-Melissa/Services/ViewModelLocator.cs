@@ -41,5 +41,7 @@ namespace Project.Services
         public SideBarViewModel SideBarViewModel => _provider.GetRequiredService<SideBarViewModel>();
         public HomePageViewModel HomePageViewModel => _provider.GetRequiredService<HomePageViewModel>();
 
+      
+
     }
 }

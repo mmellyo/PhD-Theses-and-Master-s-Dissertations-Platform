@@ -119,8 +119,8 @@ namespace Project.ViewModels
 
 
                 _windowManager.CloseWindow();
-                
-                // Switch the window to SignUpViewModel
+
+                // Switch the window to CommentViewModel
                 _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
             },
             canExecute: obj => true

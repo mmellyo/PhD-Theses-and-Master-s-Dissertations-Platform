@@ -20,8 +20,7 @@ namespace Project.Models
         void Removes(int user_id);
         bool IsUsthbMember(String email);
         string AssignUserRole(string email);
-
-
+        int GetUserId(string email);
         UserModel GetById(int user_id);
         UserModel GetByUsername(string user_name);
         IEnumerable<UserModel> GetByAll();

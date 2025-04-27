@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Project.Models;
 using Project.Services;
 using Project.Repos;
+using System.Windows;
 
 namespace Project.ViewModels
 {
@@ -20,6 +21,7 @@ namespace Project.ViewModels
         private readonly UserModel _userModel;
         private readonly IUserSessionService _userSession;
         private readonly UserRepos _userRepos;
+        private readonly CommentRepo _commentRepo;
         private readonly EmailVerificationRepo _emailVerificationRepo;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
@@ -32,6 +34,7 @@ namespace Project.ViewModels
         // getters / setters
 
         public string Email { get; set; }
+        public int UserId { get; }
         public int TheseId { get; set; }
         public string Username { get; }
 
@@ -65,6 +68,7 @@ namespace Project.ViewModels
             _userModel = new UserModel();
             _userSession = userSession;
             _userRepos = new UserRepos();
+            _commentRepo = new CommentRepo();
 
             _emailVerificationRepo = new EmailVerificationRepo();
 
@@ -74,17 +78,20 @@ namespace Project.ViewModels
             _mlContext = new MLContext();
             
 
-            // Email = _userSession.Email;
-
-            //***************************** TEST
-            Username = _userRepos.GetUsernameFromEmail("test@etu.usthb.dz");
+            Email = _userSession.Email;
+           // Username = _userRepos.GetUsernameFromEmail(Email);
+            //  UserId = _userRepos.GetUserId(Email);
             TheseId = 1;
 
-             AddCommentCommand = new ViewModelCommand(
+            //***************************** TEST
+          Username = _userRepos.GetUsernameFromEmail("melly@etu.usthb.dz");
+            UserId = _userRepos.GetUserId("melly@etu.usthb.dz");
+
+            AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-                    try
-                    {
+                   // try
+                   // {
 
                         var data = _mlContext.Data.LoadFromTextFile<CommentData>("MLModel/CommentModel.csv", hasHeader: true, separatorChar: ',', allowQuoting: true);
 
@@ -120,24 +127,35 @@ namespace Project.ViewModels
 
                         if ( sentiment == "Positive")
                         {
- 
-                            CommentService.AddComment(Username, Comment);
+
+                            //save cmnt is db
+                            bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId);
+                            MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
+
+                            //display cmnt
+                            CommentService.DisplayComment(Username, Comment);
 
 
                         } else if (sentiment == "Negative")
                         {
-                            _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
+                            MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
+                            
+                            //temp switching to MODcmnt
+                            _windowManager.CloseWindow();
+                            _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
+
+                            // _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
                         }
 
 
 
 
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Result = $"Error: {ex.Message}";
-                    }
+                   // }
+                    //catch (Exception ex)
+                    //{
+                     //   Result = $"Error: {ex.Message}";
+                    //}
                 },
                 canExecute: obj => true
                 //!string.IsNullOrEmpty(Comment) // Only enable the command if there's text to analyze

@@ -13,17 +13,19 @@ namespace Project.Services
        
 
         public ObservableCollection<Comment> Comments { get; set; }
-        void AddComment(string email, string commentText);
+        void DisplayComment(string Username, string commentText);
     }
 
 
     internal class CommentService : ICommentService
     {
+        private int theseId;
+
         public ObservableCollection<Comment> Comments { get; set; } = new();
 
-        public void AddComment(string email, string commentText)
+        public void DisplayComment(string Username, string commentText)
         {
-            Comments.Add(new Comment { Email = email ,CommentText = commentText });    
+            Comments.Add(new Comment { Username = Username, CommentText = commentText, TheseId = theseId });    
          }
     }
 }

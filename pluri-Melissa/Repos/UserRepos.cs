@@ -146,11 +146,11 @@ namespace Project.Repos
         //Method to Assign user's Role (still working on it)
         public string AssignUserRole(string email)
         {
-            if(email.Equals("milissa.ameryahia@etu.usthb.dz"))
-            if (string.IsNullOrEmpty(email))
-            {
-                return "Admin";
-            }
+            if (email.Equals("milissa.ameryahia@etu.usthb.dz"))
+                if (string.IsNullOrEmpty(email))
+                {
+                    return "Admin";
+                }
 
             // Check if email contains @ symbol
             int atIndex = email.IndexOf('@');
@@ -193,6 +193,20 @@ namespace Project.Repos
             return usernamePart;
         }
 
+        public int GetUserId(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_id FROM `user` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+                var userId = command.ExecuteScalar();
+                return Convert.ToInt32(userId);
+            }
+        }
     }
 
 }

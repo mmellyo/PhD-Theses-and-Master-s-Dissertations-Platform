@@ -3,17 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Project.View"
+        xmlns:local="clr-namespace:Project.View" 
+        xmlns:userControls="clr-namespace:Project.View.userControls"
+        
         mc:Ignorable="d"
-        Title="MODcommentView" Height="1080" Width="1920">
+        Title="MODcommentView" Height="700" Width="1238"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
 
 
-        <Grid>
+    <Grid>
+        
             <StackPanel Background="#0093ED" Height="115" VerticalAlignment="Top">
 
             </StackPanel>
+        
 
-            <StackPanel Background="White" Width="300" HorizontalAlignment="Left">
+        <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0" DataContext="{Binding SideBarViewModel, Source={StaticResource ViewModelLocator}}" Margin="0,0,970,0" />
+
+        <StackPanel Background="White" Width="300" HorizontalAlignment="Left">
 
             </StackPanel>
             <Grid Margin="300,115,0,0" Background="#f0f0f0">

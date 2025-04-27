@@ -26,8 +26,23 @@ namespace Project
             services.AddSingleton<ViewModelLocator>();
             services.AddSingleton<WindowMapper>();
             services.AddSingleton<SideBarViewModel>();
+            services.AddSingleton<CommentViewModel>();
+            services.AddSingleton<WelcomeViewModel>();
+            services.AddSingleton<EmailVerificationViewModel>();
+            services.AddSingleton<SignUpViewModel>();
+            services.AddSingleton<LoginViewModel>();
+
 
             services.AddSingleton<IWindowManager, WindowManager>();
+            services.AddSingleton<IUserSessionService, UserSessionService>();
+            services.AddSingleton<ICommentService, CommentService>();
+
+
+            
+
+
+
+
 
             //services.AddSingleton<LoginViewModel>();
             //services.AddSingleton<WelcomeViewModel>();
@@ -49,7 +64,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<HomePageViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<CommentViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();
@@ -59,8 +74,6 @@ namespace Project
 
             
 
-            AllocConsole(); 
-            Console.WriteLine("Console attached!");
         }
     }
 
