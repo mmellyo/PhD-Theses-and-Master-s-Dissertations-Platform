@@ -37,8 +37,41 @@ namespace Project.Repos
             }
         }
 
-        
-        
+
+        public List<Comment> LoadFlaggedComments()
+        {
+            var comments = new List<Comment>();
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"
+                                        SELECT c.comment_text, c.these_id
+                                        FROM reports r
+                                        JOIN comments c ON c.comment_id = r.reported_id
+                                        WHERE r.reported_type = 'Comment'
+        ";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comments.Add(new Comment
+                        {
+                            CommentText = reader.GetString("comment_text"),
+                            TheseId = reader.GetInt32("these_id")
+                        });
+                    }
+                }
+            }
+
+            return comments;
+        }
+
+
+
         //not verified yet
         public void ReportThesis(int thesisId, string description)
         {

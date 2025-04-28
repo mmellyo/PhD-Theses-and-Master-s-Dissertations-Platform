@@ -81,13 +81,22 @@ namespace Project.ViewModels
             
 
             Email = _userSession.Email;
+
+
            // Username = _userRepos.GetUsernameFromEmail(Email);
             //  UserId = _userRepos.GetUserId(Email);
             TheseId = 1;
 
             //***************************** TEST
           Username = _userRepos.GetUsernameFromEmail("melly@etu.usthb.dz");
+            //save username in session
+            _userSession.Username = this.Username;
+
             UserId = _userRepos.GetUserId("melly@etu.usthb.dz");
+
+
+
+
 
             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
@@ -132,9 +141,9 @@ namespace Project.ViewModels
 
                             //save cmnt is db
                             bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
-                        //get cmnt id
-                        int CommentId = _commentRepo.GetCommentId(Comment);
-                        MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
+                            //get cmnt id
+                            int CommentId = _commentRepo.GetCommentId(Comment);
+                            MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
 
                             //display cmnt
                             CommentService.DisplayComment(Username, Comment);
@@ -142,21 +151,20 @@ namespace Project.ViewModels
 
 
 
-                        } else if (sentiment == "Negative")
+                        } 
+                        else if (sentiment == "Negative")
                         {
 
 
                             MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
                             
-                             //save cmnt in db (comment)
-                             _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);
+                            //save cmnt in db (comment)
+                            _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);
 
                             //get cmnt id
                             int CommentId = _commentRepo.GetCommentId(Comment);
 
                             //save cmnt in db (reports)
-
-
                             _reportRepo.ReportComment(CommentId, null);
                        
 

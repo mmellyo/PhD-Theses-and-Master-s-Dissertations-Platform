@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Mysqlx.Prepare;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
@@ -18,6 +19,11 @@ namespace Project.ViewModels
         //fields
         private IUserSessionService _userSession;
         private UserRepos _userRepos;
+        IReportsRepo _reportsRepo;
+        private ViewModelLocator _viewModelLocator;
+        IWindowManager _windowManager;
+
+        public ICommentService CommentService { get; }
 
         public string Email { get; set; }
         public string Username { get; set; }
@@ -37,7 +43,9 @@ namespace Project.ViewModels
         //commands
         public ICommand ApproveCommand { get; set; }
         public ICommand DenyCommand { get; set; }
+        public ICommand DisplayTheseCommand { get; set; }
 
+        
 
 
 
@@ -51,24 +59,30 @@ namespace Project.ViewModels
                 //fields 
                  _userSession = userSession;
                  _userRepos = new UserRepos();
+                 _reportsRepo = new ReportsRepo();
 
-                 FlaggedComments = new ObservableCollection<Comment>();
+                _windowManager = windowManager;
+                _viewModelLocator = viewModelLocator;
+                CommentService = commentService;
+                _windowManager = windowManager;
+
+                FlaggedComments = new ObservableCollection<Comment>();
 
 
 
 
                 Email = _userSession.Email;
-                Username = _userRepos.GetUsernameFromEmail(Email);
+                Username = _userSession.Username;
 
-
-            // Example
-            FlaggedComments.Add(new Comment
+                foreach (var c in _reportsRepo.LoadFlaggedComments())
                 {
-                    Username= this.Username,
-                    CommentText = "This is a temp comment",
-                    TheseId = 1,
-
-                });
+                    FlaggedComments.Add(new Comment
+                    {
+                        CommentText = c.CommentText,
+                        TheseId = c.TheseId,
+                        Username = this.Username
+                    });
+                }
 
 
 
@@ -76,6 +90,20 @@ namespace Project.ViewModels
 
 
             //commands
+            DisplayTheseCommand = new ViewModelCommand(
+            execute: obj =>
+            {
+
+                //temp switching to MODcmnt
+                _windowManager.CloseWindow();
+                _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
+
+            }
+            // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
+            );
+
+
+
             ApproveCommand = new ViewModelCommand(
             execute: obj =>
             {

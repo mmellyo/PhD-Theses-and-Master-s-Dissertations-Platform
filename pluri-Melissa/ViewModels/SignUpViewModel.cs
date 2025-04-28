@@ -109,6 +109,8 @@ namespace Project.ViewModels
                     user_password = this.Password,
                     user_role = "user" //later :P
                 };
+
+
                 _userSession.Email = this.Email;
                 //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
 
