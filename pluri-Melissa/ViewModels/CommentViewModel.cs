@@ -22,6 +22,7 @@ namespace Project.ViewModels
         private readonly IUserSessionService _userSession;
         private readonly UserRepos _userRepos;
         private readonly CommentRepo _commentRepo;
+        private readonly ReportsRepo _reportRepo;
         private readonly EmailVerificationRepo _emailVerificationRepo;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
@@ -69,6 +70,7 @@ namespace Project.ViewModels
             _userSession = userSession;
             _userRepos = new UserRepos();
             _commentRepo = new CommentRepo();
+            _reportRepo = new ReportsRepo();
 
             _emailVerificationRepo = new EmailVerificationRepo();
 
@@ -140,6 +142,11 @@ namespace Project.ViewModels
                         {
                             MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
                             
+                            //save cmnt in db (reports)
+                            _reportRepo.ReportComment(Comment, null);
+                       
+
+
                             //temp switching to MODcmnt
                             _windowManager.CloseWindow();
                             _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);

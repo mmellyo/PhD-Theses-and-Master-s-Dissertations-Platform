@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace Project.Models
 {
@@ -12,5 +13,11 @@ namespace Project.Models
         List<Comment> GetComments();
         void DeleteComment(int commentId);
         void UpdateComment(int commentId, string newCommentText);
+
+
+    
+
+
+
     }
 }

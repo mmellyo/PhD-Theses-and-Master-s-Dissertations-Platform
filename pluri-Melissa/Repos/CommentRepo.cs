@@ -34,7 +34,7 @@ namespace Project.Repos
                 command.Parameters.Add("@comment_text", MySqlDbType.VarChar).Value = commentText;
                 command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = UserId; 
                 command.Parameters.Add("@these_id", MySqlDbType.Int32).Value = TheseId;
-                command.ExecuteNonQuery();
+                
 
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected == 1;
@@ -44,6 +44,20 @@ namespace Project.Repos
 
 
 
+        public void ReportThesis(int thesisId, string description)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "INSERT INTO Reports (reported_id, reported_type, description) VALUES (@id, @type, @desc)";
+                command.Parameters.AddWithValue("@id", thesisId);
+                command.Parameters.AddWithValue("@type", "Thesis");
+                command.Parameters.AddWithValue("@desc", description);
+                command.ExecuteNonQuery();
+            }
+        }
 
 
 
@@ -59,6 +73,8 @@ namespace Project.Repos
         {
             throw new NotImplementedException();
         }
+
+        
 
         public void UpdateComment(int commentId, string newCommentText)
         {
