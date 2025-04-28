@@ -65,7 +65,7 @@ namespace Project.ViewModels
             FlaggedComments.Add(new Comment
                 {
                     Username= this.Username,
-                    CommentText = "This is a negative commentTTTTT!",
+                    CommentText = "This is a temp comment",
                     TheseId = 1,
 
                 });

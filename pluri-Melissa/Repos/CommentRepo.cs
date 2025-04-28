@@ -18,7 +18,7 @@ namespace Project.Repos
 
 
 
-        public bool AddCommentInDb(int TheseId, string commentText, int UserId)
+        public bool AddCommentInDb(int TheseId, string commentText, int UserId, int State)
         {
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
@@ -29,12 +29,14 @@ namespace Project.Repos
 
 
 
-                command.CommandText = "INSERT INTO Comments (comment_text, user_id, these_id) VALUES (@comment_text, @user_id, @these_id)";
+                command.CommandText = "INSERT INTO Comments (comment_text, user_id, these_id, state) VALUES (@comment_text, @user_id, @these_id, @state)";
                 //prevent SQL injection
                 command.Parameters.Add("@comment_text", MySqlDbType.VarChar).Value = commentText;
                 command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = UserId; 
                 command.Parameters.Add("@these_id", MySqlDbType.Int32).Value = TheseId;
-                
+                command.Parameters.Add("@state", MySqlDbType.Int32).Value = State;
+
+
 
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected == 1;
@@ -78,6 +80,21 @@ namespace Project.Repos
 
         public void UpdateComment(int commentId, string newCommentText)
         {
+        }
+
+        public int GetCommentId(string comment)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT comment_id FROM `comments` WHERE comment_text=@comment_text";
+                command.Parameters.Add("@comment_text", MySqlDbType.VarChar).Value = comment;
+                var CommentId = command.ExecuteScalar();
+                return Convert.ToInt32(CommentId);
+            }
         }
     }
 }

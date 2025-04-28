@@ -9,12 +9,12 @@ namespace Project.Models
 {
     public interface ICommentRepo
     {
-        bool AddCommentInDb(int TheseId, string commentText, int UserId);
+        bool AddCommentInDb(int TheseId, string commentText, int UserId, int State);
         List<Comment> GetComments();
         void DeleteComment(int commentId);
         void UpdateComment(int commentId, string newCommentText);
 
-
+        int GetCommentId(string comment);
     
 
 

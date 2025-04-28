@@ -15,18 +15,24 @@ namespace Project.Repos
             throw new NotImplementedException();
         }
 
-        public void ReportComment(int CommentId, int Userid)
+        public void ReportComment(int CommentId, int? UserId)
         {
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
+
+
                 command.CommandText = "INSERT INTO reports (reported_id,reporter_id, reported_type) VALUES (@reported_id, @reporter_id, @reported_type)";
+                command.Parameters.AddWithValue("@reported_id", CommentId);
 
                 command.Parameters.AddWithValue("@reported_type", "Comment");
-                command.Parameters.AddWithValue("@reported_id", CommentId);
-                command.Parameters.AddWithValue("@reporter_id", Userid);
+
+                if (UserId.HasValue)
+                    command.Parameters.AddWithValue("@reporter_id", UserId.Value);
+                else
+                    command.Parameters.AddWithValue("@reporter_id", DBNull.Value);
                 command.ExecuteNonQuery();
             }
         }
