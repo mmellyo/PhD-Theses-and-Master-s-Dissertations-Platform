@@ -146,7 +146,7 @@ namespace Project.Repos
         //Method to Assign user's Role (still working on it)
         public string AssignUserRole(string email)
         {
-            if (email.Equals("milissa.ameryahia@etu.usthb.dz"))
+            if (email.Equals("theses.usthb@gmail.com"))
                 if (string.IsNullOrEmpty(email))
                 {
                     return "Admin";
@@ -173,7 +173,7 @@ namespace Project.Repos
             }
             else
             {
-                return "Regular";
+                return "error";
             }
         }
 

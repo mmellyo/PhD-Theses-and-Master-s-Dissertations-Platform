@@ -22,9 +22,10 @@ namespace Project.Services
             Registermapping<SignUpViewModel, SignUp>();
             Registermapping<LoginViewModel, Login>();
             Registermapping<WelcomeViewModel, WelcomeView>();
-            Registermapping<HomePageViewModel, AdminSpace>();
+            Registermapping<HomePageViewModel, HomePage>();
             Registermapping<MODCommentViewModel, MODcommentView>();
             Registermapping<CommentViewModel, ThesesView>();
+            Registermapping<SideBarViewModel, AdminSpace>();
 
 
 

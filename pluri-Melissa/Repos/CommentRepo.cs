@@ -9,6 +9,9 @@ using System.Net;
 using Project.Models;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Crypto.Generators;
+using gestion.Model;
+using System.Collections.ObjectModel;
+using System.Windows.Documents;
 
 
 namespace Project.Repos
@@ -71,12 +74,45 @@ namespace Project.Repos
         {
         }
 
-        public List<Comment> GetComments()
+        public List<Comment> LoadTheseComments(int theseId)
         {
-            throw new NotImplementedException();
+            var comments = new List<Comment>();
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"
+            SELECT u.user_name, c.comment_text
+            FROM comments c
+            JOIN user u ON c.user_id = u.user_id
+            WHERE c.these_id = @TheseId
+              AND c.state != 2;  -- optional: ignore deleted
+        ";
+
+                command.Parameters.AddWithValue("@TheseId", theseId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comments.Add(new Comment
+                        {
+                            Username = reader.GetString("user_name"),
+                            CommentText = reader.GetString("comment_text")
+                        });
+                    }
+                }
+            }
+
+            return comments;
         }
 
-        
+
+
+
+
 
         public void UpdateComment(int commentId, string newCommentText)
         {
@@ -96,5 +132,35 @@ namespace Project.Repos
                 return Convert.ToInt32(CommentId);
             }
         }
+
+
+
+        public bool UpdateCommentState(int commentId, int newState)
+        {
+            try
+            {
+                using (var connection = GetConnection())
+                using (var command = new MySqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+
+                    command.CommandText = "UPDATE comments SET state = @state WHERE comment_id = @comment_id";
+                    command.Parameters.AddWithValue("@state", newState);
+                    command.Parameters.AddWithValue("@comment_id", commentId); 
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error updating comment state: {ex.Message}");
+
+                return false;
+            }
+        }
+
     }
 }

@@ -67,7 +67,14 @@
 
             <local:SideBarButton  icon="m15 3a3 3 0 0 0 -3-3h-12v24h2v-11h8v1a3 3 0 0 0 3 3h11v-13h-9zm-13-1h10a1 1 0 0 1 1 1v8h-11zm20 4v9h-9a1 1 0 0 1 -1-1v-1h3v-7z"
                 content="Gestion des Rapports" Command="{Binding NavigateReportsCommand}" Width="210" Margin="0,5"/>
-
+            
+            <StackPanel x:Name="ExpandableContent2" Visibility="{Binding IsHomeExpanded, Converter={StaticResource BoolVisibilityConverter}}" Margin="20,10,0,10">
+                <local:SideBarSubButton Margin="0,0,0,5"  content="Thèses signalées" Command="{Binding NavigateReportedThesesCommand}" Width="160"/>
+                <local:SideBarSubButton Margin="0,0,0,5"  content="Comptes signalés" Command="{Binding NavigateReportedAccountsCommand}" Width="160"/>
+            </StackPanel>
+            
+            
+            
             <local:SideBarButton  icon="M19,1H5A5.006,5.006,0,0,0,0,6V18a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V6A5.006,5.006,0,0,0,19,1ZM5,3H19a3,3,0,0,1,2.78,1.887l-7.658,7.659a3.007,3.007,0,0,1-4.244,0L2.22,4.887A3,3,0,0,1,5,3ZM19,21H5a3,3,0,0,1-3-3V7.5L8.464,13.96a5.007,5.007,0,0,0,7.072,0L22,7.5V18A3,3,0,0,1,19,21Z"
                 content="Boite de Réception" Command="{Binding NavigateInboxCommand}" Width="210" Margin="0,5"/>
 

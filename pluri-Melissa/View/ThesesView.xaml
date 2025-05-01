@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
         Title="ThesesView" Height="450" Width="800">
-    
+
+
+
+
 
         <StackPanel>
             <TextBox 
@@ -17,7 +20,7 @@
                     Margin="0,30,0,16"
                     x:Name="Comment"
                      Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
-            
+
             <Button
                     x:Name="AddComment"
                    
@@ -26,20 +29,23 @@
                 Command="{Binding AddCommentCommand}"  
                     Margin="0,10,0,16" />
 
-        <ListView ItemsSource="{Binding CommentService.Comments}" 
-          Height="150" Width="300">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                <Run Text="{Binding Username,  UpdateSourceTrigger=PropertyChanged }" FontWeight="Bold" Foreground="Blue"/>
-                <Run Text=": " />
-                <Run Text="{Binding CommentText,  UpdateSourceTrigger=PropertyChanged}" Foreground="Black"/>
-                    </TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
 
 
+                <ListView ItemsSource="{Binding CommentService.Comments}" 
+                      Height="150" Width="300">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10" Padding="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Left" Width="500">
+                                        <TextBlock Text="{Binding Username}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding CommentText}" Foreground="Black" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                        </ListView.ItemTemplate>
+                </ListView>     
 
 
         <StackPanel>
@@ -55,10 +61,6 @@
 
 
     </StackPanel>
-
-
-   
-    
 
 
 

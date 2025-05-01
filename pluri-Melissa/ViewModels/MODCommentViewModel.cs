@@ -19,36 +19,30 @@ namespace Project.ViewModels
         //fields
         private IUserSessionService _userSession;
         private UserRepos _userRepos;
-        IReportsRepo _reportsRepo;
+        private readonly CommentRepo _commentRepo;
+        private IReportsRepo _reportsRepo;
         private ViewModelLocator _viewModelLocator;
+        private Comment _approvedComment;
         IWindowManager _windowManager;
-
-        public ICommentService CommentService { get; }
+        private int commentId;
+        private int cId;
 
         public string Email { get; set; }
         public string Username { get; set; }
         public string CommentText { get; set; }
         public int TheseId { get; set; }
-
+        public int UserId { get; }
+        public ICommentService CommentService { get; }
         public ObservableCollection<Comment> FlaggedComments { get; set; }
 
 
 
-
-
-
-
-
-
         //commands
-        public ICommand ApproveCommand { get; set; }
-        public ICommand DenyCommand { get; set; }
-        public ICommand DisplayTheseCommand { get; set; }
+       // public ICommand ApproveCommand { get; set; }
+       // public ICommand DenyCommand { get; set; }
+        public ICommand MODDisplayTheseCommand { get; set; }
 
         
-
-
-
 
 
 
@@ -60,6 +54,7 @@ namespace Project.ViewModels
                  _userSession = userSession;
                  _userRepos = new UserRepos();
                  _reportsRepo = new ReportsRepo();
+                _commentRepo = new CommentRepo();
 
                 _windowManager = windowManager;
                 _viewModelLocator = viewModelLocator;
@@ -69,32 +64,22 @@ namespace Project.ViewModels
                 FlaggedComments = new ObservableCollection<Comment>();
 
 
-
-
                 Email = _userSession.Email;
                 Username = _userSession.Username;
+                UserId = _userRepos.GetUserId(Email);
 
-                foreach (var c in _reportsRepo.LoadFlaggedComments())
-                {
-                    FlaggedComments.Add(new Comment
-                    {
-                        CommentText = c.CommentText,
-                        TheseId = c.TheseId,
-                        Username = this.Username
-                    });
-                }
-
-
+                LoadFlaggedComments();
 
 
 
 
             //commands
-            DisplayTheseCommand = new ViewModelCommand(
+            MODDisplayTheseCommand = new ViewModelCommand(
             execute: obj =>
             {
 
                 //temp switching to MODcmnt
+                //next : switch to these with that id
                 _windowManager.CloseWindow();
                 _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
@@ -102,37 +87,78 @@ namespace Project.ViewModels
             // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
             );
 
-
-
-            ApproveCommand = new ViewModelCommand(
-            execute: obj =>
-            {
-                
-
-                
-            }
-            // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
-            );
-
-
-
-
-
-
-            DenyCommand = new ViewModelCommand(
-            execute: obj =>
-            {
-
-
-
-            }
-            // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
-            );
-
-
         }
 
-    }
+
+        private void LoadFlaggedComments()
+        {
+            FlaggedComments.Clear();
+
+            foreach (var c in _reportsRepo.LoadFlaggedComments())
+            {
+                if (c.State == 2)
+                    continue; // Skip this cmnt if its state is 2 (approved)
+
+                var comment = new Comment
+                {
+                                 
+                    CommentText = c.CommentText,
+                    commentId = _commentRepo.GetCommentId(CommentText),
+
+                    TheseId = c.TheseId,
+                    //TEMP
+                    //Username = "melly",
+                    //UserId = 1,
+
+                    //original
+                    Username = this.Username,
+                    UserId = c.UserId,
+                    State = c.State        
+                };
+
+                //each cmnt with its own commands
+                comment.ApproveCommand = new ViewModelCommand(
+                    execute: obj =>
+                    {
+                        cId = _commentRepo.GetCommentId(comment.CommentText);
+
+                        // Update comment state in db from 1 (flagged) to 2 (approved)
+                        bool success = _commentRepo.UpdateCommentState(cId, 2);
+
+                        MessageBox.Show(success ? "Comment approved successfully!" : "Approving comment failed.");
+
+                        if (success) { 
+                        // Display cmnt in theseView
+                        CommentService.DisplayComment(comment.Username, comment.CommentText);
+
+                        // Remove from flagged cmnts list
+                        FlaggedComments.Remove(comment);
+                        }
+                    }
+                );
+
+                comment.DenyCommand = new ViewModelCommand(
+                    execute: obj =>
+                    {
+                        cId = _commentRepo.GetCommentId(comment.CommentText);
+                        // Update comment state in db from 1 (flagged) to 3 (denied)
+                        bool success = _commentRepo.UpdateCommentState(cId, 3);
+                        MessageBox.Show(success ? "Comment denied successfully!" : "Denying comment failed.");
+                        if (success)
+                        {
+                            // Remove from flagged comments list
+                            FlaggedComments.Remove(comment);
+                        }
+                    }
+                );
+
+                FlaggedComments.Add(comment);
+            }
+        }
+    
+
+}
+
 
 
 }

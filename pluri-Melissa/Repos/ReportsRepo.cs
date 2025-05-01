@@ -47,11 +47,14 @@ namespace Project.Repos
             {
                 connection.Open();
                 command.Connection = connection;
+
                 command.CommandText = @"
-                                        SELECT c.comment_text, c.these_id
+                                        SELECT c.comment_text, c.these_id, c.state
                                         FROM reports r
                                         JOIN comments c ON c.comment_id = r.reported_id
                                         WHERE r.reported_type = 'Comment'
+                                        AND c.state != 2
+
         ";
 
                 using (var reader = command.ExecuteReader())

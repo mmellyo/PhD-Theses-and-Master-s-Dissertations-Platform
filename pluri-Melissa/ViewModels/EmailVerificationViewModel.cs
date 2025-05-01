@@ -100,7 +100,8 @@ namespace Project.ViewModels
         // commands
         public ICommand SendEmailCommand { get; }
         public ICommand VerifyCodeCommand { get; }
-
+        public ICommand GoHomeCommand { get; }
+        public ICommand GologinCommand { get; }
 
 
 
@@ -230,6 +231,30 @@ namespace Project.ViewModels
             }
             // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
             );
+
+
+            //******************************************** COMMAND GO HOME
+            GoHomeCommand = new ViewModelCommand(
+            execute: obj =>
+            {
+
+                _windowManager.CloseWindow();
+                _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
+
+            },
+            canExecute: obj => true
+        );
+
+            //******************************************** COMMAND GO LOGIN
+            GologinCommand = new ViewModelCommand(
+                execute: obj =>
+                {
+
+                    _windowManager.CloseWindow();
+                    _windowManager.ShowWindow(_viewModelLocator.LoginViewModel);
+                },
+                canExecute: obj => true
+                );
 
         }
 

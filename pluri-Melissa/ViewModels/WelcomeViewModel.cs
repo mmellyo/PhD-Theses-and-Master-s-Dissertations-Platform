@@ -61,9 +61,6 @@ namespace Project.ViewModels
             {
 
                   _windowManager.CloseWindow(); 
-
-
-                // Switch the window to LoginVM
                 _windowManager.ShowWindow(_viewModelLocator.LoginViewModel);
 
                 IsViewVisible = false;
@@ -79,8 +76,7 @@ namespace Project.ViewModels
                   _windowManager.CloseWindow(); 
 
                     IsViewVisible = false;
-                // Switch the window to sign up (1st Email verification)
-                _windowManager.ShowWindow(_viewModelLocator.EmailVerificationViewModel);
+                    _windowManager.ShowWindow(_viewModelLocator.EmailVerificationViewModel);
 
                
             }

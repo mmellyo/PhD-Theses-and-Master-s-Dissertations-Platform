@@ -64,7 +64,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<CommentViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();
@@ -72,8 +72,9 @@ namespace Project
             // mainWindow.DataContext = viewModelLocator.MainViewModel;
             // mainWindow.Show();
 
-            
 
+            //AllocConsole();
+            //Console.WriteLine("Console attached!");
         }
     }
 

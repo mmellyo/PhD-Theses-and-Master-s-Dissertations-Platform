@@ -9,6 +9,7 @@ using Project.Models;
 using Project.Services;
 using Project.Repos;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace Project.ViewModels
 {
@@ -35,6 +36,7 @@ namespace Project.ViewModels
         // getters / setters
 
         public string Email { get; set; }
+        public string CommentText { get; set; }
         public int UserId { get; }
         public int TheseId { get; set; }
         public string Username { get; }
@@ -59,6 +61,8 @@ namespace Project.ViewModels
             }
         }
 
+        public ObservableCollection<Comment> ThesesComents { get;  set; } 
+
         // commands
         public ICommand AddCommentCommand { get; }
 
@@ -78,68 +82,89 @@ namespace Project.ViewModels
             _viewModelLocator = viewModelLocator;
             CommentService = commentService;
             _mlContext = new MLContext();
-            
+
+            ThesesComents = new ObservableCollection<Comment>();
 
             Email = _userSession.Email;
 
 
-           // Username = _userRepos.GetUsernameFromEmail(Email);
-            //  UserId = _userRepos.GetUserId(Email);
-            TheseId = 1;
 
-            //***************************** TEST
-          Username = _userRepos.GetUsernameFromEmail("melly@etu.usthb.dz");
+            // TEST
+            Username = _userRepos.GetUsernameFromEmail("melly@etu.usthb.dz");
+            UserId = _userRepos.GetUserId("melly@etu.usthb.dz");
+
             //save username in session
             _userSession.Username = this.Username;
 
-            UserId = _userRepos.GetUserId("melly@etu.usthb.dz");
+
+            //original
+            // Username = _userRepos.GetUsernameFromEmail(Email);
+            // UserId = _userRepos.GetUserId(Email);
+            TheseId = 1;
 
 
+            //display already added cmnts
+            // ThesesComents = _commentRepo.DisplayTheseComments(TheseId);
+
+            foreach (var c in _commentRepo.LoadTheseComments(1))
+            {
+                ThesesComents.Add(new Comment
+                {
+                    CommentText = c.CommentText,
+                    TheseId = c.TheseId,
+                    Username = this.Username
+                }); Console.WriteLine($"comment is loaded  : {CommentText}");
+
+            }
+
+            Console.WriteLine($"sinished loading");
 
 
-
+            // commands
             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-                   // try
-                   // {
+                    Console.WriteLine($"add cmnts clicked");
 
-                        var data = _mlContext.Data.LoadFromTextFile<CommentData>("MLModel/CommentModel.csv", hasHeader: true, separatorChar: ',', allowQuoting: true);
+                    // try
+                    // {
+
+                    var data = _mlContext.Data.LoadFromTextFile<CommentData>("MLModel/CommentModel.csv", hasHeader: true, separatorChar: ',', allowQuoting: true);
 
 
-                        if (data == null)
+                    if (data == null)
+                    {
+                        throw new InvalidOperationException("Data could not be loaded properly.");
+                    }
+
+
+                    var pipeline = _mlContext.Transforms.Expression("Label", "(x) => x == 1 ? true : false", "Sentiment")
+                    .Append(_mlContext.Transforms.Text.FeaturizeText("Features", nameof(CommentData.SentimentText)))
+                        .Append(_mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: "Features"));
+
+
+                    var model = pipeline.Fit(data);
+
+
+                    var predictionEngine = _mlContext.Model.CreatePredictionEngine<CommentData, CommentPrediction>(model);
+
+
+                    var prediction = predictionEngine.Predict(new CommentData
+                    {
+                        SentimentText = Comment
+                    });
+
+                    string sentiment = prediction.Prediction ? "Positive" : "Negative";
+                    Result = $" The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
+
+
+               
+
+
+                        if (sentiment == "Positive")
                         {
-                            throw new InvalidOperationException("Data could not be loaded properly.");
-                        }
 
-
-                        var pipeline = _mlContext.Transforms.Expression("Label", "(x) => x == 1 ? true : false", "Sentiment")
-                        .Append(_mlContext.Transforms.Text.FeaturizeText("Features", nameof(CommentData.SentimentText)))
-                            .Append(_mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: "Features"));
-
-
-                        var model = pipeline.Fit(data);
-
-
-                        var predictionEngine = _mlContext.Model.CreatePredictionEngine<CommentData, CommentPrediction>(model);
-
-
-                        var prediction = predictionEngine.Predict(new CommentData
-                        {
-                            SentimentText = Comment
-                        });
-
-                        string sentiment = prediction.Prediction ? "Positive" : "Negative";
-                        Result = $" The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
-
-                        
-
-                     
-
-                        if ( sentiment == "Positive")
-                        {
-
-                            //save cmnt is db
+                            //save cmnt is db with state (0) => Positive
                             bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
                             //get cmnt id
                             int CommentId = _commentRepo.GetCommentId(Comment);
@@ -149,16 +174,19 @@ namespace Project.ViewModels
                             CommentService.DisplayComment(Username, Comment);
 
 
+                            //temp switching to MODcmnt
+                            //_windowManager.CloseWindow();
+                            _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
 
-                        } 
+                        }
                         else if (sentiment == "Negative")
                         {
 
 
                             MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
-                            
-                            //save cmnt in db (comment)
+
+                            //save cmnt in db (comment) with state (1) => Negative
                             _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);
 
                             //get cmnt id
@@ -166,16 +194,17 @@ namespace Project.ViewModels
 
                             //save cmnt in db (reports)
                             _reportRepo.ReportComment(CommentId, null);
-                       
+
 
 
                             //temp switching to MODcmnt
-                            _windowManager.CloseWindow();
+                            //_windowManager.CloseWindow();
                             _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
                             // _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
                         }
-
+                    
+                }
 
 
 
@@ -185,11 +214,42 @@ namespace Project.ViewModels
                     //{
                      //   Result = $"Error: {ex.Message}";
                     //}
-                },
-                canExecute: obj => true
+               // },
+              //  canExecute: obj => true
                 //!string.IsNullOrEmpty(Comment) // Only enable the command if there's text to analyze
             );
         }
+
+       /* public void LoadTheseComments()
+        {
+        
+            ThesesComents.Clear();
+            foreach (var c in _commentRepo.LoadTheseComments(TheseId))
+            {
+
+                var comment = new Comment
+                {
+
+                    CommentText = c.CommentText,
+                    commentId = _commentRepo.GetCommentId(CommentText),
+
+                    TheseId = c.TheseId,
+                    //TEMP
+                    Username = "melly",
+                    UserId = 1,
+
+                    //original
+                    //Username = this.Username,
+                    //UserId = c.UserId,
+                    //State = c.State
+                };
+
+                ThesesComents.Add(comment);
+
+            }
+
+        }*/
+
     }
 }
     

@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using Mysqlx.Prepare;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
@@ -71,6 +72,11 @@ namespace Project.ViewModels
 
         // COMMANDS
         public ICommand SignUpCommand { get; }
+        public ICommand GoHomeCommand { get; }
+        public ICommand GologinCommand { get; }
+
+        
+
         //public ICommand AddItemCommand { get; set; }
         //public ICommand SignUpCommand { get; set; }
 
@@ -129,19 +135,44 @@ namespace Project.ViewModels
         );
 
 
-            // Load the email from UserModel - make sure to initialize this first
-            //  LoadUserData();
 
-            // SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
+            //******************************************** COMMAND GO HOME
+            GoHomeCommand = new ViewModelCommand(
+            execute: obj =>
+            {
 
-            // Debug - check if email was loaded
-            // Console.WriteLine($"SignUpViewModel initialized with email: {SignUpEmail}");
+                _windowManager.CloseWindow();
+                // Switch the window to welcoùme
+                _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
+            },
+            canExecute: obj => true
+        );
+
+
+
+            //******************************************** COMMAND GO LOGIN
+            GologinCommand = new ViewModelCommand(
+                execute: obj =>
+                {
+
+                    _windowManager.CloseWindow();
+                    // Switch the window to welcoùme
+                    _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
+                },
+                canExecute: obj => true
+                );
         }
+        
 
 
 
+        // Load the email from UserModel - make sure to initialize this first
+        //  LoadUserData();
 
+        // SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
 
+        // Debug - check if email was loaded
+        // Console.WriteLine($"SignUpViewModel initialized with email: {SignUpEmail}");
 
 
 
