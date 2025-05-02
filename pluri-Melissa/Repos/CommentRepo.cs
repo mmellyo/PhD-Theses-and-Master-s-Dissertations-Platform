@@ -88,7 +88,7 @@ namespace Project.Repos
                                         FROM comments c
                                         JOIN user u ON c.user_id = u.user_id
                                         WHERE c.these_id = @TheseId 
-                                          AND c.state != 2;  -- optional: ignore deleted
+                                        AND c.state NOT IN (1, 3);
         ";
 
                 command.Parameters.AddWithValue("@TheseId", theseId);

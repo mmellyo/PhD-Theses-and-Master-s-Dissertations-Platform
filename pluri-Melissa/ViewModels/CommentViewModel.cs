@@ -10,6 +10,7 @@ using Project.Services;
 using Project.Repos;
 using System.Windows;
 using System.Collections.ObjectModel;
+using Project.Utils;
 
 namespace Project.ViewModels
 {
@@ -34,12 +35,12 @@ namespace Project.ViewModels
         private string _comment;
 
         // getters / setters
-
         public string Email { get; set; }
         public string CommentText { get; set; }
         public int UserId { get; }
         public int TheseId { get; set; }
         public string Username { get; }
+        public byte[] user_profilepic { get; set; }
 
         public string Comment
         {
@@ -60,11 +61,13 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(Result));
             }
         }
+        public ObservableCollection<Comment> ThesesComents { get; set; } = new ObservableCollection<Comment>();
 
-        public ObservableCollection<Comment> ThesesComents { get;  set; } = new ObservableCollection<Comment>();
 
         // commands
         public ICommand AddCommentCommand { get; }
+        public ICommand ToggleCommentCommand { get; }
+
 
         // constructor
         public CommentViewModel(IUserSessionService userSession, ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
@@ -75,9 +78,7 @@ namespace Project.ViewModels
             _userRepos = new UserRepos();
             _commentRepo = new CommentRepo();
             _reportRepo = new ReportsRepo();
-
             _emailVerificationRepo = new EmailVerificationRepo();
-
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             CommentService = commentService;
@@ -86,7 +87,7 @@ namespace Project.ViewModels
             ThesesComents = new ObservableCollection<Comment>();
 
             Email = _userSession.Email;
-
+            user_profilepic = _userSession.user_profilepic;
 
 
             // TEST
@@ -96,31 +97,30 @@ namespace Project.ViewModels
             //save username in session
             _userSession.Username = this.Username;
 
-
             //original
             // Username = _userRepos.GetUsernameFromEmail(Email);
             // UserId = _userRepos.GetUserId(Email);
             TheseId = 1;
 
+            // Load existing comments
+            LoadComments(1);
 
-            //display already added cmnts
-            // ThesesComents = _commentRepo.DisplayTheseComments(TheseId);
 
-            foreach (var c in _commentRepo.LoadTheseComments(1))
-            {
-                CommentService.Comments.Add(new Comment
-                {
-                    CommentText = c.CommentText,
-                    Username = c.Username,
-                    TheseId = 1,
-                    user_profilepic = c.user_profilepic,
-                });
-            }
-
-            Console.WriteLine($"sinished loading");
 
 
             // commands
+            ToggleCommentCommand = new ViewModelCommand(
+                execute: param =>
+                {
+                    if (param is Comment comment)
+                    {
+                        comment.IsExpanded = !comment.IsExpanded;
+                    }
+                },
+                canExecute: param => param is Comment
+            );
+      
+
             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
                 {
@@ -179,7 +179,8 @@ namespace Project.ViewModels
                             {
                                 CommentText = Comment, // Bound from TextBox
                                 Username = Username,
-                                TheseId = 1
+                                TheseId = 1,
+                                user_profilepic = user_profilepic,
                             };
                             CommentService.Comments.Add(newComment);
 
@@ -230,35 +231,81 @@ namespace Project.ViewModels
             );
         }
 
-       /* public void LoadTheseComments()
+
+
+
+        private void LoadComments(int TheseId)
         {
-        
-            ThesesComents.Clear();
-            foreach (var c in _commentRepo.LoadTheseComments(TheseId))
+            try
             {
+                // Clear existing comments
+                CommentService.Comments.Clear();
 
-                var comment = new Comment
+                // Load comments from repo
+                var comments = _commentRepo.LoadTheseComments(TheseId);
+
+                if (comments != null)
                 {
-
-                    CommentText = c.CommentText,
-                    commentId = _commentRepo.GetCommentId(CommentText),
-
-                    TheseId = c.TheseId,
-                    //TEMP
-                    Username = "melly",
-                    UserId = 1,
-
-                    //original
-                    //Username = this.Username,
-                    //UserId = c.UserId,
-                    //State = c.State
-                };
-
-                ThesesComents.Add(comment);
-
+                    foreach (var c in comments)
+                    {
+                        CommentService.Comments.Add(new Comment
+                        {
+                            CommentText = c.CommentText,
+                            Username = c.Username,
+                            TheseId = c.TheseId,
+                            user_profilepic = c.user_profilepic,
+                            commentId = _commentRepo.GetCommentId(c.CommentText),
+                            IsExpanded = false  // Initially collapsed
+                        });
+                    }
+                    Console.WriteLine($"Loaded {CommentService.Comments.Count} comments successfully");
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading comments: {ex.Message}");
+                MessageBox.Show($"Failed to load comments: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
-        }*/
+
+
+
+
+
+
+
+
+
+        /* public void LoadTheseComments()
+         {
+
+             ThesesComents.Clear();
+             foreach (var c in _commentRepo.LoadTheseComments(TheseId))
+             {
+
+                 var comment = new Comment
+                 {
+
+                     CommentText = c.CommentText,
+                     commentId = _commentRepo.GetCommentId(CommentText),
+
+                     TheseId = c.TheseId,
+                     //TEMP
+                     Username = "melly",
+                     UserId = 1,
+
+                     //original
+                     //Username = this.Username,
+                     //UserId = c.UserId,
+                     //State = c.State
+                 };
+
+                 ThesesComents.Add(comment);
+
+             }
+
+         }*/
 
     }
 }

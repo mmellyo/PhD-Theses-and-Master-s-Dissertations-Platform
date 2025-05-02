@@ -7,39 +7,115 @@
              xmlns:converter="clr-namespace:Project.Utils"
 
              mc:Ignorable="d" 
-                      d:DesignHeight="100" d:DesignWidth="380"
+             d:DesignWidth="380"
          Background="Transparent">
 
     <UserControl.Resources>
-        <converter:ByteArrayToImageConverter x:Key="ImageConverter"/>
+        <converter:ByteArrayToImageConverter x:Key="ImageConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </UserControl.Resources>
 
 
-    <Border Background="White"  CornerRadius="12" BorderBrush="#FF9A9A9A" BorderThickness="0.5">
+
+    <Border Background="White"  CornerRadius="12" BorderBrush="#FF9A9A9A" BorderThickness="0.5" Padding="8">
         <Grid>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0" HorizontalAlignment="Left"  Height="80" Width="320">
-                <Border Height="70" Width="70">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="105"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+
+
+            <!-- profilepic  column 0 -->
+            <Border Height="70" Width="70">
                     <Ellipse Width="60" Height="60" Stroke="Gray" StrokeThickness="1">
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding user_profilepic, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
-                </Border>
-                <StackPanel Orientation="Vertical" Width="250" Margin="0,20,0,10">
-                    <StackPanel Orientation="Horizontal">
+            </Border>
+
+            
+            <!-- Comment Content  column 1 (*) -->  
+                <Grid Grid.Column="1">
+                    
+                    <Grid.RowDefinitions>
+                        
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                   
+                    </Grid.RowDefinitions>
+
+                    <!-- Username Row 0-->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock
-                        FontSize="12"
-                        FontFamily="Montserrat Bold"
-                        Foreground="#212121"
-                        TextWrapping="Wrap"
-                        Width="185">
-                        <Run Text="{Binding Username}"/>
+                            FontSize="12"
+                            FontFamily="Montserrat Bold"
+                            Foreground="#212121"
+                            TextWrapping="Wrap"
+                            Width="185">
+                            <Run Text="{Binding Username}"/>
                         </TextBlock>
                         <!-- ETOILES -->
                     </StackPanel>
-                    <TextBlock Text="{Binding CommentText}" FontSize="12" FontFamily="Montserrat Medium" TextWrapping="Wrap" MaxHeight="48" MaxWidth="250"  Foreground="#212121" Height="48"/>
-                </StackPanel>
-            </StackPanel>
+
+                    
+                    <!-- Comment Text (Row 1)-->
+                    <Grid Grid.Row="1">
+                        <TextBlock Text="{Binding DisplayText}" 
+                                   FontSize="12" 
+                                   FontFamily="Montserrat Medium" 
+                                   TextWrapping="Wrap" 
+                                   MaxWidth="250" 
+                                   Foreground="#212121" 
+                                    TextTrimming="CharacterEllipsis"/>
+                    </Grid>
+                    
+                    
+                        <!-- See More/Less Button (Row 2) -->
+
+                    <Button Grid.Row="2"
+                            Content="{Binding ToggleButtonText}" 
+                            Visibility="{Binding ShowToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding DataContext.ToggleCommentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            CommandParameter="{Binding}"
+                            HorizontalAlignment="Left" 
+                            Padding="5,2"
+                            Margin="0,4,0,5"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#0078D7"
+                            FontFamily="Montserrat SemiBold"
+                            FontSize="11"
+                            Cursor="Hand">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="#005FA3"/>
+                                                <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                    </Button>
+
+
+
+                    
+                </Grid>
+
         </Grid>
     </Border>
 </UserControl>

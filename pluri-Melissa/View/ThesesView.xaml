@@ -404,12 +404,20 @@
                                     <Run Text="*" FontWeight="SemiBold" Foreground="#F77777"/>
                                 </TextBlock>
                                 <Grid Width="510" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                                    <TextBox x:Name="AvisComment" Width="510" Height="100" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CommentText}"  />
+                                    <TextBox x:Name="AvisComment" 
+                                             Width="510" 
+                                             Height="100" 
+                                             Padding="0,30,0,0" 
+                                             Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}"
+                                             HorizontalAlignment="Left" 
+                                             VerticalAlignment="Top" 
+                                             Style="{StaticResource CommentText}"  />
+                                    
                                     <Label   IsHitTestVisible="False"
                                      Content="Écrivez ici..."
                                      VerticalAlignment="Center"
                                      Foreground="#9A9A9A"
-                                     Visibility="{Binding Text.IsEmpty, ElementName=AvisComment, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="20" Margin="10,0,10,0" Height="90"/>
+                                     Visibility="{Binding Text.IsEmpty, ElementName=AvisComment, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="15" Margin="10,0,10,0" Height="80" />
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -432,7 +440,7 @@
 
 
 
-                            <ScrollViewer VerticalScrollBarVisibility="Visible" Height="360" Width="380">
+                            <ScrollViewer VerticalScrollBarVisibility="Visible" Width="380">
                                 <ItemsControl 
                                             ItemsSource="{Binding CommentService.Comments}"
                                             VerticalAlignment="Stretch"
