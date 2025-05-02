@@ -37,6 +37,7 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding FlaggedComments}">
+
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Margin="10" Padding="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">

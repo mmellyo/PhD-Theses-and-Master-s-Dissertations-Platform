@@ -4,128 +4,455 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
+        xmlns:uc="clr-namespace:Project.View.userControls"
         mc:Ignorable="d"
-        Title="ThesesView" Height="450" Width="800">
+        Title="ThesesView" Height="1973" Width="1238">
 
 
 
 
 
-        <StackPanel>
-            <TextBox 
-                  
-                    MinWidth="30"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Margin="0,30,0,16"
-                    x:Name="Comment"
-                     Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
+    <Grid>
+        <StackPanel Background="White" Width="200" HorizontalAlignment="Left">
 
-            <Button
-                    x:Name="AddComment"
-                   
-                    HorizontalAlignment="Center"
-                    Content="Add Comment" 
-                Command="{Binding AddCommentCommand}"  
-                    Margin="0,10,0,16" />
-
-
-
-                <ListView ItemsSource="{Binding CommentService.Comments}" 
-                      Height="150" Width="300">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border Margin="10" Padding="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
-                                <DockPanel>
-                                    <StackPanel DockPanel.Dock="Left" Width="500">
-                                        <TextBlock Text="{Binding Username}" FontWeight="Bold" />
-                                        <TextBlock Text="{Binding CommentText}" Foreground="Black" TextWrapping="Wrap" />
-                                    </StackPanel>
-                                </DockPanel>
-                            </Border>
-                        </DataTemplate>
-                        </ListView.ItemTemplate>
-                </ListView>     
-
-
-        <StackPanel>
-
-            <TextBlock
-
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"
-                x:Name="Result">
-            </TextBlock>
         </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="200,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="450"/>
+                    <RowDefinition Height="900"/>
+                    <RowDefinition Height="446"/>
+                </Grid.RowDefinitions>
+                <!-- TOPBAR -->
+                <StackPanel Background="#0093ED" Height="75" VerticalAlignment="Top">
+
+                </StackPanel>
+                <!-- BOUTTON REVENIR -->
+                <Grid Grid.Row="1">
+                    <Border Margin="60,0,0,0" CornerRadius="16" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#D6F5FF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Button Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                <Viewbox Width="13" Height="13" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource RevenirIcon}" Stroke="#0093ED" StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="10" Height="15"/>
+                                </Viewbox>
+                                <TextBlock Margin="5,0,0,0" Text="Revenir" FontSize="13" FontFamily="Montserrat SemiBold" Foreground="#0093ED" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    <!-- LA CARTE DE THESES AVEC LES INFORMATION -->
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="410"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border  Margin="-0,25,70,25" Height="310" Width="220">
+                        <Image Source="{Binding apercutaepdf}" Stretch="Uniform">
+                            <Image.Effect>
+                                <DropShadowEffect 
+                                Color="Black" 
+                                BlurRadius="50" 
+                                ShadowDepth="5" 
+                                Opacity="0.25"/>
+                            </Image.Effect>
+                        </Image>
+                    </Border>
+                    <Grid Grid.Column="3">
+                        <Border  Height="400" Width="600" BorderBrush="#FF39C3FF" BorderThickness="2.5" CornerRadius="25" Margin="-100,25,78,25" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="80"/>
+                                    <RowDefinition Height="75"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <!-- NOM THESES + BOUTTON POUR LE FAV -->
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Margin="33,10,0,0"
+                                           Text="Développement d’une Plateforme de Gestion des Thèses et Mémoires"
+                                           FontSize="13"
+                                           FontFamily="Montserrat Bold"
+                                           Foreground="#0093ED"
+                                           Height="50"
+                                           TextWrapping="Wrap"
+                                           Width="410"/>
+
+                                    <ToggleButton Margin="75,0,0,0"
+                                              Width="35"
+                                              Height="35"
+                                              Background="Transparent"
+                                              BorderBrush="Transparent"
+                                              Cursor="Hand">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Canvas Width="25" Height="31">
+                                                    <Path x:Name="IconContour"
+                                                      Data="{StaticResource FavIconContours}"
+                                                      Stroke="#0093ED"
+                                                      StrokeThickness="4"
+                                                      StrokeLineJoin="Round"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      Stretch="Fill"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"
+                                                      Width="25"
+                                                      Height="31"
+                                                      Canvas.Left="0"
+                                                      Canvas.Top="0"
+                                                      Fill="Transparent" />
+                                                    <Path x:Name="IconTrait"
+                                                      Data="{StaticResource FavIconTrait}"
+                                                      Stroke="#0093ED"
+                                                      StrokeThickness="4"
+                                                      StrokeLineJoin="Round"
+                                                      StrokeStartLineCap="Round"
+                                                      StrokeEndLineCap="Round"
+                                                      Stretch="Fill"
+                                                      Height="5"
+                                                      Width="11"
+                                                      Canvas.Left="7"
+                                                      HorizontalAlignment="Left" Canvas.Top="8.1" VerticalAlignment="Top"/>
+                                                </Canvas>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="IconContour" Property="Fill" Value="#0093ED"/>
+                                                        <Setter TargetName="IconTrait" Property="Stroke" Value="White"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </StackPanel>
+                                <!-- INFORMATION AUTEUR/DEPARTEMENT/ANNEE/ENCADRANT -->
+                                <Grid Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                    <TextBlock Margin="33,0,0,0"
+                                           FontSize="10"
+                                           FontFamily="Montserrat"
+                                           Foreground="#9A9A9A"
+                                           Height="22"
+                                           TextWrapping="Wrap"
+                                           Width="520">
+
+                                    <Run Text="Présenté par :" />
+                                    <Run Text="{Binding AuteurString}" FontWeight="Bold" />
+                                    <Run Text=" | " FontWeight="Normal" />
+                                    <Run Text="{Binding Departement}" FontWeight="Normal" />
+                                    <Run Text=" | " FontWeight="Normal" />
+                                    <Run Text="{Binding AnneeUniv}" FontWeight="Normal" />
+                                    </TextBlock>
+                                    <TextBlock Margin="33,40,0,-22"
+                                           FontSize="10"
+                                           Height="11"
+                                           FontFamily="Montserrat"
+                                           Foreground="#9A9A9A"
+                                           TextWrapping="Wrap"
+                                           Width="520">
+                        
+                                    <Run Text="Encadré par :" />
+                                    <Run Text="{Binding EncadrantString}" FontWeight="Bold" />
+                                    </TextBlock>
+                                </Grid>
+                                <!-- MOT-ClES -->
+                                <Grid Grid.Row="3">
+                                    <WrapPanel VerticalAlignment="Top" Margin="33,0,103,0">
+                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Height="30" Width="85">
+                                            <TextBlock Text="Mot-Clé 01" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Height="30" Margin="5" Width="85">
+                                            <TextBlock Text="Mot-Clé 02" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Margin="5" Height="30" Width="85">
+                                            <TextBlock Text="Mot-Clé 03" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </WrapPanel>
+                                </Grid>
+                                <!-- DESCRIPTION -->
+                                <Grid Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <TextBlock Margin="33,0,0,0"
+                                           FontSize="10"
+                                           Height="55"
+                                           FontFamily="Montserrat"
+                                           TextWrapping="Wrap"
+                                           Width="510">
+
+                                    <Run Text="Description :" FontWeight="Bold" Foreground="Black"/>
+                                    <Run Text="{Binding Description}" FontWeight="SemiBold" Foreground="#9A9A9A"/>
+                                    </TextBlock>
+                                </Grid>
+                                <!-- VISITER/ENREGISTRER/FACULTE -->
+                                <Grid Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <StackPanel Margin="33,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Canvas Width="13" Height="10" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource VisiterContours}" Fill="#9a9a9a"  StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="12" Height="10"/>
+                                                <Path Data="{StaticResource VisiterRond}" Fill="#9a9a9a" Stroke="White"  StrokeThickness="1" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="5" Height="5" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="3.5" Canvas.Top="2.5"/>
+                                            </Canvas>
+                                            <TextBlock Margin="10,0,0,0" Text="{Binding Visite}" FontSize="12" FontFamily="Montserrat Bold" Foreground="#9A9A9A"/>
+
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Canvas Width="10" Height="12" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource FavIconContours}" Fill="#9a9a9a"  StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="10" Height="12"/>
+                                                <Path Data="{StaticResource FavIconTrait}" Fill="#9a9a9a" Stroke="White"  StrokeThickness="1" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="5" Height="1" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="2.5" Canvas.Top="2.967"/>
+                                            </Canvas>
+                                            <TextBlock Margin="10,0,0,0" Text="{Binding Enregistrement}" FontSize="12" FontFamily="Montserrat Bold" Foreground="#9A9A9A"/>
+
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Canvas Width="13" Height="12" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource LocalisationContours}" Fill="#9a9a9a"  StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="10" Height="12"/>
+                                                <Path Data="{StaticResource LocalisationTrait}" Fill="White"  StrokeThickness="1" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="4" Height="4" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="3" Canvas.Top="3"/>
+                                            </Canvas>
+                                            <TextBlock Margin="10,0,0,0" Text="{Binding Faculte}" FontSize="12" FontFamily="Montserrat Bold" Foreground="#9A9A9A"/>
+
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <!-- BOUTTON TELECHARGER/ENVOYER MAIL/SIGNALER -->
+                                <Grid Grid.Row="6" >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                        <Border Width="199" Background="#0093ED" Height="55" CornerRadius="0,0,0,24" VerticalAlignment="Top">
+                                            <Button BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                                    <Viewbox Width="14" Height="14" VerticalAlignment="Center">
+                                                        <Path Data="{StaticResource Telechargement}" Stroke="White" StrokeThickness="2.5" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="21" Height="21"/>
+                                                    </Viewbox>
+                                                    <TextBlock Margin="10,0,0,0" Text="Télécharger" FontSize="13" FontFamily="Montserrat SemiBold" Foreground="White" Height="15"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border Width="198" Height="55" >
+                                            <Button Background="#D6F5FF" Foreground="{x:Null}" BorderBrush="#FFD6F5FF">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                                    <Viewbox Width="14" Height="14" VerticalAlignment="Center">
+                                                        <Path Data="{StaticResource EnvoyerMail}" Stroke="Black" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="20" Height="20"/>
+                                                    </Viewbox>
+                                                    <TextBlock Margin="10,0,0,0" Text="Envoyer mail" FontSize="13" FontFamily="Montserrat SemiBold" Foreground="Black" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border Width="198" Height="55" Background="#D6F5FF" VerticalAlignment="Top" CornerRadius="0,0,24,0">
+                                            <Button Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" >
+                                                    <Viewbox Width="14" Height="14" VerticalAlignment="Center">
+                                                        <Path Data="{StaticResource SignalerIcon}" Stroke="Black" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="20" Height="20"/>
+                                                    </Viewbox>
+                                                    <TextBlock Margin="10,0,0,0" Text="Signaler" FontSize="13" FontFamily="Montserrat SemiBold" Foreground="Black" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="450"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- A PROPOS DE L'AUTEUR -->
+                    <Grid>
+                        <Border Width="374" HorizontalAlignment="Center" VerticalAlignment="Top" Height="510" Margin="0,60,0,0" Background="#D6F5FF">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="55"/>
+                                    <RowDefinition Height="85"/>
+                                    <RowDefinition Height="132"/>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <TextBlock Text="À propos de l'auteur" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="33,0,35,0"/>
+                                </Grid>
+                                <!-- INFORMATION DE L'AUTEUR -->
+                                <Grid Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="33,15,15,0" Height="70" Width="200">
+                                        <Border Height="50" Width="50">
+                                            <Image Source="{Binding imageUtilisateur}" Stretch="Uniform"/>
+                                        </Border>
+                                        <StackPanel Orientation="Vertical" Width="135" Margin="0,10,0,10">
+                                            <TextBlock
+                                           Margin="0,0,0,0"
+                                           FontSize="10"
+                                           FontFamily="Montserrat Bold"
+                                           Foreground="#0093ED"
+                                           TextWrapping="Wrap"
+                                           Width="135">
+
+                                        <Run Text="{Binding NomUtilisateur}"/>
+                                        <Run Text="{Binding PrenomUtilisateur}"/>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding emailUtilisateur}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,4"/>
+                                            <TextBlock Text="Etudiant(e)" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <!-- DESCRIPTION -->
+                                <Grid Grid.Row="2">
+                                    <TextBlock VerticalAlignment="Top"
+                                           HorizontalAlignment="Left"
+                                           Margin="33,10,0,0"
+                                           FontSize="10"
+                                           Height="80"
+                                           FontFamily="Montserrat"
+                                           TextWrapping="Wrap"
+                                           Width="300">
+
+                                    <Run Text="Description :" FontWeight="Bold" Foreground="Black"/>
+                                    <Run Text="{Binding Description}" FontWeight="Medium" Foreground="Black"/>
+                                    </TextBlock>
+                                    <Separator Foreground="{x:Null}" Background="#FF79DEFF" VerticalAlignment="Bottom"/>
+                                </Grid>
+                                <!-- D'AUTRES THESES DE L'AUTEUR 4 THESES MAXIMUM A AFFICHER -->
+                                <Grid Grid.Row="3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="D’autres thèses :" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="35,0,140,0"/>
+                                        <TextBlock Text="Voir tout" FontSize="13" FontFamily="Montserrat Bold" VerticalAlignment="Center" Foreground="#FF0093ED" TextDecorations="Underline"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="4">
+                                    <ItemsControl VerticalAlignment="Center" HorizontalAlignment="Center" Height="80" Width="280" ItemsSource="{Binding PageDeGardeOtherProjects}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <!-- RESUME -->
+                    <Grid Grid.Column="2">
+                        <TextBlock Text="{Binding resume}" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="13" FontFamily="Montserrat Medium" MaxHeight="800" MaxWidth="450" Foreground="Black" Margin="30,60,0,0"/>
+                    </Grid>
+                </Grid>
+                <!-- COMMENTAIRES -->
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="440"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="145"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!-- AJOUTER UN AVIS -->
+                        <TextBlock Text="Ajouter un avis" FontSize="22" FontFamily="Montserrat Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Grid Grid.Row="1">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock     Margin="5"
+                                           FontSize="12"
+                                           FontFamily="Montserrat">
+                                    <Run Text="Ajoutez votre note" FontWeight="Medium" Foreground="#9A9A9A"/>
+                                    <Run Text="*" FontWeight="SemiBold" Foreground="#F77777"/>
+                                </TextBlock>
+                                <!-- AJOUTER DES ETOILES -->
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                    <Viewbox Width="19" Height="20" VerticalAlignment="Center" Margin="5">
+                                        <Path Data="{StaticResource Etoile}" Stroke="#FFC70E" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="30" Height="28"/>
+                                    </Viewbox>
+                                    <Viewbox Width="19" Height="20" VerticalAlignment="Center" Margin="5">
+                                        <Path Data="{StaticResource Etoile}" Stroke="#FFC70E" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="30" Height="28"/>
+                                    </Viewbox>
+                                    <Viewbox Width="19" Height="20" VerticalAlignment="Center" Margin="5">
+                                        <Path Data="{StaticResource Etoile}" Stroke="#FFC70E" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="30" Height="28"/>
+                                    </Viewbox>
+                                    <Viewbox Width="19" Height="20" VerticalAlignment="Center" Margin="5">
+                                        <Path Data="{StaticResource Etoile}" Stroke="#FFC70E" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="30" Height="28"/>
+                                    </Viewbox>
+                                    <Viewbox Width="19" Height="20" VerticalAlignment="Center" Margin="5">
+                                        <Path Data="{StaticResource Etoile}" Stroke="#FFC70E" StrokeThickness="3" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="30" Height="28"/>
+                                    </Viewbox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        <!-- DONNEZ VOTRE AVIS -->
+                        <Grid Grid.Row="2">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock     Margin="5"
+                                           FontSize="12"
+                                           FontFamily="Montserrat">
+
+                                    <Run Text="Donnez votre avis" FontWeight="Medium" Foreground="#9A9A9A"/>
+                                    <Run Text="*" FontWeight="SemiBold" Foreground="#F77777"/>
+                                </TextBlock>
+                                <Grid Width="510" VerticalAlignment="Center" HorizontalAlignment="Left" >
+                                    <TextBox x:Name="AvisComment" Width="510" Height="100" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CommentText}"  />
+                                    <Label   IsHitTestVisible="False"
+                                     Content="Écrivez ici..."
+                                     VerticalAlignment="Center"
+                                     Foreground="#9A9A9A"
+                                     Visibility="{Binding Text.IsEmpty, ElementName=AvisComment, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="20" Margin="10,0,10,0" Height="90"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="3">
+                            <Border Width="510" Background="#0093ED" Height="40" CornerRadius="12" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Button Command="{Binding AddCommentCommand}"   
+                                BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
+                                    <TextBlock Text="Envoyer" FontSize="16" FontFamily="Montserrat SemiBold" Foreground="White"/>
+                                </Button>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Avis récents" FontSize="22" FontFamily="Montserrat Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <Grid Grid.Row="1">
 
 
-    </StackPanel>
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible" Height="360" Width="380">
+                                <ItemsControl 
+                                            ItemsSource="{Binding CommentService.Comments}"
+                                            VerticalAlignment="Stretch"
+                                            HorizontalAlignment="Stretch">
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <uc:UsersComment />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
 
 
 
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 
-
-
-
-
-    <!-- <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <TextBlock 
-        Grid.Column="1" 
-        Grid.Row="1" 
-        Text="COMMENTS ANALYSIS"
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        Grid.ColumnSpan="5"
-        FontSize="24">
-        </TextBlock>
-
-        <TextBlock 
-            Grid.Row="2" 
-            Grid.Column="1"
-            Text="Comment">
-        </TextBlock>
-
-        <TextBox 
-        Grid.Row="2"
-        Grid.Column="2"
-        MinWidth="30"
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        Grid.ColumnSpan="1"
-        x:Name="Comment"
-         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Width="171"/>
-
-        <Button
-    x:Name="Analyse"
-    Grid.Row="3"
-    Grid.Column="1"
-    HorizontalAlignment="Center"
-    Content="Analyse" Command="{Binding Analyse}"  
-    Margin="0,0,0,16" Grid.RowSpan="2" />
-
-        <TextBlock
-        Grid.Row="4"
-        Grid.Column="3"
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"
-        x:Name="Result">
-        </TextBlock>
-    </Grid>-->
-        
 </Window>

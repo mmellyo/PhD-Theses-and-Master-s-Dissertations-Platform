@@ -61,7 +61,7 @@ namespace Project.ViewModels
             }
         }
 
-        public ObservableCollection<Comment> ThesesComents { get;  set; } 
+        public ObservableCollection<Comment> ThesesComents { get;  set; } = new ObservableCollection<Comment>();
 
         // commands
         public ICommand AddCommentCommand { get; }
@@ -108,13 +108,13 @@ namespace Project.ViewModels
 
             foreach (var c in _commentRepo.LoadTheseComments(1))
             {
-                ThesesComents.Add(new Comment
+                CommentService.Comments.Add(new Comment
                 {
                     CommentText = c.CommentText,
-                    TheseId = c.TheseId,
-                    Username = this.Username
-                }); Console.WriteLine($"comment is loaded  : {CommentText}");
-
+                    Username = c.Username,
+                    TheseId = 1,
+                    user_profilepic = c.user_profilepic,
+                });
             }
 
             Console.WriteLine($"sinished loading");
@@ -158,11 +158,14 @@ namespace Project.ViewModels
                     Result = $" The comment is: {sentiment}\nScore: {prediction.Score:F2}\nProbability: {prediction.Probability:P2}";
 
 
-               
+                    Console.WriteLine($"detecting finished");
 
 
-                        if (sentiment == "Positive")
+                    if (sentiment == "Positive")
                         {
+
+                            //display in console
+                            Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
 
                             //save cmnt is db with state (0) => Positive
                             bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
@@ -171,8 +174,14 @@ namespace Project.ViewModels
                             MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
 
                             //display cmnt
-                            CommentService.DisplayComment(Username, Comment);
-
+                            //CommentService.DisplayComment(Username, Comment);
+                            var newComment = new Comment
+                            {
+                                CommentText = Comment, // Bound from TextBox
+                                Username = Username,
+                                TheseId = 1
+                            };
+                            CommentService.Comments.Add(newComment);
 
                             //temp switching to MODcmnt
                             //_windowManager.CloseWindow();
@@ -182,9 +191,10 @@ namespace Project.ViewModels
                         }
                         else if (sentiment == "Negative")
                         {
+                        //display in console
+                        Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
 
-
-                            MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
 
                             //save cmnt in db (comment) with state (1) => Negative
                             _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);

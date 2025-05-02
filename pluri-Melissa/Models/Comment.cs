@@ -15,6 +15,7 @@ namespace Project.Models
         public int TheseId { get; set; }
         public int UserId { get; set; }
         public int commentId { get; set; }
+        public byte[] user_profilepic { get; set; }
 
         public int State { get; set; } // 1 = flagged, 2 = approved, 3 = denied
 

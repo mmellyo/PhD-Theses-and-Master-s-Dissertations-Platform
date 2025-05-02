@@ -84,11 +84,11 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = @"
-            SELECT u.user_name, c.comment_text
-            FROM comments c
-            JOIN user u ON c.user_id = u.user_id
-            WHERE c.these_id = @TheseId
-              AND c.state != 2;  -- optional: ignore deleted
+                                        SELECT u.user_name, c.comment_text, u.user_profilepic
+                                        FROM comments c
+                                        JOIN user u ON c.user_id = u.user_id
+                                        WHERE c.these_id = @TheseId 
+                                          AND c.state != 2;  -- optional: ignore deleted
         ";
 
                 command.Parameters.AddWithValue("@TheseId", theseId);
@@ -100,7 +100,9 @@ namespace Project.Repos
                         comments.Add(new Comment
                         {
                             Username = reader.GetString("user_name"),
-                            CommentText = reader.GetString("comment_text")
+                            CommentText = reader.GetString("comment_text"),
+                            user_profilepic = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"],
+
                         });
                     }
                 }

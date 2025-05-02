@@ -64,7 +64,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<CommentViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();
@@ -73,8 +73,8 @@ namespace Project
             // mainWindow.Show();
 
 
-            //AllocConsole();
-            //Console.WriteLine("Console attached!");
+            AllocConsole();
+            Console.WriteLine("Console attached!");
         }
     }
 
