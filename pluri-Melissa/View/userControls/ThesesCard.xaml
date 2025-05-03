@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Project.View.userControls.ThesesCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View.userControls" Cursor="">
+    <Border Background="White" CornerRadius="12">
+        <Grid Width="825">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="25,10,25,5">
+                <TextBlock x:Name="tNom" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding NomThese}" Foreground="#FF0093ED" FontFamily="Montserrat Bold" MaxWidth="540" FontSize="15" TextWrapping="Wrap" />
+            </Grid>
+            <Grid Grid.Row="1">
+                <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
+                    <WrapPanel VerticalAlignment="Top" Width="780">
+
+                        <Border Background="#04395e" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock  x:Name="aNom" Text="{Binding NomAuteur}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+
+                        <Border Background="#073b4c" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="Diplome" Text="{Binding Diplome}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#a5be00" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="Langue" Text="{Binding Langue}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#90e0ef" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="anneeUniv" Text="{Binding AnneeUniversitaire}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#669bbc" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="nomEncadrant" Text="{Binding NomEncadrant}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#0d47a1" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="Faculte" Text="{Binding Faculte}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#0c48f1" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="Departement" Text="{Binding Departement}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                    </WrapPanel>
+                </StackPanel>
+
+            </Grid>
+            <Grid Grid.Row="2" Margin="25,5,25,5">
+                <TextBlock x:Name="tResume" Text="{Binding Resume}" Foreground="Black" FontFamily="Montserrat Medium" FontSize="13" TextWrapping="Wrap" MaxWidth="1000" TextTrimming="CharacterEllipsis"/>
+            </Grid>
+            <Grid Grid.Row="3">
+                <StackPanel Orientation="Horizontal" Margin="25,0,10,0">
+                    <TextBlock Text="Mots-clès :" Foreground="Black" FontSize="13" FontFamily="Montserrat Bold" Height="34"/>
+                    <WrapPanel VerticalAlignment="Top" Width="690">
+                        <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="mCle1" Text="{Binding MotCles}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="mCle2" Text="motcle2" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                        <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
+                            <TextBlock x:Name="mCle3" Text="motcle3" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
+                        </Border>
+                    </WrapPanel>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="4" Margin="0,0,25,0">
+                <Border Height="15" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                    <Button Content="consulter" Style="{DynamicResource SecondaryButtonsStyle}"/>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

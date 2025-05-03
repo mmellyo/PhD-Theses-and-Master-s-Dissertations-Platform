@@ -27,6 +27,9 @@ namespace Project.Services
             Registermapping<CommentViewModel, ThesesView>();
             Registermapping<SideBarViewModel, AdminSpace>();
             Registermapping<MyProfileViewModel, MyProfileView>();
+            Registermapping<rechercheWinViewModel, rechercheWin>();
+            Registermapping<ResultPageViewModel, Resultaaat>();
+            Registermapping<RechercheAvanceViewModel, rechercheAvance>();
 
 
 

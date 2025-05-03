@@ -32,6 +32,9 @@ namespace Project
             services.AddSingleton<SignUpViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<MyProfileViewModel>();
+            services.AddSingleton<rechercheWinViewModel>();
+            services.AddSingleton<ResultPageViewModel>();
+            services.AddSingleton<RechercheAvanceViewModel>();
 
 
 
@@ -66,7 +69,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<rechercheWinViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();
