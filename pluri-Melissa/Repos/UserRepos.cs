@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Project.Models;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Crypto.Generators;
+using System.IO;
+using System.Windows;
 
 namespace Project.Repos
 {
@@ -33,6 +35,7 @@ namespace Project.Repos
         public bool SignUp(UserModel user)
         {
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.user_password);
+            byte[] defaultProfilePic = File.ReadAllBytes("C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Default.jpg");
 
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
@@ -41,13 +44,14 @@ namespace Project.Repos
                 command.Connection = connection;
 
                 // Base query and parameters
-                string query = "INSERT INTO `user` (user_email, user_password, user_role";
-                string values = "VALUES (@user_email, @user_password, @user_role";
+                string query = "INSERT INTO `user` (user_email, user_password, user_role, user_profilepic, user_name";
+                string values = "VALUES (@user_email, @user_password, @user_role, @user_profilepic, @user_name";
 
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user.user_email;
                 command.Parameters.Add("@user_password", MySqlDbType.VarChar).Value = hashedPassword;
                 command.Parameters.Add("@user_role", MySqlDbType.VarChar).Value = user.user_role;
-                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = GetUsernameFromEmail(user.user_email);
+                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = user.user_name;
+                command.Parameters.Add("@user_profilepic", MySqlDbType.Blob).Value = defaultProfilePic;
 
 
                 ///not used : 
@@ -59,7 +63,6 @@ namespace Project.Repos
                     command.Parameters.Add("@user_uni", MySqlDbType.VarChar).Value = user.user_uni;
                 }
 
-                // Close the parentheses
                 query += ") ";
                 values += ")";
 
@@ -193,6 +196,30 @@ namespace Project.Repos
             return usernamePart;
         }
 
+
+        public byte[] GetProfilepicFromEmail(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilepic FROM `user` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+                var result = command.ExecuteScalar();
+
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+
+
+
+
+
+
         public int GetUserId(string email)
         {
             using (var connection = GetConnection())
@@ -207,6 +234,71 @@ namespace Project.Repos
                 return Convert.ToInt32(userId);
             }
         }
+
+        public bool ChangeProfilePic(int user_id, byte[] profilepic)
+        {
+            if (profilepic.Length > 5 * 1024 * 1024)
+            {
+                MessageBox.Show("Profile picture is too large (max 5 MB).", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE `user` SET user_profilepic=@profilepic WHERE user_id=@user_id";
+                command.Parameters.Add("@profilepic", MySqlDbType.Blob).Value = profilepic;
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+        public byte[] LoadProfilePic(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT user_profilepic FROM `user` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+
+                var result = command.ExecuteScalar();
+                //if true converts the result to a byte array
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+        public byte[] SetDefaultProfilePic(string Email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilepic FROM `user` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = Email;
+                var result = command.ExecuteScalar();
+                //if true converts the result to a byte array
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 
 }

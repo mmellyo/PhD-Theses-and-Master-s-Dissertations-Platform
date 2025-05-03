@@ -78,10 +78,11 @@
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="416*"/>
+                    <ColumnDefinition Width="354*"/>
+                    <ColumnDefinition Width="62*"/>
                     <ColumnDefinition Width="83*" />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Background="#F1F1F1" Margin="0,0,333,0">
+                <ScrollViewer Background="#F1F1F1" Margin="0,0,209,0">
 
                 </ScrollViewer>
             </Grid>

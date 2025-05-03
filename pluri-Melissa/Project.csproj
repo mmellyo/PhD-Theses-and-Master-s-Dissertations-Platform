@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\add-button.png" />
     <None Remove="img\angle-right.svg" />
     <None Remove="img\betterbg.png" />
     <None Remove="img\bg.png" />
@@ -18,7 +19,9 @@
     <None Remove="img\lock.png" />
     <None Remove="img\lock24.png" />
     <None Remove="img\logoTheses.png" />
+    <None Remove="img\look.png" />
     <None Remove="img\question.png" />
+    <None Remove="img\search_buttom.png" />
     <None Remove="img\user.png" />
     <None Remove="img\USTHBlogo.png" />
   </ItemGroup>
@@ -32,10 +35,12 @@
     <PackageReference Include="Microsoft.ML" Version="4.0.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="Pdfium.NET" Version="1.0.12" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\add-button.png" />
     <Resource Include="img\angle-right.svg" />
     <Resource Include="img\betterbg.png" />
     <Resource Include="img\bg.png" />
@@ -45,7 +50,9 @@
     <Resource Include="img\lock.png" />
     <Resource Include="img\lock24.png" />
     <Resource Include="img\logoTheses.png" />
+    <Resource Include="img\look.png" />
     <Resource Include="img\question.png" />
+    <Resource Include="img\search_buttom.png" />
     <Resource Include="img\user.png" />
     <Resource Include="img\USTHBlogo.png" />
   </ItemGroup>

@@ -39,7 +39,7 @@ namespace Project.ViewModels
         public string CommentText { get; set; }
         public int UserId { get; }
         public int TheseId { get; set; }
-        public string Username { get; }
+        public string Username { get; set; }
         public byte[] user_profilepic { get; set; }
 
         public string Comment
@@ -61,12 +61,12 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(Result));
             }
         }
-        public ObservableCollection<Comment> ThesesComents { get; set; } = new ObservableCollection<Comment>();
-
 
         // commands
         public ICommand AddCommentCommand { get; }
         public ICommand ToggleCommentCommand { get; }
+        public ICommand UsernameClickCommand { get; }
+
 
 
         // constructor
@@ -84,23 +84,28 @@ namespace Project.ViewModels
             CommentService = commentService;
             _mlContext = new MLContext();
 
-            ThesesComents = new ObservableCollection<Comment>();
+            // Ensure Comments collection is initialized
+            if (CommentService.Comments == null)
+            {
+                Console.WriteLine("comment collection is null - Initializing Comments collection");
+                CommentService.Comments = new ObservableCollection<Comment>();
+            }
 
-            Email = _userSession.Email;
-            user_profilepic = _userSession.user_profilepic;
 
-
-            // TEST
-            Username = _userRepos.GetUsernameFromEmail("melly@etu.usthb.dz");
-            UserId = _userRepos.GetUserId("melly@etu.usthb.dz");
-
-            //save username in session
-            _userSession.Username = this.Username;
-
-            //original
-            // Username = _userRepos.GetUsernameFromEmail(Email);
-            // UserId = _userRepos.GetUserId(Email);
+            Email = !string.IsNullOrEmpty(_viewModelLocator.LoginViewModel.LoginEmail)
+                                        ? _viewModelLocator.LoginViewModel.LoginEmail
+                                        : _viewModelLocator.SignUpViewModel.Email;
+            user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
+            Username = _userRepos.GetUsernameFromEmail(Email);
+            UserId = _userRepos.GetUserId(Email);
             TheseId = 1;
+
+            Console.WriteLine("*****************************theseview******************* ");
+
+            Console.WriteLine("id from theseview: " + UserId);
+            Console.WriteLine("email from theseview: " + Email);
+            Console.WriteLine("username from theseview: " + Username);
+
 
             // Load existing comments
             LoadComments(1);
@@ -119,15 +124,13 @@ namespace Project.ViewModels
                 },
                 canExecute: param => param is Comment
             );
-      
+
+
 
             AddCommentCommand = new ViewModelCommand(
                 execute: obj =>
                 {
                     Console.WriteLine($"add cmnts clicked");
-
-                    // try
-                    // {
 
                     var data = _mlContext.Data.LoadFromTextFile<CommentData>("MLModel/CommentModel.csv", hasHeader: true, separatorChar: ',', allowQuoting: true);
 
@@ -161,104 +164,124 @@ namespace Project.ViewModels
                     Console.WriteLine($"detecting finished");
 
 
+
+
+
+
+
+
+
+
                     if (sentiment == "Positive")
+                    {
+                        //display in console
+                        Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
+
+                        //save cmnt is db with state (0) => Positive
+                        bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
+                        int CommentId = _commentRepo.GetCommentId(Comment);
+
+                        MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
+
+
+
+                        //display cmnt
+                        var newComment = new Comment
                         {
+                            CommentText = Comment,
+                            Username = Username,
+                            commentId = CommentId,
+                            TheseId = 1,
+                            user_profilepic = user_profilepic,
+                            IsExpanded = false
+                        };
+                        CommentService.Comments.Add(newComment);
 
-                            //display in console
-                            Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
+                        //temp switching to MODcmnt
+                        //_windowManager.CloseWindow();
+                        _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
-                            //save cmnt is db with state (0) => Positive
-                            bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
-                            //get cmnt id
-                            int CommentId = _commentRepo.GetCommentId(Comment);
-                            MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
-
-                            //display cmnt
-                            //CommentService.DisplayComment(Username, Comment);
-                            var newComment = new Comment
-                            {
-                                CommentText = Comment, // Bound from TextBox
-                                Username = Username,
-                                TheseId = 1,
-                                user_profilepic = user_profilepic,
-                            };
-                            CommentService.Comments.Add(newComment);
-
-                            //temp switching to MODcmnt
-                            //_windowManager.CloseWindow();
-                            _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
-
-
-                        }
-                        else if (sentiment == "Negative")
-                        {
+                        Comment = string.Empty;
+                    }
+                    else if (sentiment == "Negative")
+                    {
                         //display in console
                         Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
 
                         MessageBox.Show("This comment may include restricted content. It will only be published upon approval by an administrator.", "Negative comment", MessageBoxButton.OK, MessageBoxImage.Error);
 
-                            //save cmnt in db (comment) with state (1) => Negative
-                            _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);
+                        //save cmnt in db (comment) with state (1) => Negative
+                        _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 1);
 
-                            //get cmnt id
-                            int CommentId = _commentRepo.GetCommentId(Comment);
+                        //get cmnt id
+                        int CommentId = _commentRepo.GetCommentId(Comment);
 
-                            //save cmnt in db (reports)
-                            _reportRepo.ReportComment(CommentId, null);
+                        //save cmnt in db (reports)
+                        _reportRepo.ReportComment(CommentId, null);
 
 
 
-                            //temp switching to MODcmnt
-                            //_windowManager.CloseWindow();
-                            _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
+                        //temp switching to MODcmnt
+                        //_windowManager.CloseWindow();
+                        _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
-                            // _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
-                        }
-                    
+                        // _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
+                    }
+
                 }
-
-
-
-
-                   // }
-                    //catch (Exception ex)
-                    //{
-                     //   Result = $"Error: {ex.Message}";
-                    //}
-               // },
-              //  canExecute: obj => true
-                //!string.IsNullOrEmpty(Comment) // Only enable the command if there's text to analyze
             );
+
+
+            UsernameClickCommand = new ViewModelCommand(
+                   execute: obj =>
+                   {
+                       _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
+
+                   }
+                     );
+
+
+
+
         }
-
-
-
 
         private void LoadComments(int TheseId)
         {
+            Console.WriteLine("loadcomments function is called");
+
             try
             {
-                // Clear existing comments
+                // Clear both collections
                 CommentService.Comments.Clear();
+                Console.WriteLine("Cleared both comment collections");
 
-                // Load comments from repo
+                // Load from DB
                 var comments = _commentRepo.LoadTheseComments(TheseId);
+                Console.WriteLine("Loaded comments from repo");
 
                 if (comments != null)
                 {
                     foreach (var c in comments)
                     {
-                        CommentService.Comments.Add(new Comment
+                        var comment = new Comment
                         {
                             CommentText = c.CommentText,
                             Username = c.Username,
                             TheseId = c.TheseId,
                             user_profilepic = c.user_profilepic,
                             commentId = _commentRepo.GetCommentId(c.CommentText),
-                            IsExpanded = false  // Initially collapsed
-                        });
+                            IsExpanded = false
+                        };
+
+                        CommentService.Comments.Add(comment);
+
                     }
+
                     Console.WriteLine($"Loaded {CommentService.Comments.Count} comments successfully");
+                }
+                else
+                {
+                    Console.WriteLine("No comments found for this these");
                 }
             }
             catch (Exception ex)
@@ -267,45 +290,6 @@ namespace Project.ViewModels
                 MessageBox.Show($"Failed to load comments: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
-
-
-
-
-
-
-
-
-        /* public void LoadTheseComments()
-         {
-
-             ThesesComents.Clear();
-             foreach (var c in _commentRepo.LoadTheseComments(TheseId))
-             {
-
-                 var comment = new Comment
-                 {
-
-                     CommentText = c.CommentText,
-                     commentId = _commentRepo.GetCommentId(CommentText),
-
-                     TheseId = c.TheseId,
-                     //TEMP
-                     Username = "melly",
-                     UserId = 1,
-
-                     //original
-                     //Username = this.Username,
-                     //UserId = c.UserId,
-                     //State = c.State
-                 };
-
-                 ThesesComents.Add(comment);
-
-             }
-
-         }*/
 
     }
 }

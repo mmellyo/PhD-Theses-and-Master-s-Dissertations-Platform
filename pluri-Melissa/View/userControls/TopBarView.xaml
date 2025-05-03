@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="Project.View.userControls.TopBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View.userControls"
+             xmlns:converter="clr-namespace:Project.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="1034">
+
+    <UserControl.Resources>
+        <converter:ByteArrayToImageConverter x:Key="ImageConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+
+
+    <Grid Height="70" VerticalAlignment="Top" Background="#0093ED">
+        <Grid Width="1034">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Accueil"
+                   HorizontalAlignment="Center"
+                   Margin="0,13,0,3"
+                   Foreground="White"
+                   FontSize="15"
+                   FontWeight="semiBold"/>
+                <TextBlock Text="Apprenez en plus sure notre application."
+                   HorizontalAlignment="Center"
+                   Foreground="White"
+                   Opacity="0.7"
+                   FontSize="12"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2"
+                Orientation="Horizontal">
+                <Grid Width="344">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="45*"/>
+                        <ColumnDefinition Width="143*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Command="{Binding UploadCommand}" 
+                            Background="Transparent" Margin="70,0,0,0"
+                            BorderThickness="0"
+                            Padding="0"
+                            Cursor="Hand"
+                            Height="10" Width="10">
+
+                        <Image Source="/img/add-button.png"
+                               Stretch="Uniform" 
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    </Button>
+                    <Button Command="{Binding GoToSearcheCommand}" 
+                            Background="Transparent" Margin="40,0,0,0"
+                            BorderThickness="0"
+                            Padding="0"
+                            Cursor="Hand"
+                            Height="9" Width="9">
+
+                        <Image Source="/img/look.png"
+                               Stretch="Uniform" 
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    </Button>
+
+                    <StackPanel Grid.Column="1">
+                        <Border Height="70" Width="40">
+                            <Ellipse Height="40" VerticalAlignment="Center" Stroke="White" StrokeThickness="1" >
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding user_profilepic, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="{Binding Username}"
+                           Foreground="White"
+                           Margin="10,14,0,0"
+                           FontWeight="SemiBold"/>
+                        <TextBlock 
+                           Text="{Binding Email}"
+                           Foreground="White"
+                           Margin="10,0,0,0"
+                           FontSize="9"
+                           />
+                        <TextBlock Text="{Binding User_role}"
+                           Foreground="White"
+                           Margin="10,0,0,0"
+                           FontSize="9"/>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</UserControl>

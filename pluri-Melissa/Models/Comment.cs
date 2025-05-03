@@ -18,7 +18,20 @@ namespace Project.Models
         public int TheseId { get; set; }
         public int UserId { get; set; }
         public int commentId { get; set; }
-        public byte[] user_profilepic { get; set; }
+
+        private byte[] _userProfilePic;
+        public byte[] user_profilepic
+        {
+            get => _userProfilePic;
+            set
+            {
+                if (_userProfilePic != value)
+                {
+                    _userProfilePic = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public int State { get; set; } //1 = flagged, 0 = positive,  2 = approved, 3 = denied
 
         // Commands for UI binding

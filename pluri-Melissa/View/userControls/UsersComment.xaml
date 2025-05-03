@@ -49,20 +49,22 @@
                     </Grid.RowDefinitions>
 
                     <!-- Username Row 0-->
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock
                             FontSize="12"
                             FontFamily="Montserrat Bold"
                             Foreground="#212121"
                             TextWrapping="Wrap"
                             Width="185">
-                            <Run Text="{Binding Username}"/>
-                        </TextBlock>
-                        <!-- ETOILES -->
-                    </StackPanel>
+                            <Hyperlink Command="{Binding UsernameClickCommand}">
+                                <Run Text="{Binding Username}" />
+                            </Hyperlink>
+                    </TextBlock>
+                    <!-- ETOILES -->
+                </StackPanel>
 
-                    
-                    <!-- Comment Text (Row 1)-->
+
+                <!-- Comment Text (Row 1)-->
                     <Grid Grid.Row="1">
                         <TextBlock Text="{Binding DisplayText}" 
                                    FontSize="12" 

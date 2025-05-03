@@ -6,28 +6,36 @@
         xmlns:local="clr-namespace:Project.View"
         xmlns:uc="clr-namespace:Project.View.userControls"
         mc:Ignorable="d"
-        Title="ThesesView" Height="1973" Width="1238">
+         Title="ThesesView"
+        Height="1973" Width="1238">
 
 
 
 
 
     <Grid>
-        <StackPanel Background="White" Width="200" HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="166*"/>
+            <ColumnDefinition Width="333*"/>
+        </Grid.ColumnDefinitions>
 
-        </StackPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Margin="200,0,0,0">
+        <!-- Sidebar -->
+        <uc:SideBar_admin Grid.Column="0" Margin="0,70,0,1187"/>
+
+        <!-- Main Content with TopBar and all your other controls -->
+        <ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
+            <Grid Margin="0,0,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="70"/>
                     <RowDefinition Height="80"/>
                     <RowDefinition Height="450"/>
                     <RowDefinition Height="900"/>
                     <RowDefinition Height="446"/>
                 </Grid.RowDefinitions>
                 <!-- TOPBAR -->
-                <StackPanel Background="#0093ED" Height="75" VerticalAlignment="Top">
-
+                <StackPanel>
+                    <uc:TopBarView />
                 </StackPanel>
                 <!-- BOUTTON REVENIR -->
                 <Grid Grid.Row="1">
@@ -298,10 +306,9 @@
                                            TextWrapping="Wrap"
                                            Width="135">
 
-                                        <Run Text="{Binding NomUtilisateur}"/>
-                                        <Run Text="{Binding PrenomUtilisateur}"/>
+                                        <Run Text="{Binding Username}"/>
                                             </TextBlock>
-                                            <TextBlock Text="{Binding emailUtilisateur}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,4"/>
+                                            <TextBlock Text="{Binding Email}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,4"/>
                                             <TextBlock Text="Etudiant(e)" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,0"/>
                                         </StackPanel>
                                     </StackPanel>
@@ -412,7 +419,7 @@
                                              HorizontalAlignment="Left" 
                                              VerticalAlignment="Top" 
                                              Style="{StaticResource CommentText}"  />
-                                    
+
                                     <Label   IsHitTestVisible="False"
                                      Content="Écrivez ici..."
                                      VerticalAlignment="Center"
@@ -435,14 +442,14 @@
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Avis récents" FontSize="22" FontFamily="Montserrat Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <TextBlock Text="Avis récents" FontSize="22" FontFamily="Montserrat Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="28,0,0,0"/>
                         <Grid Grid.Row="1">
 
 
 
                             <ScrollViewer VerticalScrollBarVisibility="Visible" Width="380">
                                 <ItemsControl 
-                                            ItemsSource="{Binding CommentService.Comments}"
+                                            ItemsSource="{Binding  CommentService.Comments}"
                                             VerticalAlignment="Stretch"
                                             HorizontalAlignment="Stretch">
 

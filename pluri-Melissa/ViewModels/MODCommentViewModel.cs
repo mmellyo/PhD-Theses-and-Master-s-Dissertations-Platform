@@ -20,6 +20,7 @@ namespace Project.ViewModels
         private IUserSessionService _userSession;
         private UserRepos _userRepos;
         private readonly CommentRepo _commentRepo;
+        private readonly TheseRepo _theseRepo;
         private IReportsRepo _reportsRepo;
         private ViewModelLocator _viewModelLocator;
         private Comment _approvedComment;
@@ -55,6 +56,8 @@ namespace Project.ViewModels
                  _userRepos = new UserRepos();
                  _reportsRepo = new ReportsRepo();
                 _commentRepo = new CommentRepo();
+                _theseRepo = new TheseRepo();
+
 
                 _windowManager = windowManager;
                 _viewModelLocator = viewModelLocator;
@@ -77,11 +80,12 @@ namespace Project.ViewModels
             MODDisplayTheseCommand = new ViewModelCommand(
             execute: obj =>
             {
+                _theseRepo.ShowPdf(2);
+                // switch to these with that id
+                //_windowManager.CloseWindow();
+                //_windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                //_viewModelLocator.CommentViewModel.TheseId = TheseId;
 
-                //temp switching to MODcmnt
-                //next : switch to these with that id
-                _windowManager.CloseWindow();
-                _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
 
             }
             // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6

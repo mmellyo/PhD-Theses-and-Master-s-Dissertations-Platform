@@ -16,6 +16,15 @@ namespace Project.Models
         //login
         bool AuthenticateUser(string user_email, string user_password);
         bool SignUp(UserModel usermodel);
+
+        bool ChangeProfilePic(int user_id, byte[] profilepic);
+        public byte[] LoadProfilePic(int user_id);
+        public byte[] SetDefaultProfilePic(string Email);
+
+        public string GetUsernameFromEmail(string email);
+        public byte[] GetProfilepicFromEmail(string email);
+
+
         void Edit(UserModel usermodel);
         void Removes(int user_id);
         bool IsUsthbMember(String email);

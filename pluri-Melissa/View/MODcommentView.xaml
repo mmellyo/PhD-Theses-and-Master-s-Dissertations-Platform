@@ -3,86 +3,95 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-
-        xmlns:local="clr-namespace:Project.View" 
-        xmlns:userControls="clr-namespace:Project.View.userControls" DataContext="{Binding MODCommentViewModel, Source={StaticResource ViewModelLocator}}"
-        
+        xmlns:local="clr-namespace:Project.View"
+        xmlns:userControls="clr-namespace:Project.View.userControls"
+        DataContext="{Binding MODCommentViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d"
-        Title="MODcommentView" Height="700" Width="1238"
+        Title="MODcommentView"
+        Height="700"
+        Width="1238"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown">
 
-
-
     <Grid>
-        
-            <StackPanel Background="#0093ED" Height="115" VerticalAlignment="Top">
 
-            </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <!-- TopBar -->
+            <RowDefinition Height="*"/>
+            <!-- Content -->
+        </Grid.RowDefinitions>
 
-        <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0"  Margin="0,0,970,0" DataContext="{Binding SideBarViewModel, Source={StaticResource ViewModelLocator}}" />
+        <!-- Top bar -->
+        <userControls:TopBarView Grid.ColumnSpan="2" Grid.Row="0" />
 
-        <!-- <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0" Margin="0,0,970,0" />-->
+        <!-- Sidebar -->
+        <userControls:SideBar_admin Grid.RowSpan="2" Grid.Column="0" x:Name="SideBarAdmin" Margin="0,0,0,0"/>
 
-        <StackPanel Background="White" Width="300" HorizontalAlignment="Left">
+        <!-- Main Content -->
+        <Border Grid.Row="1" Grid.Column="1" Background="#f0f0f0" Padding="20">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding FlaggedComments}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,10" Padding="15" Background="White" CornerRadius="10" BorderThickness="1" BorderBrush="#DDD" >
+                                <DockPanel LastChildFill="False">
 
-            </StackPanel>
-            <Grid Margin="300,115,0,0" Background="#f0f0f0">
-                <Grid Background="#f0f0f0">
+                                    <!-- Left section: username + comment -->
+                                    <StackPanel DockPanel.Dock="Left" Width="550" Margin="0,0,10,0">
+                                        <TextBlock Text="{Binding Username}" FontWeight="Bold" FontSize="14" Foreground="#333"/>
 
+                                        <Button 
+                                            Command="{Binding DataContext.MODDisplayTheseCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                            CommandParameter="{Binding TheseId}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Left"
+                                            Cursor="Hand">
+                                            <TextBlock 
+                                                Text="{Binding TheseId, StringFormat='These number: {0}'}"
+                                                FontSize="12"
+                                                Foreground="#007ACC" />
+                                        </Button>
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding FlaggedComments}">
+                                        <TextBlock Text="{Binding CommentText}" TextWrapping="Wrap" Margin="0,5,0,0" Foreground="#444"/>
+                                    </StackPanel>
 
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="10" Padding="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
-                                        <DockPanel>
-                                            <StackPanel DockPanel.Dock="Left" Width="500">
-                                                <TextBlock Text="{Binding Username}" FontWeight="Bold" />
+                                    <!-- Right section: action buttons -->
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" >
+                                        <Button Content="Approve" 
+                                                Command="{Binding ApproveCommand}" 
+                                                Width="80"
+                                                Background="#77d785"
+                                                Foreground="White"
+                                                FontWeight="Bold"
+                                                BorderThickness="0"
+                                                Padding="5,2"
+                                                Margin="0,0,10,0"/>
 
-                                            <Button 
-                                                    Command="{Binding DataContext.MODDisplayTheseCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                                    CommandParameter="{Binding TheseId}"
-                                                    Background="Transparent"
-                                                    BorderThickness="0"
-                                                    HorizontalAlignment="Left"
-                                                    FontSize="12"
-                                                    Margin="0,0,10,0"
-                                                    Padding="0"
-                                                    Foreground="Black"
-                                                    Cursor="Hand">
-                                                <TextBlock 
-                                                    Text="{Binding TheseId, StringFormat='these number : {0}'}" 
-                                                    Margin="0"
-                                                    Padding="0"
-                                                    VerticalAlignment="Center" />
-                                            </Button>
-
-                                            <TextBlock Text="{Binding CommentText}" TextWrapping="Wrap" />
-                                                
-                                            </StackPanel>
-
-                                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0">
-                                            <Button Content="Approve" Command="{Binding ApproveCommand}" Margin="0,0,10,0"/>
-                                                <Button Content="Deny" Command="{Binding DenyCommand}" />
-                                            </StackPanel>
-                                        </DockPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-
-
-
-                </Grid>
-            </Grid>
-        </Grid>
-
-    </Window>
-
+                                        <Button Content="Deny" 
+                                                Command="{Binding DenyCommand}" 
+                                                Width="80"
+                                                Background="#d2666f"
+                                                Foreground="White"
+                                                FontWeight="Bold"
+                                                BorderThickness="0"
+                                                Padding="5,2"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>

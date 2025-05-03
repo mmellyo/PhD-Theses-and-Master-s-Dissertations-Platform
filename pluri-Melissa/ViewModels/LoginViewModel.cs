@@ -73,7 +73,6 @@ namespace Project.ViewModels
         //COMMANDS
         public ICommand LoginCommand { get; }
 
-        /// not yet
         public ICommand RecoverPasswordCommand { get; }
         public ICommand ShowPasswordCommand { get; }
         public ICommand RememberPasswordCommand { get; }
@@ -119,15 +118,17 @@ namespace Project.ViewModels
                     if (isValidUser)
                     {
                         MessageBox.Show("loggin in successfully");
-
-                        // Store the user in session
-                        //usermodel. SetCurrentUserEmail(LoginEmail);
+Console.WriteLine("************************LOGED IN***********************************");
                         IsViewVisible = false;
 
-                        _windowManager.CloseWindow();
+                        //Assigns EMAIL
+                        _viewModelLocator.MyProfileViewModel.Email = LoginEmail;
+                        _viewModelLocator.CommentViewModel.Email = LoginEmail;
+ Console.WriteLine("email from _viewModelLocator.MyProfileViewModel: " + _viewModelLocator.MyProfileViewModel.Email);
+ Console.WriteLine("email from _viewModelLocator.CommentViewModel: " + _viewModelLocator.CommentViewModel.Email);
 
-                        // temp Switch the window to thses comeents
-                        _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                        _windowManager.CloseWindow();
+                        _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
 
                     }
                     else

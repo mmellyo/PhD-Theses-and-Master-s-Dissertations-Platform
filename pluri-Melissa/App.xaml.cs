@@ -31,14 +31,16 @@ namespace Project
             services.AddSingleton<EmailVerificationViewModel>();
             services.AddSingleton<SignUpViewModel>();
             services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<MyProfileViewModel>();
+
 
 
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<IUserSessionService, UserSessionService>();
             services.AddSingleton<ICommentService, CommentService>();
 
-
             
+
 
 
 
@@ -64,7 +66,7 @@ namespace Project
 
 
             //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<CommentViewModel>());
+            windowManager.ShowWindow(_serviceProvider.GetRequiredService<WelcomeViewModel>());
 
             base.OnStartup(e);
             //var mainWindow = new MainWindow();

@@ -33,6 +33,7 @@ namespace Project.ViewModels
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Email { get; set; }
+        public byte[] user_profilepic { get; set; }
 
 
 
@@ -75,11 +76,6 @@ namespace Project.ViewModels
         public ICommand GoHomeCommand { get; }
         public ICommand GologinCommand { get; }
 
-        
-
-        //public ICommand AddItemCommand { get; set; }
-        //public ICommand SignUpCommand { get; set; }
-
 
 
 
@@ -112,24 +108,26 @@ namespace Project.ViewModels
                 var user = new UserModel
                 {
                     user_email = this.Email,
+                    user_name = _userRepos.GetUsernameFromEmail(this.Email),
                     user_password = this.Password,
-                    user_role = "user" //later :P
+                    user_role = _userRepos.AssignUserRole(this.Email),
                 };
-
-
-                _userSession.Email = this.Email;
-                //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
 
                 bool success = repo.SignUp(user);
                 MessageBox.Show(success ? "User registered!" : "Registration failed.");
 
-                //if (success) { _userSession.Email = this.Email; }
+
+                //Assigns EMAIL
+                _viewModelLocator.MyProfileViewModel.Email = Email;
+                _viewModelLocator.CommentViewModel.Email = Email;
+
+                //Assigns pdp
+                //_viewModelLocator.MyProfileViewModel.user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
+               // _viewModelLocator.CommentViewModel.user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
 
 
                 _windowManager.CloseWindow();
-
-                // Switch the window to CommentViewModel
-                _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
             },
             canExecute: obj => true
         );
@@ -140,9 +138,7 @@ namespace Project.ViewModels
             GoHomeCommand = new ViewModelCommand(
             execute: obj =>
             {
-
                 _windowManager.CloseWindow();
-                // Switch the window to welcoùme
                 _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
             },
             canExecute: obj => true
@@ -154,7 +150,6 @@ namespace Project.ViewModels
             GologinCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-
                     _windowManager.CloseWindow();
                     // Switch the window to welcoùme
                     _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
@@ -162,20 +157,6 @@ namespace Project.ViewModels
                 canExecute: obj => true
                 );
         }
-        
-
-
-
-        // Load the email from UserModel - make sure to initialize this first
-        //  LoadUserData();
-
-        // SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
-
-        // Debug - check if email was loaded
-        // Console.WriteLine($"SignUpViewModel initialized with email: {SignUpEmail}");
-
-
-
 
     }
 }
