@@ -28,6 +28,10 @@ namespace Project.Services
             _windodwMapper = windowMapper;
         }
 
+        public WindowManager()
+        {
+        }
+
 
 
 

@@ -15,15 +15,18 @@
         <StackPanel Background="White" Width="200" HorizontalAlignment="Left">
         </StackPanel>
 
-        <Grid Margin="200,75,0,0" Background="#f0f0f0">
-            <ListBox Name="resultListBox" ItemsSource="{Binding Results}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <uc:ThesesCard />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <ScrollViewer VerticalScrollBarVisibility="Visible"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" >
+            <ItemsControl 
+                ItemsSource="{Binding  TheseService.Theses}"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch">
 
-        </Grid>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <uc:ThesesCard  />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>

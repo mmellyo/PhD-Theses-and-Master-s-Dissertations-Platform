@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Project.Services;
 using Project.ViewModels;
 
 namespace Project.View
@@ -23,8 +24,7 @@ namespace Project.View
         public rechercheAvance()
         {
             InitializeComponent();
-            DataContext = new RechercheAvanceViewModel();
-
+            
         }
     }
 }

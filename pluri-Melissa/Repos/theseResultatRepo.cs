@@ -15,7 +15,6 @@ namespace Project.Repos
         /// laterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  
         public List<theseResultat> rechercherAvecFiltres(string auteur, string encadrant, string these, string motcle, string langue, string dep, string annee, string fac)
         {
-            Console.WriteLine("rechercherAvecFiltres REPO running");
             List<theseResultat> resultats = new List<theseResultat>();
 
             using (var connection = GetConnection())
@@ -77,6 +76,7 @@ namespace Project.Repos
                     {
                         resultats.Add(new theseResultat
                         {
+                            TheseId = Convert.ToInt32(reader["these_id"]),
                             NomThese = reader["nomThese"].ToString(),
                             NomAuteur = reader["nomAuteur"].ToString(),
                             MotCles = reader["MotCles"].ToString(),
@@ -128,6 +128,7 @@ namespace Project.Repos
                         {
                             theseResultat data = new theseResultat
                             {
+                                TheseId = Convert.ToInt32(reader["these_id"]),
                                 NomThese = reader["nomThese"].ToString(),
                                 NomAuteur = reader["nomAuteur"].ToString(),
                                 MotCles = reader["MotCles"].ToString(),

@@ -24,14 +24,8 @@ namespace Project.View
         {
             InitializeComponent();
 
-            var viewModel = new ResultPageViewModel(searchKey);
-            this.DataContext = viewModel;
         }
-        public Resultaaat(ResultPageViewModel vm)
-        {
-            InitializeComponent();
-            DataContext = vm;
-        }
+
     
 }
 }

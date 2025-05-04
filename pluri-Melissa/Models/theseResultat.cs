@@ -11,6 +11,7 @@ namespace gestion.Model
     {
         public static List<theseResultat> list = new List<theseResultat>();
         public string NomThese { get; set; }
+        public int TheseId { get; set; }
         public string NomAuteur { get; set; }
         public string MotCles { get; set; }
         public string Faculte { get; set; }

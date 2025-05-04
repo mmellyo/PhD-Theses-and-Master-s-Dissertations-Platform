@@ -8,12 +8,27 @@ using Project.Utils;
 using Project.View;
 using System.Windows.Input;
 using System.Windows;
+using Project.Services;
+using Project.Models;
+using gestion.Model;
+using MySqlX.XDevAPI.Common;
 
 namespace Project.ViewModels
 {
     public class RechercheAvanceViewModel : ViewModelBase
     {
-        // Champs de filtre
+        //fields
+        private readonly UserModel _userModel;
+        private readonly IUserSessionService _userSession;
+        private readonly UserRepos _userRepos;
+        private readonly TheseRepo _theseRepo;
+        private readonly theseResultatRepo _theseResultatRepo;
+        private readonly ReportsRepo _reportRepo;
+        private readonly EmailVerificationRepo _emailVerificationRepo;
+        private readonly IWindowManager _windowManager;
+        private readonly ViewModelLocator _viewModelLocator;
+
+       //setter / geter
         public string NomAuteur { get; set; }
         public string NomEncadrant { get; set; }
         public string NomThese { get; set; }
@@ -23,19 +38,35 @@ namespace Project.ViewModels
         public string Annee { get; set; }
         public string Faculte { get; set; }
 
-        // Commande liée au bouton Rechercher
+        public ITheseService TheseService { get; }
+
+        //commands
         public ICommand RechercherCommand { get; }
 
 
         //constructor
-        public RechercheAvanceViewModel()
+        public RechercheAvanceViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
+            //fields
+            _userModel = new UserModel();
+            _userRepos = new UserRepos();
+            _theseRepo = new TheseRepo();
+            _reportRepo = new ReportsRepo();
+
+            _windowManager = windowManager;
+            _viewModelLocator = viewModelLocator;
+            TheseService = theseService;
+
+
             //commands
             RechercherCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-                    Console.WriteLine("RechercherCommand ADVNCD  clicked");
                     RechercherAvecFiltres();
+
+                    _windowManager.CloseWindow();
+                    _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
+
                 }
             );
         }
@@ -44,25 +75,51 @@ namespace Project.ViewModels
         {
             try
             {
-                Console.WriteLine("RechercherAvecFiltres functipon");
-                var repo = new theseResultatRepo();
-                var resultats = repo.rechercherAvecFiltres(NomAuteur, NomEncadrant, NomThese, MotCle, Langue, Departement, Annee, Faculte);
+                TheseService.Theses.Clear();
 
+                // Load from DB
+                var resultats = _theseResultatRepo.rechercherAvecFiltres(NomAuteur, NomEncadrant, NomThese, MotCle, Langue, Departement, Annee, Faculte);
                 Console.WriteLine("Resultats count: " + resultats.Count);
 
-                var resultViewModel = new ResultPageViewModel();
-                foreach (var res in resultats)
-                    resultViewModel.Results.Add(res);
-                Console.WriteLine("Resultats count displayed : " + resultViewModel.Results.Count);
-                var resultWindow = new Resultaaat(resultViewModel);
-                resultWindow.Show();
+                if (resultats != null)
+                {
+                    foreach (var r in resultats)
+                    {
+                        var result = new theseResultat
+                        {
+                            NomThese = r.NomThese,
+                            NomAuteur = r.NomAuteur,
+                            MotCles = r.MotCles,
+                            Faculte = r.Faculte,
+                            NomEncadrant = r.NomEncadrant,
+                            Langue = r.Langue,
+                            Diplome = r.Diplome,
+                            AnneeUniversitaire = r.AnneeUniversitaire,
+                            Departement = r.Departement,
+                            Resume = r.Resume,
+                            TheseId = r.TheseId
+                        };
+
+                        TheseService.Theses.Add(result);
+
+                    }
+
+                    Console.WriteLine($"Loaded {TheseService.Theses.Count} result successfully");
+                }
+                else
+                {
+                    Console.WriteLine("No comments found for this these");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading Resultats: {ex.Message}");
-                MessageBox.Show($"Failed to load Resultats: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"Error loading comments: {ex.Message}");
+                MessageBox.Show($"Failed to load comments: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
 
         }
+
     }
-}
+
