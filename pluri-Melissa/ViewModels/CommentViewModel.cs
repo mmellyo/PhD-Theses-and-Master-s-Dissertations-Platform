@@ -11,6 +11,9 @@ using Project.Repos;
 using System.Windows;
 using System.Collections.ObjectModel;
 using Project.Utils;
+using MySqlX.XDevAPI.Common;
+using SharpVectors.Dom;
+using Comment = Project.Models.Comment;
 
 namespace Project.ViewModels
 {
@@ -23,6 +26,7 @@ namespace Project.ViewModels
         private readonly UserModel _userModel;
         private readonly IUserSessionService _userSession;
         private readonly UserRepos _userRepos;
+        private readonly TheseRepo _theseRepo;
         private readonly CommentRepo _commentRepo;
         private readonly ReportsRepo _reportRepo;
         private readonly EmailVerificationRepo _emailVerificationRepo;
@@ -30,6 +34,7 @@ namespace Project.ViewModels
         private readonly ViewModelLocator _viewModelLocator;
 
         public ICommentService CommentService { get; }
+        private readonly ITheseService _theseService;
 
         private string _result;
         private string _comment;
@@ -37,7 +42,7 @@ namespace Project.ViewModels
         // getters / setters
         public string Email { get; set; }
         public string CommentText { get; set; }
-        public int UserId { get; }
+        public int UserId { get; set; }
         public int TheseId { get; set; }
         public string Username { get; set; }
         public byte[] user_profilepic { get; set; }
@@ -62,15 +67,51 @@ namespace Project.ViewModels
             }
         }
 
+
+        //these fields
+        private string _nomEncadrant;
+        public string NomEncadrant
+        {
+            get => _nomEncadrant;
+            set
+            {
+                _nomEncadrant = value;
+                OnPropertyChanged(nameof(NomEncadrant));
+            }
+        }
+
+        private string _faculte;
+        public string Faculte
+        {
+            get => _faculte;
+            set
+            {
+                _faculte = value;
+                OnPropertyChanged(nameof(Faculte));
+            }
+        }
+
+        public string _nomAuteur;
+        public string NomAuteur
+        {
+            get => _nomAuteur;
+            set
+            {
+                _nomAuteur = value;
+                OnPropertyChanged(nameof(NomAuteur));
+            }
+        }
+
+
+
         // commands
         public ICommand AddCommentCommand { get; }
         public ICommand ToggleCommentCommand { get; }
-        public ICommand UsernameClickCommand { get; }
 
 
 
         // constructor
-        public CommentViewModel(IUserSessionService userSession, ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        public CommentViewModel(ITheseService theseService, IUserSessionService userSession, ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
             //fields
             _userModel = new UserModel();
@@ -78,11 +119,13 @@ namespace Project.ViewModels
             _userRepos = new UserRepos();
             _commentRepo = new CommentRepo();
             _reportRepo = new ReportsRepo();
+            _theseRepo = new TheseRepo();
             _emailVerificationRepo = new EmailVerificationRepo();
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             CommentService = commentService;
             _mlContext = new MLContext();
+            _theseService = theseService;
 
             // Ensure Comments collection is initialized
             if (CommentService.Comments == null)
@@ -92,24 +135,11 @@ namespace Project.ViewModels
             }
 
 
+            //init user info
             Email = !string.IsNullOrEmpty(_viewModelLocator.LoginViewModel.LoginEmail)
                                         ? _viewModelLocator.LoginViewModel.LoginEmail
                                         : _viewModelLocator.SignUpViewModel.Email;
-            user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
-            Username = _userRepos.GetUsernameFromEmail(Email);
-            UserId = _userRepos.GetUserId(Email);
-            TheseId = 1;
-
-            Console.WriteLine("*****************************theseview******************* ");
-
-            Console.WriteLine("id from theseview: " + UserId);
-            Console.WriteLine("email from theseview: " + Email);
-            Console.WriteLine("username from theseview: " + Username);
-
-
-            // Load existing comments
-            LoadComments(1);
-
+            TheseId = _theseService.TheseId;
 
 
 
@@ -177,8 +207,10 @@ namespace Project.ViewModels
                         //display in console
                         Console.WriteLine($"comment is : {Comment} and :{sentiment} ");
 
-                        //save cmnt is db with state (0) => Positive
+                        //save cmnt in db with state (0) => Positive
                         bool success = _commentRepo.AddCommentInDb(TheseId, Comment, UserId, 0);
+                        
+                        //i should get id as a return from the function that saved the cmnt
                         int CommentId = _commentRepo.GetCommentId(Comment);
 
                         MessageBox.Show(success ? "Comment added successfully!" : "adding comment failed.");
@@ -188,21 +220,44 @@ namespace Project.ViewModels
                         //display cmnt
                         var newComment = new Comment
                         {
+                            UserId = UserId,
                             CommentText = Comment,
                             Username = Username,
                             commentId = CommentId,
-                            TheseId = 1,
+                            TheseId = this.TheseId,
                             user_profilepic = user_profilepic,
                             IsExpanded = false
                         };
+                        try
+                        {
+                            newComment.CommentUsernameClickCommand = new ViewModelCommand(
+                            execute: obj =>
+                            {
+                                Console.WriteLine("CommentUsernameClickCommand CLICKEDDDDDDDDDDDDDDDDDD");
+                                Console.WriteLine("ypu email is  " + Email);
+
+                                int uId = newComment.UserId;
+                                if (uId == _userRepos.GetUserId(Email))
+                                {
+                                    Console.WriteLine("You view your own profile");
+                                    _windowManager.CloseWindow();
+                                    _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
+
+                                    return;
+                                }
+                            }
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error creating command: {ex.Message}");
+                        }
+
+
                         CommentService.Comments.Add(newComment);
-
-                        //temp switching to MODcmnt
-                        //_windowManager.CloseWindow();
-                        _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
-
                         Comment = string.Empty;
                     }
+
                     else if (sentiment == "Negative")
                     {
                         //display in console
@@ -232,22 +287,42 @@ namespace Project.ViewModels
             );
 
 
-            UsernameClickCommand = new ViewModelCommand(
-                   execute: obj =>
-                   {
-                       _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
-
-                   }
-                     );
 
 
+        }
 
+        public void InitializeWithTheseId(int theseId)
+        {
+            TheseId = theseId;
+            NomAuteur = _theseRepo.GetNomAuteurFromTheseId(theseId);
+            NomEncadrant = _theseRepo.GetNomEncadrantFromTheseId(theseId);
+            //Faculte = _theseRepo.GetFaculteFromTheseId(theseId);
+            _theseService.TheseId = theseId;
 
+            Console.WriteLine("***************************** InitializeWithTheseId *******************");
+            Console.WriteLine("TheseId that is recieving from THESE SERVICE to COMMENTVM is: " + TheseId);
+            Console.WriteLine("Email theseview: " + Email);
+            Console.WriteLine("Username theseview: " + Username);
+            Console.WriteLine("UserId theseview: " + UserId);
+
+            LoadComments(theseId);
+        }
+
+        public void InitializeWithUserId(int userId)
+        {
+            UserId = userId;
+            _userSession.UserId = userId;
+            user_profilepic = _userRepos.GetProfilepicFromId(UserId);
+            Username = _userRepos.GetUsernameFromEmail(Email);
+
+            Console.WriteLine("***************************** InitializeWithUserId *******************");
+            Console.WriteLine("UserId that is recieving from login to COMMENTVM is: " + UserId);
         }
 
         private void LoadComments(int TheseId)
         {
             Console.WriteLine("loadcomments function is called");
+            Console.WriteLine("loading comments from these number :" + TheseId);
 
             try
             {
@@ -265,6 +340,7 @@ namespace Project.ViewModels
                     {
                         var comment = new Comment
                         {
+                            UserId = c.UserId,
                             CommentText = c.CommentText,
                             Username = c.Username,
                             TheseId = c.TheseId,
@@ -272,6 +348,37 @@ namespace Project.ViewModels
                             commentId = _commentRepo.GetCommentId(c.CommentText),
                             IsExpanded = false
                         };
+                        try
+                        {
+                            comment.CommentUsernameClickCommand = new ViewModelCommand(
+                            execute: obj =>
+                            {
+                                Console.WriteLine("CommentUsernameClickCommand CLICKEDDDDDDDDDDDDDDDDDD");
+                                Console.WriteLine("ypu email is  " +Email);
+
+                                int uId = comment.UserId;
+                                if (uId == _userRepos.GetUserId(Email)) 
+                                {
+                                    Console.WriteLine("You view your own profile");
+                                    _windowManager.CloseWindow();
+                                    _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
+
+                                    return;
+                                }
+
+                                _windowManager.CloseWindow();
+                                _viewModelLocator.UserProfileViewModel.InitializeWithUserId(uId);
+                                Console.WriteLine("UserId that is sending from COMMENTVM to USERPROFILE is: " + uId);  //works : get id of clicked cmnt
+                                _windowManager.ShowWindow(_viewModelLocator.UserProfileViewModel);
+                                
+                            }
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error creating command: {ex.Message}");
+                        }
+                        
 
                         CommentService.Comments.Add(comment);
 

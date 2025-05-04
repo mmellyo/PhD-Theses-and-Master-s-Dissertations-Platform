@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using gestion.Model;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
+using SharpVectors.Dom;
 
 namespace Project.ViewModels
 {
@@ -29,6 +31,7 @@ namespace Project.ViewModels
 
 
         //setters / getters
+        public int TheseId { get; set; }
         public string NomThese { get; set; }
         public string NomAuteur { get; set; }
         public string MotCles { get; set; }
@@ -79,15 +82,12 @@ namespace Project.ViewModels
                     LoadResults();
             }
         }
-
-
-        //commands
-        public ICommand consulterTheseCommand { get; }
-
-
-
         private readonly ITheseService _theseService;
         private theseResultat _selectedThese;
+
+        //commands
+//        public ICommand consulterTheseCommand { get; }
+
 
 
         //constructors
@@ -123,40 +123,12 @@ namespace Project.ViewModels
                 Console.WriteLine("Theses collection is not empty - we came from ADVNCD SEARCH");
             }
 
-           
 
 
 
-            // commands
-            consulterTheseCommand = new ViewModelCommand(
-                execute: obj =>
-                {
-                    _windowManager.CloseWindow();
-                    _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
-                },
-                canExecute: obj => true
-            );
+
+          
         }
-
-
-      //  public ResultPageViewModel(string searchKey)
-      //  {
-      //      Results = new ObservableCollection<theseResultat>();
-       //     SearchKey = searchKey;
-        //    LoadResults();
-       // }
-
-
-
-    //    public ResultPageViewModel(List<theseResultat> resultats)
-       // {
-      //     Results = new ObservableCollection<theseResultat>(resultats);
-      //  }
-
-
-
-
-
 
 
         //methods
@@ -189,6 +161,26 @@ namespace Project.ViewModels
                             Resume = r.Resume,
                             TheseId = r.TheseId
                         };
+                        Console.WriteLine("this.TheseId = r.TheseId; " + this.TheseId);  //works
+
+
+                        //each thses resultat with its own command
+                        try
+                        {
+                        result.consulterTheseCommand = new ViewModelCommand(
+                        execute: obj =>
+                        {
+                            int tId = result.TheseId;
+                            _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
+                             Console.WriteLine("TheseId that is sending from RESULTPAGEVM to COMMENTVM is: " + tId);
+                            _windowManager.CloseWindow();
+                            _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                        }
+                        ); }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error creating command: {ex.Message}");
+                        }
 
                         TheseService.Theses.Add(result);
 
@@ -209,13 +201,6 @@ namespace Project.ViewModels
         }
 
 
-    
-
-        private void ConsulterThese(theseResultat these)
-        {
-            // Logique pour consulter la thèse
-            // Par exemple, ouvrir une nouvelle fenêtre avec les détails de la thèse
-            Console.WriteLine($"Consulter la thèse : {these.NomThese}");
-        }
+ 
     }
 }

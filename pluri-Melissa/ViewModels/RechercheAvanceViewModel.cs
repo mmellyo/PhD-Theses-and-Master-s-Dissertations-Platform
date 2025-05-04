@@ -161,6 +161,7 @@ namespace Project.ViewModels
                     TheseService.Theses = new ObservableCollection<theseResultat>(filteredResults);
 
                     _viewModelLocator.ResultPageViewModel.TheseService.Theses = TheseService.Theses;
+                    _windowManager.CloseWindow();
                     _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
                 }
             );
@@ -198,6 +199,25 @@ namespace Project.ViewModels
                             Resume = r.Resume,
                             TheseId = r.TheseId
                         };
+
+                        //each thses resultat with its own command
+                        try
+                        {
+                            result.consulterTheseCommand = new ViewModelCommand(
+                            execute: obj =>
+                            {
+                                int tId = result.TheseId;
+                                _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
+                                Console.WriteLine("TheseId that is sending from ADVNCVM to COMMENTVM is: " + tId);
+                                _windowManager.CloseWindow();
+                                _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                            }
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error creating command: {ex.Message}");
+                        }
 
                         results.Add(result);
                     }

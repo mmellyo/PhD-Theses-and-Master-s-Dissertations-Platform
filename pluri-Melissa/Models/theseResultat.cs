@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MySql.Data.MySqlClient;
 
 namespace gestion.Model
 {
-    public class theseResultat
+    public class theseResultat 
     {
         public string NomThese { get; set; }
         public int TheseId { get; set; }
@@ -21,6 +23,9 @@ namespace gestion.Model
         public string Departement { get; set; }
         public string Resume { get; set; }
 
+
+        // Commands for UI binding
+        public ICommand consulterTheseCommand { get; set; }
 
     }
 }

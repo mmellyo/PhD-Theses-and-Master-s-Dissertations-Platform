@@ -30,6 +30,7 @@ namespace Project.Services
             Registermapping<rechercheWinViewModel, rechercheWin>();
             Registermapping<ResultPageViewModel, Resultaaat>();
             Registermapping<RechercheAvanceViewModel, rechercheAvance>();
+            Registermapping<UserProfileViewModel, UserProfileView>();
 
 
 

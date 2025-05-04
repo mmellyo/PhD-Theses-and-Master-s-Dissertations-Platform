@@ -84,7 +84,7 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = @"
-                                        SELECT u.user_name, c.comment_text, u.user_profilepic
+                                        SELECT u.user_id, u.user_name, c.comment_text, u.user_profilepic
                                         FROM comments c
                                         JOIN user u ON c.user_id = u.user_id
                                         WHERE c.these_id = @TheseId 
@@ -99,10 +99,10 @@ namespace Project.Repos
                     {
                         comments.Add(new Comment
                         {
+                            UserId = reader.GetInt32("user_id"),
                             Username = reader.GetString("user_name"),
                             CommentText = reader.GetString("comment_text"),
-                            user_profilepic = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"],
-
+                            user_profilepic = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"]
                         });
                     }
                 }
@@ -110,6 +110,7 @@ namespace Project.Repos
 
             return comments;
         }
+
 
 
 

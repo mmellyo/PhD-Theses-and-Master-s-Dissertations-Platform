@@ -106,16 +106,28 @@ namespace Project.Repos
             using (var connection = GetConnection())
             {
                 connection.Open();
-                string sql = @"SELECT * FROM theses
-                       WHERE nomThese LIKE @key 
-                          OR nomAuteur LIKE @key 
-                          OR MotCles LIKE @key
-                          OR Faculte LIKE @key
-                          OR NomEncadrant LIKE @key
-                          OR Langue LIKE @key
-                          OR Diplome LIKE @key
-                          OR Departement LIKE @key
-                          OR AnneeUniversitaire LIKE @key";
+                string sql = @"
+                            SELECT t.*, 
+       MAX(u.user_name) AS nomAuteur,
+       MAX(u.user_faculte) AS user_faculte, 
+       MAX(u.user_departement) AS user_departement,
+       GROUP_CONCAT(k.keyword SEPARATOR ', ') AS MotCles
+FROM theses t
+JOIN written_by_users w ON t.these_id = w.these_id
+JOIN user u ON w.user_id = u.user_id
+LEFT JOIN used_keywords uk ON t.these_id = uk.these_id
+LEFT JOIN keywords k ON uk.keyword_id = k.keyword_id
+WHERE t.nomThese LIKE @key 
+   OR u.user_name LIKE @key 
+   OR k.keyword LIKE @key
+   OR u.user_faculte LIKE @key
+   OR u.user_departement LIKE @key
+   OR t.NomEncadrant LIKE @key
+   OR t.Langue LIKE @key
+   OR t.Diplome LIKE @key
+   OR t.AnneeUniversitaire LIKE @key
+GROUP BY t.these_id
+";
 
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
@@ -132,8 +144,8 @@ namespace Project.Repos
                                 NomThese = reader["nomThese"].ToString(),
                                 NomAuteur = reader["nomAuteur"].ToString(),
                                 MotCles = reader["MotCles"].ToString(),
-                                Faculte = reader["Faculte"].ToString(),
-                                Departement = reader["Departement"].ToString(),
+                                Faculte = reader["user_faculte"].ToString(),
+                                Departement = reader["user_departement"].ToString(),
                                 NomEncadrant = reader["NomEncadrant"].ToString(),
                                 Langue = reader["Langue"].ToString(),
                                 Diplome = reader["Diplome"].ToString(),
@@ -149,4 +161,4 @@ namespace Project.Repos
             return results;
         }
     }
-}
+    }

@@ -67,7 +67,11 @@
             </Grid>
             <Grid Grid.Row="4" Margin="0,0,25,0">
                 <Border Height="15" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <Button Content="consulter" Style="{DynamicResource SecondaryButtonsStyle}" Command="{Binding consulterTheseCommand}" />
+                    <Button Content="consulter"
+                            Cursor="Hand"
+                            Style="{DynamicResource SecondaryButtonsStyle}"
+                            Command="{Binding consulterTheseCommand}" />
+                    
                 </Border>
             </Grid>
         </Grid>

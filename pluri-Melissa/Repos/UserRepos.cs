@@ -31,8 +31,8 @@ namespace Project.Repos
 
         ///implementing  IUserRepos interface methods : 
 
-        //METHOD SIGNUP USER - true if added successfully
-        public bool SignUp(UserModel user)
+        //METHOD SIGNUP USER - id if added successfully
+        public int SignUp(UserModel user)
         {
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.user_password);
             byte[] defaultProfilePic = File.ReadAllBytes("C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\Default.jpg");
@@ -43,7 +43,6 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
 
-                // Base query and parameters
                 string query = "INSERT INTO `user` (user_email, user_password, user_role, user_profilepic, user_name";
                 string values = "VALUES (@user_email, @user_password, @user_role, @user_profilepic, @user_name";
 
@@ -53,9 +52,6 @@ namespace Project.Repos
                 command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = user.user_name;
                 command.Parameters.Add("@user_profilepic", MySqlDbType.Blob).Value = defaultProfilePic;
 
-
-                ///not used : 
-                // Conditionally add user_uni if not null or empty
                 if (!string.IsNullOrEmpty(user.user_uni))
                 {
                     query += ", user_uni";
@@ -66,37 +62,47 @@ namespace Project.Repos
                 query += ") ";
                 values += ")";
 
-                // Combine query and values
-                command.CommandText = query + values;
+                command.CommandText = query + values + "; SELECT LAST_INSERT_ID();";
 
-                int rowsAffected = command.ExecuteNonQuery();
-                return rowsAffected == 1;
+                object result = command.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : -1;
             }
         }
 
 
 
-        //returns true if the credentials are valid
-        public bool AuthenticateUser(string user_email, string user_password)
+
+        // Returns the user ID if credentials are valid, otherwise -1
+        public int AuthenticateUser(string user_email, string user_password)
         {
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT user_password FROM `user` WHERE user_email=@user_email";
+                command.CommandText = "SELECT user_id, user_password FROM `user` WHERE user_email = @user_email";
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user_email;
 
-                var storedHash = command.ExecuteScalar()?.ToString();
-                if (storedHash == null) return false;
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var userId = reader.GetInt32("user_id");
+                        var storedHash = reader.GetString("user_password");
 
-                // Compare hashed passwords securely
-                return BCrypt.Net.BCrypt.Verify(user_password, storedHash);
+                        if (BCrypt.Net.BCrypt.Verify(user_password, storedHash))
+                        {
+                            return userId; 
+                        }
+                    }
+                }
             }
+
+            return -1;
         }
 
 
-        //still working on it
+
         public bool IsUsthbMember(String email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -213,10 +219,38 @@ namespace Project.Repos
             }
         }
 
+        public byte[] GetProfilepicFromId(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilepic FROM `user` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.VarChar).Value = user_id;
+                var result = command.ExecuteScalar();
+
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
 
 
 
 
+        public string GetuserEmail(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT user_email FROM `user` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+                var result = command.ExecuteScalar();
+                return result != DBNull.Value ? (string)result : null;
+            }
+        }
 
 
 

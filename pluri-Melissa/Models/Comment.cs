@@ -37,6 +37,8 @@ namespace Project.Models
         // Commands for UI binding
         public ICommand ApproveCommand { get; set; }
         public ICommand DenyCommand { get; set; }
+        public ICommand CommentUsernameClickCommand { get; set; }
+
 
 
         // Properties for expansion/collapse functionality

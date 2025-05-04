@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MaterialDesignThemes.Wpf;
 using MySql.Data.MySqlClient;
 using Project.Models;
 
@@ -40,5 +41,71 @@ namespace Project.Repos
                 }
             }
         }
+
+
+        public string GetNomEncadrantFromTheseId(int these_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT NomEncadrant FROM `theses` WHERE these_id = @these_id";
+                command.Parameters.AddWithValue("@these_id", these_id);
+
+                var result = command.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("No encadrant name found for this thesis.");
+                    return null;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        public string GetNomAuteurFromTheseId(int these_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                // Adjusted query with JOINs
+                command.CommandText = @"
+                            SELECT u.user_name
+                            FROM user u
+                            JOIN written_by_users wbu ON u.user_id = wbu.user_id
+                            JOIN these t ON wbu.these_id = t.these_id
+                            WHERE t.these_id = @these_id";
+
+                command.Parameters.AddWithValue("@these_id", these_id);
+
+                var result = command.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("No author name found for this thesis.");
+                    return null;
+                }
+            }
+        }
+
     }
 }

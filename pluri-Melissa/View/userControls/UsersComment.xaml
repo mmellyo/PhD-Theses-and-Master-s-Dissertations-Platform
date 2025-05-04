@@ -56,9 +56,11 @@
                             Foreground="#212121"
                             TextWrapping="Wrap"
                             Width="185">
-                            <Hyperlink Command="{Binding UsernameClickCommand}">
-                                <Run Text="{Binding Username}" />
-                            </Hyperlink>
+                            <Hyperlink 
+    Command="{Binding CommentUsernameClickCommand}" 
+    CommandParameter="{Binding}">
+    <Run Text="{Binding Username}" />
+</Hyperlink>
                     </TextBlock>
                     <!-- ETOILES -->
                 </StackPanel>

@@ -17,6 +17,8 @@ namespace Project.Services
         public ObservableCollection<theseResultat> Theses { get; set; }
         void DisplayThese(int TheseId);
         void ReloadTheses(int theseId);
+        int TheseId { get; set; }
+
     }
 
 
@@ -24,7 +26,7 @@ namespace Project.Services
 
     public class TheseService : ITheseService
     {
-        private int theseId;
+        public int TheseId { get; set; }
         private readonly theseResultatRepo _theseresultatRepo;
 
         public TheseService(theseResultatRepo theseresultatRepo = null)

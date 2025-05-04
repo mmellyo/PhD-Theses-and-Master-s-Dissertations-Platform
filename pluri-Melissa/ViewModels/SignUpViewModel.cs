@@ -37,6 +37,7 @@ namespace Project.ViewModels
 
 
 
+        public int UserId { get; set; }
 
         public string Username
         {
@@ -113,18 +114,14 @@ namespace Project.ViewModels
                     user_role = _userRepos.AssignUserRole(this.Email),
                 };
 
-                bool success = repo.SignUp(user);
-                MessageBox.Show(success ? "User registered!" : "Registration failed.");
+                UserId = repo.SignUp(user);
+
+                MessageBox.Show(UserId != 0 ? "User registered!" : "Registration failed.");
 
 
                 //Assigns EMAIL
-                _viewModelLocator.MyProfileViewModel.Email = Email;
-                _viewModelLocator.CommentViewModel.Email = Email;
-
-                //Assigns pdp
-                //_viewModelLocator.MyProfileViewModel.user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
-               // _viewModelLocator.CommentViewModel.user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
-
+                _viewModelLocator.MyProfileViewModel.InitializeWithUserId(UserId);
+                _viewModelLocator.CommentViewModel.InitializeWithUserId(UserId);
 
                 _windowManager.CloseWindow();
                 _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);

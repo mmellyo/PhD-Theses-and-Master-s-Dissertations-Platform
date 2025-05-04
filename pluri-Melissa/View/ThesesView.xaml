@@ -79,7 +79,11 @@
                         </Image>
                     </Border>
                     <Grid Grid.Column="3">
-                        <Border  Height="400" Width="600" BorderBrush="#FF39C3FF" BorderThickness="2.5" CornerRadius="25" Margin="-100,25,78,25" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="353*"/>
+                            <RowDefinition Height="97*"/>
+                        </Grid.RowDefinitions>
+                        <Border  Height="400" Width="600" BorderBrush="#FF39C3FF" BorderThickness="2.5" CornerRadius="25" Margin="-95,25,83,25" Grid.RowSpan="2" >
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="70"/>
@@ -174,7 +178,7 @@
                                            Width="520">
                         
                                     <Run Text="Encadré par :" />
-                                    <Run Text="{Binding EncadrantString}" FontWeight="Bold" />
+                                    <Run Text="{Binding NomEncadrant}" FontWeight="Bold" />
                                     </TextBlock>
                                 </Grid>
                                 <!-- MOT-ClES -->

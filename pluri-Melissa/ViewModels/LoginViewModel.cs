@@ -12,6 +12,7 @@ using Project.Repos;
 using Org.BouncyCastle.Bcpg;
 using System.Windows;
 using Project.Services;
+using System.Security.Cryptography;
 
 namespace Project.ViewModels
 {
@@ -36,6 +37,7 @@ namespace Project.ViewModels
         public string LoginEmail { get; set; }
 
 
+        public int UserId { get; set; }
 
         public string Username
         {
@@ -106,29 +108,27 @@ namespace Project.ViewModels
                 {
                     _windowManager.CloseWindow();
 
-                    // Switch the window to adminspacce
+                    
                     _windowManager.ShowWindow(_viewModelLocator.SideBarViewModel);
 
                 } else
                 {
 
                     _userSession.Email = this.LoginEmail;
-                    var isValidUser = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
+                     UserId = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
 
-                    if (isValidUser)
+                    if (UserId != 0)
                     {
+                        // Assigns usser info
+                        _viewModelLocator.MyProfileViewModel.InitializeWithUserId(UserId);
+                        _viewModelLocator.CommentViewModel.InitializeWithUserId(UserId);
+
                         MessageBox.Show("loggin in successfully");
-Console.WriteLine("************************LOGED IN***********************************");
+                        Console.WriteLine("************************LOGED IN***********************************");
                         IsViewVisible = false;
 
-                        //Assigns EMAIL
-                        _viewModelLocator.MyProfileViewModel.Email = LoginEmail;
-                        _viewModelLocator.CommentViewModel.Email = LoginEmail;
- Console.WriteLine("email from _viewModelLocator.MyProfileViewModel: " + _viewModelLocator.MyProfileViewModel.Email);
- Console.WriteLine("email from _viewModelLocator.CommentViewModel: " + _viewModelLocator.CommentViewModel.Email);
-
                         _windowManager.CloseWindow();
-                        _windowManager.ShowWindow(_viewModelLocator.MyProfileViewModel);
+                        _windowManager.ShowWindow(_viewModelLocator.rechercheWinViewModel);
 
                     }
                     else
@@ -141,6 +141,12 @@ Console.WriteLine("************************LOGED IN*****************************
             },
            canExecute: obj =>true
         );
+
+
+
+
+
+
 
 
 
@@ -171,50 +177,6 @@ Console.WriteLine("************************LOGED IN*****************************
                 );
 
 
-        }
-
-        private bool CanExecuteLoginCommand(object obj)
-        {
-            bool validData;
-
-            if (string.IsNullOrWhiteSpace(LoginEmail) || LoginEmail.Length < 3 ||
-              LoginPassword == null || LoginPassword.Length < 3)
-                validData = false;
-            else
-                validData = true;
-
-            return validData;
-        }
-
-        private void ExecuteLoginCommand(object obj)
-        {
-            string enteredEmail = LoginEmail;
-            var isValidUser = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
-
-
-            if (isValidUser)
-            {
-                ErrorMessage = "loggin in successfully";
-
-                // Store the user in session
-                //usermodel. SetCurrentUserEmail(LoginEmail);
-                IsViewVisible = false;
-            }
-            else
-            {
-                ErrorMessage = "Invalid username or password";
-            }
-        }
-
-
-
-
-        //RecoverPasswordCommand = new ViewModelCommand(p => ExecuteRecoverPasswordCommand("", ""));
-
-        /// not yet:
-        private void ExecuteRecoverPasswordCommand(string username, string email)
-        {
-            throw new NotImplementedException();
         }
     }
 }

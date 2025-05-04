@@ -29,7 +29,9 @@ namespace Project.ViewModels
 
         // getters / setters
         public string Email { get; set; }
-        public int UserId { get; }
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public string User_role { get; set; }
         public bool IsViewVisible
         {
             get => _isViewVisible;
@@ -67,26 +69,6 @@ namespace Project.ViewModels
             _userSession = userSession;
             _userRepos = new UserRepos();
             _usermodel = new UserModel();
-
-
-            if (!string.IsNullOrEmpty(_viewModelLocator.LoginViewModel.LoginEmail))
-            {
-                Email = _viewModelLocator.LoginViewModel.LoginEmail;
-Console.WriteLine("************************PROFILE*************************");
-
- Console.WriteLine("we looged in - pick from login : " + Email);
-            }
-            else
-            {
-                Email = _viewModelLocator.SignUpViewModel.Email;
-Console.WriteLine("we signed up - pick from signup : " + Email);
-            }
-
-
-            int UserId = _userRepos.GetUserId(Email);
-            user_profilepic = _userRepos.GetProfilepicFromEmail(Email);
-
-
 
 
             // COMMAND CHANGE PDP
@@ -134,7 +116,7 @@ Console.WriteLine("we signed up - pick from signup : " + Email);
 
 
 
-            // COMMAND CHANGE window
+            // temp COMMAND CHANGE window
             GoToTheseCommand = new ViewModelCommand(
             execute: obj =>
             {
@@ -145,11 +127,26 @@ Console.WriteLine("we signed up - pick from signup : " + Email);
 
             );
 
+        }
 
 
 
+        public void InitializeWithUserId(int userId)
+        {
+            UserId = userId;
+            _userSession.UserId = userId;
+            user_profilepic = _userRepos.GetProfilepicFromId(UserId);
+            Email = _userRepos.GetuserEmail(UserId);
+            User_role = _userRepos.AssignUserRole(Email);
+            Username = _userRepos.GetUsernameFromEmail(Email);
 
+            Console.WriteLine("***************************** InitializeWithUserId *******************");
+            Console.WriteLine("UserId that is recieving from login to MYPROFILE is: " + UserId);
+            Console.WriteLine("my email " + Email);
+            Console.WriteLine("my role " + User_role);
+            Console.WriteLine("my username " + Username);
 
         }
+
     }
 }

@@ -82,6 +82,7 @@ namespace Project.ViewModels
                 execute: obj =>
                 {
                     _viewModelLocator.ResultPageViewModel.SearchKey = SearchText;
+                    _windowManager.CloseWindow();
                     _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
                 }
             );
@@ -91,6 +92,7 @@ namespace Project.ViewModels
             OpenAdvancedSearchCommand = new ViewModelCommand(
                 execute: obj =>
                 {
+                    _windowManager.CloseWindow();
                     _windowManager.ShowWindow(_viewModelLocator.RechercheAvanceViewModel);
                 }
             );

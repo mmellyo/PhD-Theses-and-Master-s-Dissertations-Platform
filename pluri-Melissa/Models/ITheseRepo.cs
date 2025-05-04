@@ -9,6 +9,7 @@ namespace Project.Models
     public interface ITheseRepo
     {
         public void ShowPdf(int these_id);
+        public String GetNomEncadrantFromTheseId(int TheseId);
 
     }
 }
