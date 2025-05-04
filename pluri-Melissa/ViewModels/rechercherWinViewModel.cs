@@ -77,7 +77,7 @@ namespace Project.ViewModels
             }
 
 
-            //commands
+            //command 1
             OpenResultPageCommand = new ViewModelCommand(
                 execute: obj =>
                 {
@@ -87,20 +87,16 @@ namespace Project.ViewModels
             );
 
 
-
+            //command 2
             OpenAdvancedSearchCommand = new ViewModelCommand(
-                execute: obj => OpenAdvancedSearch(),
-                canExecute: obj => true
+                execute: obj =>
+                {
+                    _windowManager.ShowWindow(_viewModelLocator.RechercheAvanceViewModel);
+                }
             );
         }
 
 
-
-        private void OpenAdvancedSearch()
-        {
-            var advancedSearchWindow = new rechercheAvance();
-            advancedSearchWindow.Show();
-        }
 
         private void Recherche(string key)
         {

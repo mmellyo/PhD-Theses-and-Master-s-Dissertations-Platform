@@ -44,19 +44,23 @@
             </Grid>
             <Grid Grid.Row="4">
                 <TextBlock FontFamily="Montserrat Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" ><Run Language="fr-fr" Text="Langue"/></TextBlock>
-                <ComboBox SelectedItem="{Binding Langue}"
-              Width="650" Height="35"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Center"
-              Padding="9"
-              FontSize="12"
-              FontFamily="Montserrat Medium"
-              Background="White"
-              Foreground="#333"
-              Text="Choisir langue"
-              IsEditable="True"
-              IsReadOnly="True"
-              SelectedIndex="-1" Margin="250,0,0,0">
+                <ComboBox
+                    ItemsSource="{Binding Langues}"
+                    SelectedValue="{Binding Langue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="."
+    
+                        Width="650" Height="35"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Padding="9"
+                        FontSize="12"
+                        FontFamily="Montserrat Medium"
+                        Background="White"
+                        Foreground="#333"
+                        Text="Choisir langue"
+                        IsEditable="True"
+                        IsReadOnly="True"
+                        SelectedIndex="-1" Margin="250,0,0,0">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="FontSize" Value="20"/>

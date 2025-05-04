@@ -11,8 +11,9 @@ using System.Windows;
 using Project.Services;
 using Project.Models;
 using gestion.Model;
-using MySqlX.XDevAPI.Common;
 using System.Collections.ObjectModel;
+using MySqlX.XDevAPI.Common;
+using MailKit.Search;
 
 namespace Project.ViewModels
 {
@@ -29,17 +30,58 @@ namespace Project.ViewModels
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
 
-       //setter / geter
+       //setter / getter
         public string NomAuteur { get; set; }
         public string NomEncadrant { get; set; }
         public string NomThese { get; set; }
         public string MotCle { get; set; }
-        public string Langue { get; set; }
+
+        private ObservableCollection<string> _langues;
+        public ObservableCollection<string> Langues
+        {
+            get => _langues;
+            set { _langues = value; OnPropertyChanged(nameof(Langues)); }
+        }
+
+        private string _langue;
+        public string Langue
+        {
+            get => _langue;
+            set { _langue = value; OnPropertyChanged(nameof(Langue)); }
+        }
+
+
         public string Departement { get; set; }
         public string Annee { get; set; }
         public string Faculte { get; set; }
 
+        private bool _isAdvancedSearch;
+        public bool IsAdvancedSearch
+        {
+            get => _isAdvancedSearch;
+            set
+            {
+                _isAdvancedSearch = value;
+                OnPropertyChanged(nameof(IsAdvancedSearch));
+            }
+        }
+
         public ITheseService TheseService { get; }
+
+
+
+
+        /// used for dropdowns
+        /*private void InitializeFilters()
+        {
+            Langues = new ObservableCollection<string> { "Français", "Anglais" };
+            //Departements = new ObservableCollection<string> { "Informatique", "Biologie" };
+            //Annees = new ObservableCollection<string> { "2020", "2021", "2022", "2023", "2024" };
+            //Facultes = new ObservableCollection<string> { "Intelligence artificielle", "cybersécurité" };
+        }*/
+
+
+
 
         //commands
         public ICommand RechercherCommand { get; }
@@ -58,6 +100,9 @@ namespace Project.ViewModels
             _viewModelLocator = viewModelLocator;
             TheseService = theseService;
 
+            /// used for dropdowns
+            //InitializeFilters();
+
             // Ensure collection is initialized
             if (TheseService.Theses == null)
             {
@@ -69,18 +114,20 @@ namespace Project.ViewModels
             RechercherCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-                    //retrive results
-                    RechercherAvecFiltres();
+                    var filteredResults = RechercherAvecFiltres();
+                    TheseService.Theses = new ObservableCollection<theseResultat>(filteredResults);
 
-                    _windowManager.CloseWindow();
+                    _viewModelLocator.ResultPageViewModel.TheseService.Theses = TheseService.Theses;
                     _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
-
                 }
             );
         }
 
-        private void RechercherAvecFiltres()
+        
+
+        private List<theseResultat> RechercherAvecFiltres()
         {
+            var results = new List<theseResultat>();
             try
             {
                 TheseService.Theses.Clear();
@@ -88,6 +135,7 @@ namespace Project.ViewModels
                 // Load from DB
                 var resultats = _theseResultatRepo.rechercherAvecFiltres(NomAuteur, NomEncadrant, NomThese, MotCle, Langue, Departement, Annee, Faculte);
                 Console.WriteLine("Resultats count: " + resultats.Count);
+                Console.WriteLine($"Langue used in filter: '{Langue}'");
 
                 if (resultats != null)
                 {
@@ -108,11 +156,10 @@ namespace Project.ViewModels
                             TheseId = r.TheseId
                         };
 
-                        TheseService.Theses.Add(result);
-
+                        results.Add(result);
                     }
 
-                    Console.WriteLine($"Loaded {TheseService.Theses.Count} result successfully");
+                    Console.WriteLine($"Loaded {results.Count} result successfully");
                 }
                 else
                 {
@@ -124,6 +171,7 @@ namespace Project.ViewModels
                 Console.WriteLine($"Error loading comments: {ex.Message}");
                 MessageBox.Show($"Failed to load comments: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            return results;
         }
 
 

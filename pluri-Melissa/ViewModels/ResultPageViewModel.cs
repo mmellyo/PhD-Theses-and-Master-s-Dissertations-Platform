@@ -52,6 +52,18 @@ namespace Project.ViewModels
             {
                 _results = value;
                 OnPropertyChanged(nameof(Results));
+                IsAdvancedSearch = true;
+            }
+        }
+
+        private bool _isAdvancedSearch;
+        public bool IsAdvancedSearch
+        {
+            get => _isAdvancedSearch;
+            set
+            {
+                _isAdvancedSearch = value;
+                OnPropertyChanged(nameof(IsAdvancedSearch));
             }
         }
 
@@ -63,7 +75,8 @@ namespace Project.ViewModels
             {
                 _searchKey = value;
                 OnPropertyChanged(nameof(SearchKey));
-                LoadResults();
+                if (!IsAdvancedSearch)
+                    LoadResults();
             }
         }
 
@@ -98,8 +111,19 @@ namespace Project.ViewModels
                 TheseService.Theses = new ObservableCollection<theseResultat>();
             }
 
-            // Load existing these results
-            LoadResults();
+
+            if (TheseService.Theses.Count == 0)
+            {
+                Console.WriteLine("Theses collection is empty - Loading ALL theses");
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+                LoadResults();
+            }
+            else
+            {
+                Console.WriteLine("Theses collection is not empty - we came from ADVNCD SEARCH");
+            }
+
+           
 
 
 
@@ -125,8 +149,8 @@ namespace Project.ViewModels
 
 
     //    public ResultPageViewModel(List<theseResultat> resultats)
-      //  {
-      //      Results = new ObservableCollection<theseResultat>(resultats);
+       // {
+      //     Results = new ObservableCollection<theseResultat>(resultats);
       //  }
 
 
@@ -185,8 +209,7 @@ namespace Project.ViewModels
         }
 
 
-
-
+    
 
         private void ConsulterThese(theseResultat these)
         {
