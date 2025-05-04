@@ -50,10 +50,53 @@ namespace Project.ViewModels
             set { _langue = value; OnPropertyChanged(nameof(Langue)); }
         }
 
+        private ObservableCollection<string> _departements;
+        public ObservableCollection<string> Departements
+        {
+            get => _departements;
+            set { _departements = value; OnPropertyChanged(nameof(Departements)); }
+        }
 
-        public string Departement { get; set; }
-        public string Annee { get; set; }
-        public string Faculte { get; set; }
+        private string _departement;
+        public string Departement
+        {
+            get => _departement;
+            set { _departement = value; OnPropertyChanged(nameof(Departement)); }
+        }
+
+
+
+
+        private ObservableCollection<string> _annees;
+        public ObservableCollection<string> Annees
+        {
+            get => _annees;
+            set { _annees = value; OnPropertyChanged(nameof(Annees)); }
+        }
+
+        private string _annee;
+        public string Annee
+        {
+            get => _annee;
+            set { _annee = value; OnPropertyChanged(nameof(Annee)); }
+        }
+
+
+
+        private ObservableCollection<string> _facultes;
+        public ObservableCollection<string> Facultes
+        {
+            get => _facultes;
+            set { _facultes = value; OnPropertyChanged(nameof(Facultes)); }
+        }
+
+        private string _faculte;
+        public string Faculte
+        {
+            get => _faculte;
+            set { _faculte = value; OnPropertyChanged(nameof(Faculte)); }
+
+        }
 
         private bool _isAdvancedSearch;
         public bool IsAdvancedSearch
@@ -72,13 +115,13 @@ namespace Project.ViewModels
 
 
         /// used for dropdowns
-        /*private void InitializeFilters()
+        private void InitializeFilters()
         {
             Langues = new ObservableCollection<string> { "Français", "Anglais" };
-            //Departements = new ObservableCollection<string> { "Informatique", "Biologie" };
-            //Annees = new ObservableCollection<string> { "2020", "2021", "2022", "2023", "2024" };
-            //Facultes = new ObservableCollection<string> { "Intelligence artificielle", "cybersécurité" };
-        }*/
+            Departements = new ObservableCollection<string> { "Informatique", "Biologie" };
+            Annees = new ObservableCollection<string> { "2020", "2021", "2022", "2023", "2024" };
+            Facultes = new ObservableCollection<string> { "Intelligence artificielle", "cybersécurité" };
+        }
 
 
 
@@ -101,7 +144,7 @@ namespace Project.ViewModels
             TheseService = theseService;
 
             /// used for dropdowns
-            //InitializeFilters();
+            InitializeFilters();
 
             // Ensure collection is initialized
             if (TheseService.Theses == null)

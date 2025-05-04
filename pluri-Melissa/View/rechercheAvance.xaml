@@ -44,23 +44,19 @@
             </Grid>
             <Grid Grid.Row="4">
                 <TextBlock FontFamily="Montserrat Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" ><Run Language="fr-fr" Text="Langue"/></TextBlock>
-                <ComboBox
-                    ItemsSource="{Binding Langues}"
-                    SelectedValue="{Binding Langue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValuePath="."
-    
-                        Width="650" Height="35"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Padding="9"
-                        FontSize="12"
-                        FontFamily="Montserrat Medium"
-                        Background="White"
-                        Foreground="#333"
-                        Text="Choisir langue"
-                        IsEditable="True"
-                        IsReadOnly="True"
-                        SelectedIndex="-1" Margin="250,0,0,0">
+                <ComboBox SelectedItem="{Binding Langue}" ItemsSource="{Binding Langues}"
+  Width="650" Height="35"
+  HorizontalAlignment="Left"
+  VerticalAlignment="Center"
+  Padding="9"
+  FontSize="12"
+  FontFamily="Montserrat Medium"
+  Background="White"
+  Foreground="#333"
+  Text="Choisir langue"
+  IsEditable="True"
+  IsReadOnly="True"
+  SelectedIndex="-1" Margin="250,0,0,0">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="FontSize" Value="20"/>
@@ -84,26 +80,23 @@
                             </Setter>
                         </Style>
                     </ComboBox.Resources>
-
-                    <ComboBoxItem Content="Français"/>
-                    <ComboBoxItem Content="Anglais"/>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="7">
                 <TextBlock FontFamily="Montserrat Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" RenderTransformOrigin="0.277,0.774" ><Run Language="fr-fr" Text="Faculté"/></TextBlock>
-                <ComboBox SelectedItem="{Binding Faculte}"
-              Width="650" Height="35"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Center"
-              Padding="9"
-              FontSize="12"
-              FontFamily="Montserrat Medium"
-              Background="White"
-              Foreground="#333"
-              Text="Choisir faculté"
-              IsEditable="True"
-              IsReadOnly="True"
-              SelectedIndex="-1" Margin="250,0,0,0">
+                <ComboBox SelectedItem="{Binding Faculte}" ItemsSource="{Binding Facultes}"
+  Width="650" Height="35"
+  HorizontalAlignment="Left"
+  VerticalAlignment="Center"
+  Padding="9"
+  FontSize="12"
+  FontFamily="Montserrat Medium"
+  Background="White"
+  Foreground="#333"
+  Text="Choisir faculté"
+  IsEditable="True"
+  IsReadOnly="True"
+  SelectedIndex="-1" Margin="250,0,0,0">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="FontSize" Value="20"/>
@@ -127,26 +120,23 @@
                             </Setter>
                         </Style>
                     </ComboBox.Resources>
-
-                    <ComboBoxItem Content="intelligence artificielle"/>
-                    <ComboBoxItem Content="cybersécurité"/>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="6">
                 <TextBlock FontFamily="Montserrat Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" RenderTransformOrigin="0.277,0.774" ><Run Language="fr-fr" Text="Departement"/></TextBlock>
-                <ComboBox SelectedItem="{Binding Departement}"
-            Width="650" Height="36"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Padding="9"
-            FontSize="12"
-            FontFamily="Montserrat Medium"
-            Background="White"
-            Foreground="#333"
-            Text="Choisir departement"
-            IsEditable="True"
-            IsReadOnly="True"
-            SelectedIndex="-1" Margin="250,0,0,0">
+                <ComboBox SelectedItem="{Binding Departement}" ItemsSource="{Binding Departements}"
+Width="650" Height="36"
+HorizontalAlignment="Left"
+VerticalAlignment="Center"
+Padding="9"
+FontSize="12"
+FontFamily="Montserrat Medium"
+Background="White"
+Foreground="#333"
+Text="Choisir departement"
+IsEditable="True"
+IsReadOnly="True"
+SelectedIndex="-1" Margin="250,0,0,0">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="FontSize" Value="20"/>
@@ -170,26 +160,23 @@
                             </Setter>
                         </Style>
                     </ComboBox.Resources>
-
-                    <ComboBoxItem Content="Informatique"/>
-                    <ComboBoxItem Content="Biologie"/>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="8">
                 <TextBlock FontFamily="Montserrat Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" ><Run Language="fr-fr" Text="Année universitaire"/></TextBlock>
-                <ComboBox SelectedItem="{Binding Annee}"
-            Width="650" Height="36"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Padding="9"
-            FontSize="12"
-            FontFamily="Montserrat Medium"
-            Background="White"
-            Foreground="#333"
-            Text="Choisir Année universitaire"
-            IsEditable="True"
-            IsReadOnly="True"
-            SelectedIndex="-1" Margin="250,0,0,0">
+                <ComboBox SelectedItem="{Binding Annee}" ItemsSource="{Binding Annees}"
+Width="650" Height="36"
+HorizontalAlignment="Left"
+VerticalAlignment="Center"
+Padding="9"
+FontSize="12"
+FontFamily="Montserrat Medium"
+Background="White"
+Foreground="#333"
+Text="Choisir Année universitaire"
+IsEditable="True"
+IsReadOnly="True"
+SelectedIndex="-1" Margin="250,0,0,0">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="FontSize" Value="20"/>
@@ -213,9 +200,6 @@
                             </Setter>
                         </Style>
                     </ComboBox.Resources>
-
-                    <ComboBoxItem Content="2025"/>
-                    <ComboBoxItem Content="2024"/>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="5">
