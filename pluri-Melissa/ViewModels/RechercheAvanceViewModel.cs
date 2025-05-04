@@ -12,6 +12,7 @@ using Project.Services;
 using Project.Models;
 using gestion.Model;
 using MySqlX.XDevAPI.Common;
+using System.Collections.ObjectModel;
 
 namespace Project.ViewModels
 {
@@ -52,16 +53,23 @@ namespace Project.ViewModels
             _userRepos = new UserRepos();
             _theseRepo = new TheseRepo();
             _reportRepo = new ReportsRepo();
-
+            _theseResultatRepo = new theseResultatRepo();
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             TheseService = theseService;
 
+            // Ensure collection is initialized
+            if (TheseService.Theses == null)
+            {
+                Console.WriteLine("comment collection is null - Initializing Comments collection");
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+            }
 
             //commands
             RechercherCommand = new ViewModelCommand(
                 execute: obj =>
                 {
+                    //retrive results
                     RechercherAvecFiltres();
 
                     _windowManager.CloseWindow();

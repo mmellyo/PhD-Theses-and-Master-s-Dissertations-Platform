@@ -20,7 +20,7 @@ namespace Project.View
     /// </summary>
     public partial class Resultaaat : Window
     {
-        public Resultaaat(string searchKey)
+        public Resultaaat()
         {
             InitializeComponent();
 

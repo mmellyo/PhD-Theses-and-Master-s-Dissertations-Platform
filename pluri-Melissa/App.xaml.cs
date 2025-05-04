@@ -41,6 +41,7 @@ namespace Project
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<IUserSessionService, UserSessionService>();
             services.AddSingleton<ICommentService, CommentService>();
+            services.AddSingleton<ITheseService, TheseService>();
 
             
 

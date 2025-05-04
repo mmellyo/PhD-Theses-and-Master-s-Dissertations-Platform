@@ -9,7 +9,6 @@ namespace gestion.Model
 {
     public class theseResultat
     {
-        public static List<theseResultat> list = new List<theseResultat>();
         public string NomThese { get; set; }
         public int TheseId { get; set; }
         public string NomAuteur { get; set; }

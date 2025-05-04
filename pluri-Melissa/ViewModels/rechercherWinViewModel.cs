@@ -12,11 +12,19 @@ using Project.Services;
 using Project.Repos;
 using Project.View;
 
+
+//this will search - get results - send them to resultvm
+// resultvm will display them
+
+
 namespace Project.ViewModels
 {
     public class rechercheWinViewModel : ViewModelBase
     {
+        //fields
         private readonly IWindowManager _windowManager;
+        private readonly ViewModelLocator _viewModelLocator;
+        public ITheseService TheseService { get; }
 
         private ObservableCollection<suggestionRecherche> _suggestions;
         public ObservableCollection<suggestionRecherche> Suggestions
@@ -47,45 +55,44 @@ namespace Project.ViewModels
         public ICommand OpenAdvancedSearchCommand { get; }
 
 
-        //constructor
-        public rechercheWinViewModel(IWindowManager windowManager, ViewModelLocator viewModelLocator)
-        {
-            Console.WriteLine("rechercheWinViewModel constructor called");
-            _windowManager = windowManager;
 
+
+
+        //constructor
+        public rechercheWinViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        {
+            //fields
             Suggestions = new ObservableCollection<suggestionRecherche>();
+
+            _windowManager = windowManager;
+            _viewModelLocator = viewModelLocator;
+            TheseService = theseService;
+
+
+            //initialize the theses collection
+            if (TheseService.Theses == null)
+            {
+                Console.WriteLine(" collection is null - Initializing  collection");
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+            }
 
 
             //commands
             OpenResultPageCommand = new ViewModelCommand(
                 execute: obj =>
                 {
-                    Console.WriteLine("OpenResultPageCommand  clicked");
-                    OpenResultPage();
+                    _viewModelLocator.ResultPageViewModel.SearchKey = SearchText;
+                    _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
                 }
             );
+
+
 
             OpenAdvancedSearchCommand = new ViewModelCommand(
                 execute: obj => OpenAdvancedSearch(),
                 canExecute: obj => true
             );
         }
-
-
-
-        private void OpenResultPage()
-        {
-            Resultaaat resultPage = new Resultaaat(SearchText);
-            resultPage.Show();
-        }
-
-
-
-
-
-
-
-
 
 
 

@@ -6,27 +6,49 @@
         xmlns:uc="clr-namespace:Project.View.userControls"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="resultaaat" Height="700" Width="1238">
+        Title="Résultats des Thèses" Height="700" Width="1238"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F7FA">
 
     <Grid>
-        <StackPanel Background="#0093ED" Height="75" VerticalAlignment="Top">
-        </StackPanel>
+        <!-- Header -->
+        <Border Background="#0093ED" Height="75" VerticalAlignment="Top">
+            <TextBlock Text="Résultats des Thèses" 
+                       VerticalAlignment="Center" 
+                       Margin="20,0"
+                       Foreground="White" 
+                       FontSize="24"
+                       FontFamily="Segoe UI Semibold"/>
+        </Border>
 
-        <StackPanel Background="White" Width="200" HorizontalAlignment="Left">
-        </StackPanel>
+        <!-- Side Navigation Panel -->
+        <Border Background="#FFFFFF" Width="200" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+            <StackPanel Margin="10" VerticalAlignment="Top">
+                <TextBlock Text="Navigation" FontSize="16" FontWeight="Bold" Margin="0,20,0,10"/>
+                <!-- Add real buttons or navigation links as needed -->
+                <Button Content="Accueil" Margin="0,5"/>
+                <Button Content="Rechercher" Margin="0,5"/>
+                <Button Content="Statistiques" Margin="0,5"/>
+            </StackPanel>
+        </Border>
 
-        <ScrollViewer VerticalScrollBarVisibility="Visible"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" >
-            <ItemsControl 
-                ItemsSource="{Binding  TheseService.Theses}"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch">
+        <!-- Main Content Area -->
+        <Border Margin="210,85,10,10" Background="Transparent">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding TheseService.Theses}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Margin="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <uc:ThesesCard  />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:ThesesCard Margin="0,10" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>

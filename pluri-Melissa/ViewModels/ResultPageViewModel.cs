@@ -71,24 +71,25 @@ namespace Project.ViewModels
         //commands
         public ICommand consulterTheseCommand { get; }
 
-        
 
 
+        private readonly ITheseService _theseService;
+        private theseResultat _selectedThese;
 
 
         //constructors
-        public ResultPageViewModel(IUserSessionService userSession, ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        public ResultPageViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
             //fields
             _userModel = new UserModel();
             _userRepos = new UserRepos();
             _theseRepo = new TheseRepo();
             _reportRepo = new ReportsRepo();
-
-            _userSession = userSession;
+            _theseResultatRepo = new theseResultatRepo();
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
             TheseService = theseService;
+            _theseService = theseService;
 
             // Ensure these collection is initialized
             if (TheseService.Theses == null)
@@ -99,6 +100,8 @@ namespace Project.ViewModels
 
             // Load existing these results
             LoadResults();
+
+
 
             // commands
             consulterTheseCommand = new ViewModelCommand(
@@ -112,18 +115,19 @@ namespace Project.ViewModels
         }
 
 
-        public ResultPageViewModel(string searchKey)
-        {
-            Results = new ObservableCollection<theseResultat>();
-            SearchKey = searchKey;
-            LoadResults();
-        }
+      //  public ResultPageViewModel(string searchKey)
+      //  {
+      //      Results = new ObservableCollection<theseResultat>();
+       //     SearchKey = searchKey;
+        //    LoadResults();
+       // }
 
 
-        public ResultPageViewModel(List<theseResultat> resultats)
-        {
-            Results = new ObservableCollection<theseResultat>(resultats);
-        }
+
+    //    public ResultPageViewModel(List<theseResultat> resultats)
+      //  {
+      //      Results = new ObservableCollection<theseResultat>(resultats);
+      //  }
 
 
 
