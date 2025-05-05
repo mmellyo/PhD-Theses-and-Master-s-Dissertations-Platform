@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Project.View.userControls.SideBarButton_arrowdown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:svg="http://sharpvectors.codeplex.com/runtime"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View.userControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="160">
+    <UserControl.Resources>
+        <Style x:Key="SidebarButtonTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource DarkTextColor}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource AncestorType=Button}}" Value="White"/>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SidebarGrayPathStyle" TargetType="Path">
+            <Setter Property="Fill" Value="Gray"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                    <Setter Property="Fill" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                    <Setter Property="Fill" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SidebarBluePathStyle" TargetType="Path">
+            <Setter Property="Fill" Value="#0093ED"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                    <Setter Property="Fill" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource AncestorType=Button}}" Value="White"/>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Button Background="Transparent"
+                BorderThickness="0"
+                Padding="5"
+                Height="40"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Center"
+                Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Style="{StaticResource TertiaryButtonStyle}">
+
+            <Grid VerticalAlignment="Center" Height="40" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                
+                <Viewbox Grid.Column="0" Width="13" Height="13" Margin="0,1,5,0">
+                    <Path Style="{StaticResource SidebarBluePathStyle}" Data="{Binding icon, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Viewbox>
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding content, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                           FontSize="12"
+                           VerticalAlignment="Center"
+                           Style="{StaticResource SidebarButtonTextStyle}"
+                           Margin="5,0,0,0"
+                           TextTrimming="CharacterEllipsis"/>
+                <Viewbox Grid.Column="2">
+                    <Path Style="{StaticResource SidebarGrayPathStyle}" Margin="10,39" Data="M1.51,6.079a1.492,1.492,0,0,1,1.06.44l7.673,7.672a2.5,2.5,0,0,0,3.536,0L21.44,6.529A1.5,1.5,0,1,1,23.561,8.65L15.9,16.312a5.505,5.505,0,0,1-7.778,0L.449,8.64A1.5,1.5,0,0,1,1.51,6.079Z"/>
+                </Viewbox>
+                
+            </Grid>
+        </Button>
+    </Grid>
+</UserControl>

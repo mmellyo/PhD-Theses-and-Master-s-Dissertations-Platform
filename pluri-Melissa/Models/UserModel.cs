@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Project.Models
 {
@@ -19,69 +21,76 @@ namespace Project.Models
         public string user_password { get; set; }
         public string user_role { get; set; }
 
-
-      /*  //EMAIL
-        private static string _user_email;
-
-        public string User_email
+        public ImageSource pfp { get; set; }
+        public UserModel(string user_id, string user_name)
         {
-            get => _user_email;
-            private set => _user_email = value;
-        }
-
-        public void SetCurrentUserEmail(string email)
-        {
-            _user_email = email;
-        }
-
-        public string GetCurrentUserEmail()
-        {
-            return _user_email;
-        }
+            this.user_id = user_id;
+            this.user_name = user_name;
+        }   
 
 
+        /*  //EMAIL
+          private static string _user_email;
 
+          public string User_email
+          {
+              get => _user_email;
+              private set => _user_email = value;
+          }
 
-        //ROLE
-        private static string _user_role;
+          public void SetCurrentUserEmail(string email)
+          {
+              _user_email = email;
+          }
 
-        public string User_role
-        {
-            get => _user_role;
-            private set => _user_role = value;
-        }
-
-        public void SetCurrentUserRole(string role)
-        {
-            _user_role = role;
-        }
-
-        public string GetCurrentUserRole()
-        {
-            return _user_role;
-        }
+          public string GetCurrentUserEmail()
+          {
+              return _user_email;
+          }
 
 
 
-        //PASSWORD
-        private static string _user_password;
 
-        public string User_password
-        {
-            get => _user_password;
-            private set => _user_password = value;
-        }
+          //ROLE
+          private static string _user_role;
 
-        public void SetCurrentUserPassword(string email)
-        {
-            _user_password = email;
-        }
+          public string User_role
+          {
+              get => _user_role;
+              private set => _user_role = value;
+          }
 
-        public string GetCurrentUserPassword()
-        {
-            return _user_password;
-        }
+          public void SetCurrentUserRole(string role)
+          {
+              _user_role = role;
+          }
 
-        */
+          public string GetCurrentUserRole()
+          {
+              return _user_role;
+          }
+
+
+
+          //PASSWORD
+          private static string _user_password;
+
+          public string User_password
+          {
+              get => _user_password;
+              private set => _user_password = value;
+          }
+
+          public void SetCurrentUserPassword(string email)
+          {
+              _user_password = email;
+          }
+
+          public string GetCurrentUserPassword()
+          {
+              return _user_password;
+          }
+
+          */
     }
 }

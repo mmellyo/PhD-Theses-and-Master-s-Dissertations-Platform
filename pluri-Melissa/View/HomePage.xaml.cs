@@ -16,16 +16,17 @@ using System.Windows.Shapes;
 
 namespace Project.View
 {
-    /// <summary>
-    /// Interaction logic for Home.xaml
-    /// </summary>
     public partial class HomePage : Window
     {
         public HomePage()
         {
             InitializeComponent();
+            myrecommended.DataContext = new HomePageViewModel();
         }
 
+        private void ArticleCard_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
-        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" DataContext="{Binding HomePageViewModel, Source={StaticResource ViewModelLocator}}"
+        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" 
         mc:Ignorable="d"
         Title="Home" Height="700" Width="1238">
     <Grid>
@@ -13,7 +13,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <userControls:SideBar_prof x:Name="SideBar" Grid.Column="0" DataContext="{Binding SideBarViewModel, Source={StaticResource ViewModelLocator}}" />
+        <userControls:SideBar_prof x:Name="SideBar" Grid.Column="0"/>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -78,11 +78,29 @@
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="416*"/>
+                    <ColumnDefinition Width="500*"/>
                     <ColumnDefinition Width="83*" />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Background="#F1F1F1" Margin="0,0,333,0">
-
+                <ScrollViewer x:Name="myrecommended"
+                                Background="#F1F1F1"
+                              Grid.Column="0"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl ItemsSource="{Binding ArticleViewModels}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <userControls:ArticleCard Title="{Binding title}"
+                                                          Summary="{Binding description}"
+                                                          Type="{Binding type}"
+                                                          Author1_name="malak"
+                                                          Author1_pfp="pack://application:,,,/img/user.png"
+                                                          Date="{Binding date}"
+                                                          Color="CadetBlue"
+                                                          Margin="0,10,0,10"
+                                                          Click="ArticleCard_Click"/>
+                                
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
             </Grid>
 

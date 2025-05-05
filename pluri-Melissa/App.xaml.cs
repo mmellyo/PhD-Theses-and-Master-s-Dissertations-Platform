@@ -20,13 +20,12 @@ namespace Project
         private static extern bool AllocConsole();
         public App()
         {
-            services.AddSingleton<ArticleCardViewModel>();
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<MODCommentViewModel>();
             services.AddSingleton<ViewModelLocator>();
             services.AddSingleton<WindowMapper>();
             services.AddSingleton<SideBarViewModel>();
-
+            services.AddSingleton<ArticleViewModel>();
             services.AddSingleton<IWindowManager, WindowManager>();
 
             //services.AddSingleton<LoginViewModel>();
