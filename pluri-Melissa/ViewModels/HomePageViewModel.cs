@@ -1,4 +1,5 @@
 ﻿using Project.Models;
+using Project.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,11 @@ namespace Project.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
+        string userid;
+        private readonly NavigationStore _navigationStore;
+        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+
+
         private string _role;
 
         private readonly List<UserModel> authors = new List<UserModel>();
@@ -21,9 +27,11 @@ namespace Project.ViewModels
 
         public readonly ObservableCollection<ArticleViewModel> _articles;
         public IEnumerable<ArticleViewModel> ArticleViewModels => _articles;
-        public HomePageViewModel()
+
+        public HomePageViewModel(NavigationStore navigationStore, string userId)
         {
-            
+            _navigationStore = navigationStore;
+            userid = userId;
 
             UserModel user1 = new UserModel("malakbenzahia", "Malak Benzahia");
             authors.Add(user1);
@@ -46,5 +54,6 @@ namespace Project.ViewModels
             };
         }
 
+        
     }
 }

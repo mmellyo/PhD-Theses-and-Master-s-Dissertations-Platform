@@ -6,15 +6,174 @@
              xmlns:services="clr-namespace:Project.Services"
              >
 
-
-
-
-
-
     <Application.Resources>
         
         <ResourceDictionary>
+
+
+            <PathGeometry x:Key="RevenirIcon" Figures="M10.4375 18.875C10.4375 18.875 2.5625 14.213 2.5625 11C2.5625 7.78812 10.4375 3.125 10.4375 3.125" />
+            <PathGeometry x:Key="FavIconContours" Figures="M19.808 3C5.4373 3 3.00955 5.097 3.00955 21.9652C3.00955 40.8495 2.6563 45.75 6.2473 45.75C9.83605 45.75 15.6973 37.461 19.808 37.461C23.9188 37.461 29.78 45.75 33.3688 45.75C36.9598 45.75 36.6065 40.8495 36.6065 21.9652C36.6065 5.097 34.1788 3 19.808 3Z" />
+            <PathGeometry x:Key="FavIconTrait" Figures="M12.0947 18.115H27.5185"/>
+            <PathGeometry x:Key="Etoile" Figures="M9.47949 1.48242C9.50439 1.48242 9.52296 1.48968 9.53223 1.49609C9.53466 1.49778 9.53824 1.50128 9.54297 1.50781L9.55859 1.54102L11.0771 6.50781C11.2594 7.1036 11.8096 7.51056 12.4326 7.51074H17.4404C17.4714 7.51074 17.4837 7.5183 17.4893 7.52246C17.4985 7.52945 17.511 7.54419 17.5186 7.56641C17.5261 7.5884 17.5254 7.60697 17.5225 7.61816C17.5216 7.62143 17.5201 7.62704 17.5156 7.63379L17.4912 7.6582L13.3633 10.8447C12.9254 11.1828 12.7266 11.7419 12.8457 12.2754L12.874 12.3818L14.4316 17.4766C14.4412 17.5079 14.4368 17.5215 14.4346 17.5273C14.4305 17.538 14.4195 17.5545 14.3994 17.5684C14.3795 17.582 14.3609 17.5859 14.3496 17.5859C14.3466 17.586 14.3415 17.5865 14.334 17.584L14.3027 17.5654L10.3457 14.5107C9.86714 14.1416 9.21145 14.119 8.71094 14.4424L8.61328 14.5107L4.65625 17.5654C4.62994 17.5857 4.61547 17.586 4.60938 17.5859C4.59798 17.5858 4.57937 17.582 4.55957 17.5684C4.53953 17.5545 4.52945 17.538 4.52539 17.5273C4.52321 17.5216 4.51772 17.5082 4.52734 17.4766L6.08594 12.3818C6.2477 11.8529 6.08631 11.2814 5.68066 10.915L5.59668 10.8447L1.46875 7.6582C1.44348 7.6387 1.43925 7.62464 1.4375 7.61816C1.43454 7.60701 1.43293 7.58845 1.44043 7.56641C1.44801 7.54418 1.46053 7.52945 1.46973 7.52246C1.47518 7.51834 1.48722 7.51076 1.51855 7.51074H6.52637C7.11063 7.51071 7.63083 7.15296 7.84375 6.61719L7.88184 6.50781L9.40137 1.54102C9.41139 1.50823 9.423 1.49937 9.42773 1.49609C9.43703 1.48972 9.45484 1.48246 9.47949 1.48242Z"/>
+            <PathGeometry x:Key="VisiterContours" Figures="M1.85645 6.03505C1.85645 8.24905 4.6523 10.9639 8.10155 10.9639C11.5501 10.9639 14.3466 8.25108 14.3466 6.03505C14.3466 3.81903 11.5501 1.1062 8.10155 1.1062C4.6523 1.1062 1.85645 3.82105 1.85645 6.03505Z"/>
+            <PathGeometry x:Key="VisiterRond" Figures="M10.2355 6.03498C10.2355 7.21353 9.2797 8.16933 8.10115 8.16933C6.9226 8.16933 5.9668 7.21353 5.9668 6.03498C5.9668 4.85576 6.9226 3.90063 8.10115 3.90063C9.2797 3.90063 10.2355 4.85576 10.2355 6.03498Z"/>
+            <PathGeometry x:Key="LocalisationContours" Figures="M5.47429 12.8125C3.60265 12.8125 0.630859 9.55663 0.630859 6.09495C0.630859 3.38492 2.79899 1.1875 5.47429 1.1875C8.1496 1.1875 10.3184 3.38492 10.3184 6.09495C10.3184 9.55663 7.34657 12.8125 5.47429 12.8125Z"/>
+            <PathGeometry x:Key="LocalisationTrait" Figures="M7.09538 6.16716C7.09538 5.27509 6.37254 4.55225 5.48047 4.55225C4.58905 4.55225 3.86621 5.27509 3.86621 6.16716C3.86621 7.05857 4.58905 7.78141 5.48047 7.78141C6.37254 7.78141 7.09538 7.05857 7.09538 6.16716Z"/>
+            <PathGeometry x:Key="Telechargement" Figures="M11.8638 15.0786V1.53247M15.1443 11.786L11.8638 15.08L8.58325 11.786M16.9163 6.60486C20.9426 6.97611 22.4062 8.48361 22.4062 14.4799C22.4062 22.4674 19.8064 22.4674 12 22.4674C4.19137 22.4674 1.59375 22.4674 1.59375 14.4799C1.59375 8.48361 3.05625 6.97611 7.08375 6.60486"/>
+            <PathGeometry x:Key="EnvoyerMail" Figures="M11.4684 12.5314C11.4684 12.5314 -2.00535 9.74412 2.67685 7.04125C6.62801 4.76053 20.245 0.83929 22.1473 1.85247M11.4684 12.5314C11.4684 12.5314 14.2557 26.0051 16.9586 21.323C19.2393 17.3718 23.1605 3.75484 22.1473 1.85247M11.4684 12.5314L22.1473 1.85247"/>
+            <PathGeometry x:Key="SignalerIcon" Figures="M12 7.6181V12M11.9949 15.9375H12.0051M1.59375 12C1.59375 4.19588 4.19588 1.59375 12 1.59375C19.8041 1.59375 22.4062 4.19588 22.4062 12C22.4062 19.8041 19.8041 22.4062 12 22.4062C4.19588 22.4062 1.59375 19.8041 1.59375 12Z"/>
+            <PathGeometry x:Key="SearchIcon" Figures="M31.4499 31.162C72.4562 -9.84436 138.941 -9.84436 179.95 31.162C213.743 64.955 219.661 116.041 197.757 155.92L252.47 210.637C253.968 212.134 253.968 214.565 252.47 216.063L216.354 252.183C214.856 253.68 212.425 253.68 210.927 252.183L156.211 197.466C116.332 219.37 65.2458 213.455 31.4527 179.659C-9.55642 138.653 -9.55642 72.1683 31.4499 31.162ZM151.105 150.817C176.182 125.741 176.182 85.0831 151.105 60.0066C126.029 34.9302 85.371 34.9302 60.2946 60.0066C35.2181 85.0831 35.2181 125.741 60.2946 150.817C85.371 175.894 126.029 175.894 151.105 150.817Z"/>
+
+            <Style x:Key="CommentText" TargetType="TextBox">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="#9A9A9A" />
+                <Setter Property="Padding" Value="14,14,0,0" />
+                <Setter Property="FontFamily" Value="Montserrat Medium"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="Cursor" Value="IBeam"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="#9A9A9A" BorderThickness="2" CornerRadius="10" >
+                                <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ThesesRecherche" TargetType="TextBox">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Padding" Value="65,0,0,0" />
+                <Setter Property="FontFamily" Value="Montserrat Medium"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Cursor" Value="IBeam"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12,12,0,0" >
+                                <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Black"
+                              BlurRadius="100"
+                              Direction="8"
+                              ShadowDepth="3"
+                              Opacity="0.25"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ThesesRechercheAvance" TargetType="TextBox">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Padding" Value="15,0,0,0" />
+                <Setter Property="FontFamily" Value="Montserrat Medium"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Cursor" Value="IBeam"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" >
+                                <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SearchButton" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="BlurOnHoverTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <BlurEffect Radius="12" />
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <BlurEffect Radius="0" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="SecondaryButtonsStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="#BDEFFF"/>
+                <Setter Property="Foreground" Value="#0093ED" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="FontFamily" Value="Montserrat Bold"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="btnBorder" CornerRadius="4"
+            Background="{TemplateBinding Background}">
+                                <ContentPresenter x:Name="ContentPresenter" Focusable="False"
+                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          RecognizesAccessKey="True"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                </ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="SecondaryButtonsStyleAvance" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="#BDEFFF"/>
+                <Setter Property="Foreground" Value="#0093ED" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="FontFamily" Value="Montserrat Bold"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="btnBorder" CornerRadius="4"
+        Background="{TemplateBinding Background}">
+                                <ContentPresenter x:Name="ContentPresenter" Focusable="False"
+                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                      RecognizesAccessKey="True"
+                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                </ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <utils:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        
             <services:ViewModelLocator x:Key="ViewModelLocator" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />

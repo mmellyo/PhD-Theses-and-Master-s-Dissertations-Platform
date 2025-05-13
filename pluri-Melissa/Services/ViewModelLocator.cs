@@ -37,9 +37,18 @@ namespace Project.Services
         public WelcomeViewModel WelcomeViewModel => _provider.GetRequiredService<WelcomeViewModel>();
         public CommentViewModel CommentViewModel => _provider.GetRequiredService<CommentViewModel>();
         public MODCommentViewModel MODCommentViewModel => _provider.GetRequiredService<MODCommentViewModel>();
+        public rechercheWinViewModel rechercheWinViewModel => _provider.GetRequiredService<rechercheWinViewModel>();
+        public ResultPageViewModel ResultPageViewModel => _provider.GetRequiredService<ResultPageViewModel>();
+        public UserProfileViewModel UserProfileViewModel => _provider.GetRequiredService<UserProfileViewModel>();
 
         public SideBarViewModel SideBarViewModel => _provider.GetRequiredService<SideBarViewModel>();
         public HomePageViewModel HomePageViewModel => _provider.GetRequiredService<HomePageViewModel>();
+        public MyProfileViewModel MyProfileViewModel => _provider.GetRequiredService<MyProfileViewModel>();
+        public RechercheAvanceViewModel RechercheAvanceViewModel => _provider.GetRequiredService<RechercheAvanceViewModel>();
+
+
+
+
 
     }
 }

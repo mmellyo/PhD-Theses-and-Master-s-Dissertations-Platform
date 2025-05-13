@@ -19,7 +19,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for EmailVerificationView.xaml
     /// </summary>
-    public partial class EmailVerificationView : Window
+    public partial class EmailVerificationView : UserControl
     {
         public EmailVerificationView()
         {
@@ -46,34 +46,9 @@ namespace Project.View
 
             paletteHelper.SetTheme(theme);
         }
+       
 
 
-
-
-
-        private void exitApp(Object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-
-        private void click_Minimize(Object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-
-
-
-
-
-        private void Window_MouseDown(Object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
-        }
 
     }
 }

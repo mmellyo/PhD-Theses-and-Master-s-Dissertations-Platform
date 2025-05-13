@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:Project.View"
         xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" DataContext="{Binding HomePageViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d"
-        Title="Home" Height="700" Width="1238">
+        Title="Home" Height="700" Width="1238"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240"/>

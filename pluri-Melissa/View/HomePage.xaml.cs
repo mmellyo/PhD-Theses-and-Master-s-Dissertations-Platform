@@ -16,12 +16,12 @@ using System.Windows.Shapes;
 
 namespace Project.View
 {
-    public partial class HomePage : Window
+    public partial class HomePage : UserControl
     {
         public HomePage()
         {
             InitializeComponent();
-            myrecommended.DataContext = new HomePageViewModel();
+            
         }
 
         private void ArticleCard_Click(object sender, RoutedEventArgs e)

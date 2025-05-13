@@ -5,6 +5,9 @@ using Project.Services;
 using Project.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Project.Stores;
+using Project.View;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Project
@@ -12,55 +15,25 @@ namespace Project
    
     public partial class App : Application
     {
-        private readonly IServiceCollection services = new ServiceCollection();
-        private readonly IServiceProvider _serviceProvider;
-        public static IServiceProvider ServiceProviderInstance { get; private set; }
-
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-        public App()
-        {
-            services.AddSingleton<HomePageViewModel>();
-            services.AddSingleton<MODCommentViewModel>();
-            services.AddSingleton<ViewModelLocator>();
-            services.AddSingleton<WindowMapper>();
-            services.AddSingleton<SideBarViewModel>();
-            services.AddSingleton<ArticleViewModel>();
-            services.AddSingleton<IWindowManager, WindowManager>();
-
-            //services.AddSingleton<LoginViewModel>();
-            //services.AddSingleton<WelcomeViewModel>();
-
-
-
-            // services.AddSingleton<IItemService, ItemService>();
-
-
-            _serviceProvider = services.BuildServiceProvider();
-            ServiceProviderInstance = _serviceProvider;
-
-            ViewModelLocator.Init(ServiceProviderInstance);
-        }
-        //test github
         protected override void OnStartup(StartupEventArgs e)
         {
-            var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
+            
+            
+            NavigationStore navigationStore = new NavigationStore();
 
 
-            //start window (keep it at the welcomeVM)
-            windowManager.ShowWindow(_serviceProvider.GetRequiredService<HomePageViewModel>());
+            navigationStore.CurrentViewModel = new WelcomeViewModel(navigationStore);
+
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainViewModel(navigationStore)
+            };
+
+            MainWindow.Show();
 
             base.OnStartup(e);
-            //var mainWindow = new MainWindow();
-            // var viewModelLocator = _serviceProvider.GetRequiredService<ViewModelLocator>();
-            // mainWindow.DataContext = viewModelLocator.MainViewModel;
-            // mainWindow.Show();
-
-            
-
-            AllocConsole(); 
-            Console.WriteLine("Console attached!");
         }
     }
 
 }
+

@@ -34,6 +34,13 @@ namespace Project.ViewModels
         public ICommand ToggleHomeCommand { get; }
         public ICommand NavigateReportedCommentsCommand { get; }
         public ICommand NavigateAutoFlaggedCommentsCommand { get; }
+
+        
+        public ICommand NavigateReportedThesesCommand { get; }
+        public ICommand NavigateReportedAccountsCommand { get; }
+
+
+
         public ICommand NavigateHomeOption3Command { get; }
         public ICommand NavigateSearchCommand { get; }
         public ICommand NavigateSettingsCommand { get; }
@@ -49,13 +56,24 @@ namespace Project.ViewModels
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
 
-            NavigateReportedCommentsCommand = new ViewModelCommand(_ =>
+            NavigateAutoFlaggedCommentsCommand = new ViewModelCommand(_ =>
             {
                 _windowManager.CloseWindow();
                 _windowManager.ShowWindow(_viewModelLocator.MODCommentViewModel);
             });
-            NavigateReportedCommentsCommand = new ViewModelCommand(_ => NavigateTo(_viewModelLocator.MODCommentViewModel));
+            NavigateAutoFlaggedCommentsCommand = new ViewModelCommand(_ => NavigateTo(_viewModelLocator.MODCommentViewModel));
 
+            
+
+
+            
+            
+            
+            
+            
+            
+            
+            
             ToggleHomeCommand = new ViewModelCommand(_ => IsHomeExpanded = ! IsHomeExpanded);
             
         }

@@ -18,7 +18,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for SignUp.xaml
     /// </summary>
-    public partial class SignUp : Window
+    public partial class SignUp : UserControl
     {
         public SignUp()
         {
@@ -52,7 +52,7 @@ namespace Project.View
 
 
 
-        private void exitApp(Object sender, RoutedEventArgs e)
+        /* private void exitApp(Object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
@@ -76,6 +76,6 @@ namespace Project.View
             }
         }
 
-        
+        */
     }
 }

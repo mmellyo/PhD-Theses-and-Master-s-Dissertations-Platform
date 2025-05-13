@@ -1,4 +1,4 @@
-﻿<Window x:Class="Project.View.WelcomeView"
+﻿<UserControl x:Class="Project.View.WelcomeView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,14 +9,11 @@
         xmlns:viewModel="clr-namespace:Project.ViewModels" xmlns:CC="clr-namespace:Project.CustomControls"
     
         mc:Ignorable="d"
-        Title="WelcomeView" Height="700" Width="1238"
-         WindowStyle="None"
-         ResizeMode="NoResize"
-         WindowStartupLocation="CenterScreen"
-         MouseDown="Window_MouseDown"
+        Height="700" Width="1238"
+         
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          Background="{x:Null}"
-        AllowsTransparency="True">
+        >
 
 
 
@@ -88,9 +85,9 @@
                                     <TextBlock VerticalAlignment="Center" Text="Dark Mode"/>
                                     <ToggleButton Cursor="Hand" ToolTip="Enable Dark Mode" Margin="12 0 8 0" x:Name="themeToggle" IsChecked="{Binding IsDarktheme}" Click="toggleTheme"/>
                                 </StackPanel>
-                                <Button ToolTip="Having trouble logging in?" Margin="0 8 0 0" Content="Help me" />
+                                <!--<Button ToolTip="Having trouble logging in?" Margin="0 8 0 0" Content="Help me" />
                                 <Button x:Name="button_exit" ToolTip="Close app" Content="Exit" Click="exitApp" />
-                                <Button x:Name="button_minimize" ToolTip="Minimize" Content="Minimize Window" Click="click_Minimize"/>
+                                <Button x:Name="button_minimize" ToolTip="Minimize" Content="Minimize Window" Click="click_Minimize"/>-->
                             </StackPanel>
 
                         </materialDesign:PopupBox>
@@ -277,4 +274,4 @@
        
   
 
-</Window>
+</UserControl>

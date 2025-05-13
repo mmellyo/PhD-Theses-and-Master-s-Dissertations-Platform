@@ -17,7 +17,6 @@ namespace Project.Models
         public List<string> keywords { get; set; }
         public List<string> faculties { get; set; }
         public string date { get; set; }
-        public bool IsSaved { get; set; }
 
         public ArticleModel(string title, string description, string type, List<UserModel> authors, List<string> unregistered_authors, List<string> keywords, List<string> faculties, string date)
         {

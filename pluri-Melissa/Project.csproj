@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\add-button.png" />
     <None Remove="img\angle-right.svg" />
     <None Remove="img\betterbg.png" />
     <None Remove="img\bg.png" />
@@ -18,7 +19,9 @@
     <None Remove="img\lock.png" />
     <None Remove="img\lock24.png" />
     <None Remove="img\logoTheses.png" />
+    <None Remove="img\look.png" />
     <None Remove="img\question.png" />
+    <None Remove="img\search_buttom.png" />
     <None Remove="img\user.png" />
     <None Remove="img\USTHBlogo.png" />
   </ItemGroup>
@@ -27,14 +30,23 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MailKit" Version="4.11.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="9.0.4" />
     <PackageReference Include="Microsoft.ML" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="Pdfium.NET" Version="1.0.12" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\add-button.png" />
     <Resource Include="img\angle-right.svg" />
     <Resource Include="img\betterbg.png" />
     <Resource Include="img\bg.png" />
@@ -44,7 +56,9 @@
     <Resource Include="img\lock.png" />
     <Resource Include="img\lock24.png" />
     <Resource Include="img\logoTheses.png" />
+    <Resource Include="img\look.png" />
     <Resource Include="img\question.png" />
+    <Resource Include="img\search_buttom.png" />
     <Resource Include="img\user.png" />
     <Resource Include="img\USTHBlogo.png" />
   </ItemGroup>

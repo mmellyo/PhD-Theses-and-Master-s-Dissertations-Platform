@@ -2,9 +2,11 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using Project.Commands;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
+using Project.Stores;
 
 
 namespace Project.ViewModels
@@ -19,8 +21,7 @@ namespace Project.ViewModels
         private string _email;
         private UserModel _userModel;
         private bool _isViewVisible = true;
-        private IUserRepos _userRepos;
-        private EmailVerificationRepo _emailVerificationRepo;
+        
         private readonly IUserSessionService _userSession;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
@@ -74,74 +75,77 @@ namespace Project.ViewModels
         //public ICommand AddItemCommand { get; set; }
         //public ICommand SignUpCommand { get; set; }
 
+        public ICommand GoLoginCommand { get; }
+        public ICommand GoHomeCommand { get; }
 
-
-
-
-        // Constructor
-        public SignUpViewModel(IUserSessionService userSession, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        public SignUpViewModel(NavigationStore navigationStore)
         {
+            GoHomeCommand = new NavigateCommand<WelcomeViewModel>(navigationStore, ()=> new WelcomeViewModel(navigationStore));
+            GoLoginCommand = new NavigateCommand<LoginViewModel>(navigationStore, ()=> new LoginViewModel(navigationStore));
 
-            //fields
-            _userSession = userSession;
-            _windowManager = windowManager;
-            _viewModelLocator = viewModelLocator;
-            _userModel = new UserModel();
-            _userRepos = new UserRepos();
-            _emailVerificationRepo = new EmailVerificationRepo();
+            SignUpCommand = new SignUpCommand(this, navigationStore);
 
-
-            //******************************************** COMMAND SIGN UP
-            SignUpCommand = new ViewModelCommand(
-            execute: obj =>
-            {
-                
-                if (Password != ConfirmPassword)
-                {
-                    MessageBox.Show("Passwords do not match! Please re-enter to confirm.", "Passwords do not match", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                var repo = new UserRepos();
-                var user = new UserModel
-                {
-                    user_email = this.Email,
-                    user_password = this.Password,
-                    user_role = "user" //later :P
-                };
-                _userSession.Email = this.Email;
-                //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
-
-                bool success = repo.SignUp(user);
-                MessageBox.Show(success ? "User registered!" : "Registration failed.");
-
-                //if (success) { _userSession.Email = this.Email; }
-
-
-                _windowManager.CloseWindow();
-                
-                // Switch the window to SignUpViewModel
-                _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
-            },
-            canExecute: obj => true
-        );
-
-
-            // Load the email from UserModel - make sure to initialize this first
-            //  LoadUserData();
-
-            // SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
-
-            // Debug - check if email was loaded
-            // Console.WriteLine($"SignUpViewModel initialized with email: {SignUpEmail}");
         }
 
 
 
+        // Constructor
+        /* public SignUpViewModel(IUserSessionService userSession, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+         {
+
+             //fields
+             _userSession = userSession;
+             _windowManager = windowManager;
+             _viewModelLocator = viewModelLocator;
+             _userModel = new UserModel();
+             _userRepos = new UserRepos();
+             _emailVerificationRepo = new EmailVerificationRepo();
 
 
+             //******************************************** COMMAND SIGN UP
+             SignUpCommand = new ViewModelCommand(
+             execute: obj =>
+             {
+
+                 if (Password != ConfirmPassword)
+                 {
+                     MessageBox.Show("Passwords do not match! Please re-enter to confirm.", "Passwords do not match", MessageBoxButton.OK, MessageBoxImage.Error);
+                     return;
+                 }
+
+                 var repo = new UserRepos();
+                 var user = new UserModel
+                 {
+                     user_email = this.Email,
+                     user_password = this.Password,
+                     user_role = "user" //later :P
+                 };
+                 _userSession.Email = this.Email;
+                 //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
+
+                 bool success = repo.SignUp(user);
+                 MessageBox.Show(success ? "User registered!" : "Registration failed.");
+
+                 //if (success) { _userSession.Email = this.Email; }
 
 
+                 _windowManager.CloseWindow();
+
+                 // Switch the window to SignUpViewModel
+                 _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+             },
+             canExecute: obj => true
+         );
+
+
+             // Load the email from UserModel - make sure to initialize this first
+             //  LoadUserData();
+
+             // SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
+
+             // Debug - check if email was loaded
+             // Console.WriteLine($"SignUpViewModel initialized with email: {SignUpEmail}");
+         }*/
 
 
     }

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Project.Models;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Crypto.Generators;
+using System.IO;
+using System.Windows;
 
 namespace Project.Repos
 {
@@ -22,15 +24,15 @@ namespace Project.Repos
 
 
 
-    class UserRepos : RepoBase, IUserRepos
+    public class UserRepos : RepoBase, IUserRepos
     {
 
 
 
         ///implementing  IUserRepos interface methods : 
 
-        //METHOD SIGNUP USER - true if added successfully
-        public bool SignUp(UserModel user)
+        //METHOD SIGNUP USER - id if added successfully
+        public int SignUp(UserModel user)
         {
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.user_password);
 
@@ -40,18 +42,14 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
 
-                // Base query and parameters
-                string query = "INSERT INTO `user` (user_email, user_password, user_role";
-                string values = "VALUES (@user_email, @user_password, @user_role";
+                string query = "INSERT INTO `users` (user_email, user_password, user_role, user_name";
+                string values = "VALUES (@user_email, @user_password, @user_role,  @user_name";
 
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user.user_email;
                 command.Parameters.Add("@user_password", MySqlDbType.VarChar).Value = hashedPassword;
                 command.Parameters.Add("@user_role", MySqlDbType.VarChar).Value = user.user_role;
-                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = GetUsernameFromEmail(user.user_email);
+                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = user.user_name;
 
-
-                ///not used : 
-                // Conditionally add user_uni if not null or empty
                 if (!string.IsNullOrEmpty(user.user_uni))
                 {
                     query += ", user_uni";
@@ -59,41 +57,50 @@ namespace Project.Repos
                     command.Parameters.Add("@user_uni", MySqlDbType.VarChar).Value = user.user_uni;
                 }
 
-                // Close the parentheses
                 query += ") ";
                 values += ")";
 
-                // Combine query and values
-                command.CommandText = query + values;
+                command.CommandText = query + values + "; SELECT LAST_INSERT_ID();";
 
-                int rowsAffected = command.ExecuteNonQuery();
-                return rowsAffected == 1;
+                object result = command.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : -1;
             }
         }
 
 
 
-        //returns true if the credentials are valid
-        public bool AuthenticateUser(string user_email, string user_password)
+
+        // Returns the user ID if credentials are valid, otherwise -1
+        public int AuthenticateUser(string user_email, string user_password)
         {
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT user_password FROM `user` WHERE user_email=@user_email";
+                command.CommandText = "SELECT user_id, user_password FROM `users` WHERE user_email = @user_email";
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user_email;
 
-                var storedHash = command.ExecuteScalar()?.ToString();
-                if (storedHash == null) return false;
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var userId = reader.GetInt32("user_id");
+                        var storedHash = reader.GetString("user_password");
 
-                // Compare hashed passwords securely
-                return BCrypt.Net.BCrypt.Verify(user_password, storedHash);
+                        if (BCrypt.Net.BCrypt.Verify(user_password, storedHash))
+                        {
+                            return userId; 
+                        }
+                    }
+                }
             }
+
+            return -1;
         }
 
 
-        //still working on it
+
         public bool IsUsthbMember(String email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -146,11 +153,11 @@ namespace Project.Repos
         //Method to Assign user's Role (still working on it)
         public string AssignUserRole(string email)
         {
-            if(email.Equals("milissa.ameryahia@etu.usthb.dz"))
-            if (string.IsNullOrEmpty(email))
-            {
-                return "Admin";
-            }
+            if (email.Equals("theses.usthb@gmail.com"))
+                if (string.IsNullOrEmpty(email))
+                {
+                    return "Admin";
+                }
 
             // Check if email contains @ symbol
             int atIndex = email.IndexOf('@');
@@ -173,7 +180,7 @@ namespace Project.Repos
             }
             else
             {
-                return "Regular";
+                return "error";
             }
         }
 
@@ -192,6 +199,137 @@ namespace Project.Repos
             string usernamePart = atSplit[0].Replace('.', '_');
             return usernamePart;
         }
+
+
+        public byte[] GetProfilepicFromEmail(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilePic FROM `users` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+                var result = command.ExecuteScalar();
+
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+        public byte[] GetProfilepicFromId(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilePic FROM `users` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.VarChar).Value = user_id;
+                var result = command.ExecuteScalar();
+
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+
+
+        public string GetuserEmail(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT user_email FROM `users` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+                var result = command.ExecuteScalar();
+                return result != DBNull.Value ? (string)result : null;
+            }
+        }
+
+
+
+        public int GetUserId(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_id FROM `users` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+                var userId = command.ExecuteScalar();
+                return Convert.ToInt32(userId);
+            }
+        }
+
+        public bool ChangeProfilePic(int user_id, byte[] profilepic)
+        {
+            if (profilepic.Length > 5 * 1024 * 1024)
+            {
+                MessageBox.Show("Profile picture is too large (max 5 MB).", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE `users` SET user_profilepic=@profilePic WHERE user_id=@user_id";
+                command.Parameters.Add("@profilepic", MySqlDbType.Blob).Value = profilepic;
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+        public byte[] LoadProfilePic(int user_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT user_profilePic FROM `users` WHERE user_id=@user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = user_id;
+
+                var result = command.ExecuteScalar();
+                //if true converts the result to a byte array
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+        public byte[] SetDefaultProfilePic(string Email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "SELECT user_profilePic FROM `users` WHERE user_email=@user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = Email;
+                var result = command.ExecuteScalar();
+                //if true converts the result to a byte array
+                return result != DBNull.Value ? (byte[])result : null;
+            }
+        }
+
+
+
+
+
+
+
+
+
 
     }
 

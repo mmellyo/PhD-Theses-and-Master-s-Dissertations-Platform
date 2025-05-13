@@ -11,17 +11,27 @@ namespace Project.Models
 
 
 
-    interface IUserRepos
+    public interface IUserRepos
     {
         //login
-        bool AuthenticateUser(string user_email, string user_password);
-        bool SignUp(UserModel usermodel);
+        public int AuthenticateUser(string user_email, string user_password);
+        public int SignUp(UserModel user);
+
+        bool ChangeProfilePic(int user_id, byte[] profilepic);
+        public byte[] LoadProfilePic(int user_id);
+        public byte[] SetDefaultProfilePic(string Email);
+
+        public string GetUsernameFromEmail(string email);
+        public byte[] GetProfilepicFromEmail(string email);
+        public byte[] GetProfilepicFromId(int user_id);
+        public string GetuserEmail(int user_id);
+
+
         void Edit(UserModel usermodel);
         void Removes(int user_id);
         bool IsUsthbMember(String email);
         string AssignUserRole(string email);
-
-
+        int GetUserId(string email);
         UserModel GetById(int user_id);
         UserModel GetByUsername(string user_name);
         IEnumerable<UserModel> GetByAll();

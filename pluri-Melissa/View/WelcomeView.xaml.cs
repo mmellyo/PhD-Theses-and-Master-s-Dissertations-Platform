@@ -18,7 +18,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for WelcomeView.xaml
     /// </summary>
-    public partial class WelcomeView : Window
+    public partial class WelcomeView : UserControl
     {
         public WelcomeView()
         {
@@ -50,13 +50,13 @@ namespace Project.View
 
 
 
-        private void exitApp(Object sender, RoutedEventArgs e)
+       /* private void exitApp(Object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-        }
+        }*/
 
 
-        private void click_Minimize(Object sender, RoutedEventArgs e)
+        /*private void click_Minimize(Object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
@@ -74,6 +74,6 @@ namespace Project.View
             }
         }
 
-
+        */
     }
 }

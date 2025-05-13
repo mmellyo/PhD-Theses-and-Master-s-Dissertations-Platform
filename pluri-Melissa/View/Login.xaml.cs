@@ -10,7 +10,7 @@ namespace Project.View
     /// </summary>
 
 
-    public partial class Login : Window
+    public partial class Login : UserControl
     {
         public Login()
         {
@@ -44,7 +44,7 @@ namespace Project.View
 
 
 
-        private void exitApp(Object sender, RoutedEventArgs e)
+       /* private void exitApp(Object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
@@ -69,6 +69,6 @@ namespace Project.View
         }
 
       
-        
+        */
     }
 }

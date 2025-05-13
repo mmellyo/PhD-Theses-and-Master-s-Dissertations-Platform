@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Project.Commands;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
+using Project.Stores;
 
 namespace Project.ViewModels
 {
@@ -16,27 +18,21 @@ namespace Project.ViewModels
         private string _email;
         private string _inputCode;
         private string _statusMessage;
-        private readonly EmailVerificationRepo _emailVerificationRepo;
-        private readonly EmailVerificationModel _emailVerificationModel;
+        private  EmailVerificationRepo _emailVerificationRepo;
+        private  EmailVerificationModel _emailVerificationModel;
         private readonly IUserRepos _userRepos;
         private UserModel _usermodel;
         private bool _isViewVisible;
 
         private string _inputVerificationCode;
         private string _codeStatusMessage;
-
+        private NavigationStore navigationStore;
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
 
         // public IItemService ItemService { get; set; }
 
         public Action OnWindowChange { get; set; }
-
-
-
-
-
-
 
 
         // getters / setters
@@ -92,23 +88,15 @@ namespace Project.ViewModels
         }
 
 
-
-
-
-
-
         // commands
         public ICommand SendEmailCommand { get; }
         public ICommand VerifyCodeCommand { get; }
-
-
-
-
-
+        public ICommand GoHomeCommand { get; }
+        public ICommand GologinCommand { get; }
 
 
         // constructor
-        public EmailVerificationViewModel(IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        /*public EmailVerificationViewModel(IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
 
             //fields
@@ -231,8 +219,36 @@ namespace Project.ViewModels
             // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
             );
 
+
+            //******************************************** COMMAND GO HOME
+            GoHomeCommand = new ViewModelCommand(
+            execute: obj =>
+            {
+
+                _windowManager.CloseWindow();
+                _windowManager.ShowWindow(_viewModelLocator.WelcomeViewModel);
+
+            },
+            canExecute: obj => true
+        );
+
+            //******************************************** COMMAND GO LOGIN
+            GologinCommand = new ViewModelCommand(
+                execute: obj =>
+                {
+
+                    _windowManager.CloseWindow();
+                    _windowManager.ShowWindow(_viewModelLocator.LoginViewModel);
+                },
+                canExecute: obj => true
+                );
+
+        }*/
+
+        public EmailVerificationViewModel(NavigationStore navigationStore)
+        {
+            SendEmailCommand = new SendEmailCommand(this, navigationStore);
+            VerifyCodeCommand = new VerifyCodeCommand(this, navigationStore);
         }
-
-
     }
 }

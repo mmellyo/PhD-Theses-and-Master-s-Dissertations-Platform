@@ -11,6 +11,7 @@ namespace Project.Services
         string Email { get; set; }
         string Username { get; set; }
         int UserId { get; set; }
+        public byte[] user_profilepic { get; set; }
 
     }
 
@@ -19,5 +20,6 @@ namespace Project.Services
         public string Email { get; set; }
         public string Username { get ; set; }
         public int UserId { get ; set; }
+        public byte[] user_profilepic { get; set; }
     }
 }

@@ -8,21 +8,32 @@ using Project.Repos;
 using Project.Services;
 using System.Windows.Input;
 using System.Windows;
+using Project.Commands;
+using Project.Stores;
 
 namespace Project.ViewModels
 {
     public class WelcomeViewModel : ViewModelBase
-    {   
-        
+    {
+        public ICommand GoToLogin { get; }
+        public ICommand GoToSignup { get; }
+
+
+        public WelcomeViewModel(NavigationStore navigationStore)
+        {
+            GoToLogin = new NavigateCommand<LoginViewModel>(navigationStore, ()=> new LoginViewModel(navigationStore));
+            GoToSignup = new NavigateCommand<SignUpViewModel>(navigationStore, ()=> new SignUpViewModel(navigationStore));
+        }
+
         // fields 
-        private IWindowManager _windowManager;
-        private ViewModelLocator _viewModelLocator;
-        private bool _isViewVisible;
-
-     
+        //private IWindowManager _windowManager;
+        //private ViewModelLocator _viewModelLocator;
+        //private bool _isViewVisible;
 
 
-        // getters / setters
+
+
+        /*/ getters / setters
         public bool IsViewVisible
         {
             get => _isViewVisible;
@@ -33,19 +44,13 @@ namespace Project.ViewModels
             }
         }
 
-
+        */
 
 
         // commands
-        public ICommand GoToLogin { get; }
-        public ICommand GoToSignup { get; }
 
 
-
-
-
-
-        // constructor
+        /*/ constructor
         public WelcomeViewModel(IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
 
@@ -61,9 +66,6 @@ namespace Project.ViewModels
             {
 
                   _windowManager.CloseWindow(); 
-
-
-                // Switch the window to LoginVM
                 _windowManager.ShowWindow(_viewModelLocator.LoginViewModel);
 
                 IsViewVisible = false;
@@ -79,14 +81,13 @@ namespace Project.ViewModels
                   _windowManager.CloseWindow(); 
 
                     IsViewVisible = false;
-                // Switch the window to sign up (1st Email verification)
-                _windowManager.ShowWindow(_viewModelLocator.EmailVerificationViewModel);
+                    _windowManager.ShowWindow(_viewModelLocator.EmailVerificationViewModel);
 
                
             }
         );
               
-        }
+        }*/
     }
 }
 

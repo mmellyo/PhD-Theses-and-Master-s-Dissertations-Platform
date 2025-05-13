@@ -11,6 +11,10 @@ using Project.Models;
 using Project.Repos;
 using Org.BouncyCastle.Bcpg;
 using System.Windows;
+using Project.Services;
+using System.Security.Cryptography;
+using Project.Commands;
+using Project.Stores;
 
 namespace Project.ViewModels
 {
@@ -23,8 +27,10 @@ namespace Project.ViewModels
         private bool _isViewVisible = true;
         private UserModel usermodel;
         private IUserRepos userRepos;
+        private readonly IUserSessionService _userSession;
+        
 
-
+        
 
 
         //setters/getters
@@ -32,6 +38,7 @@ namespace Project.ViewModels
         public string LoginEmail { get; set; }
 
 
+        public int UserId { get; set; }
 
         public string Username
         {
@@ -69,20 +76,36 @@ namespace Project.ViewModels
         //COMMANDS
         public ICommand LoginCommand { get; }
 
-        /// not yet
         public ICommand RecoverPasswordCommand { get; }
         public ICommand ShowPasswordCommand { get; }
         public ICommand RememberPasswordCommand { get; }
+        public ICommand GoSignUpCommand { get; }
+        public ICommand GoHomeCommand { get; }
 
 
+        public LoginViewModel(NavigationStore navigationStore)
+        {
+            GoHomeCommand = new NavigateCommand<WelcomeViewModel>(navigationStore, () => new WelcomeViewModel(navigationStore));
+            GoSignUpCommand = new NavigateCommand<SignUpViewModel>(navigationStore, () => new SignUpViewModel(navigationStore));
+
+            usermodel = new UserModel();
+            
+
+           
+            LoginCommand = new LoginCommand(this, navigationStore);
+
+                     
+           
+        }
 
 
 
         //constructs
-        public LoginViewModel()
+        /*public LoginViewModel(IUserSessionService userSession, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
-            usermodel = new UserModel();
-            userRepos = new UserRepos();
+ 
+
+
 
 
             //******************************************** COMMAND LOGIN
@@ -90,72 +113,59 @@ namespace Project.ViewModels
             execute: obj =>
             {
                 string enteredEmail = LoginEmail;
-                var isValidUser = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
 
-
-                if (isValidUser)
+                if (LoginEmail.Equals("theses.usthb@gmail.com"))
                 {
-                    MessageBox.Show("loggin in successfully");
+                    _windowManager.CloseWindow();
 
-                    // Store the user in session
-                    //usermodel. SetCurrentUserEmail(LoginEmail);
-                    IsViewVisible = false;
-                }
-                else
+                    
+                    _windowManager.ShowWindow(_viewModelLocator.SideBarViewModel);
+
+                } else
                 {
-                    MessageBox.Show("Invalid email or password");
+
+                    _userSession.Email = this.LoginEmail;
+                     UserId = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
+
+                    if (UserId != 0)
+                    {
+                        // Assigns usser info
+                        _viewModelLocator.MyProfileViewModel.InitializeWithUserId(UserId);
+                        _viewModelLocator.CommentViewModel.InitializeWithUserId(UserId);
+
+                        MessageBox.Show("loggin in successfully");
+                        Console.WriteLine("************************LOGED IN***********************************");
+                        IsViewVisible = false;
+
+                        _windowManager.CloseWindow();
+                        _windowManager.ShowWindow(_viewModelLocator.rechercheWinViewModel);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid email or password");
+
+                    }
 
                 }
-            },
+            
            canExecute: obj =>true
         );
 
-
-
-        }
-
-        private bool CanExecuteLoginCommand(object obj)
-        {
-            bool validData;
-
-            if (string.IsNullOrWhiteSpace(LoginEmail) || LoginEmail.Length < 3 ||
-              LoginPassword == null || LoginPassword.Length < 3)
-                validData = false;
-            else
-                validData = true;
-
-            return validData;
-        }
-
-        private void ExecuteLoginCommand(object obj)
-        {
-            string enteredEmail = LoginEmail;
-            var isValidUser = userRepos.AuthenticateUser(LoginEmail, LoginPassword);
-
-
-            if (isValidUser)
-            {
-                ErrorMessage = "loggin in successfully";
-
-                // Store the user in session
-                //usermodel. SetCurrentUserEmail(LoginEmail);
-                IsViewVisible = false;
-            }
-            else
-            {
-                ErrorMessage = "Invalid username or password";
-            }
-        }
+        
 
 
 
 
-        //RecoverPasswordCommand = new ViewModelCommand(p => ExecuteRecoverPasswordCommand("", ""));
 
-        /// not yet:
-        private void ExecuteRecoverPasswordCommand(string username, string email)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
+
+
+
+        }*/
+
+
     }
 }

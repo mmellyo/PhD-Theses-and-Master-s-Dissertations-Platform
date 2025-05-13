@@ -20,6 +20,7 @@ namespace Project.Models
         public string user_email { get; set; }
         public string user_password { get; set; }
         public string user_role { get; set; }
+        public byte[] user_profilepic { get; set; }
 
         public ImageSource pfp { get; set; }
         public UserModel(string user_id, string user_name)
