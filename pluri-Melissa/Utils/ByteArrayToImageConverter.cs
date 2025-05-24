@@ -6,32 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Project.Utils
 {
-    public class ByteArrayToImageConverter : IValueConverter
+    public class ByteArrayToImageConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+       public static ImageSource LoadImageSourceFromBytes(Byte[] imageData)
         {
-            var bytes = value as byte[];
-            if (bytes == null || bytes.Length == 0)
-                return null;
-
-            using (var stream = new MemoryStream(bytes))
+            using (var ms = new MemoryStream(imageData))
             {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.StreamSource = stream;
-                image.EndInit();
-                image.Freeze();
-                return image;
+                var img = new BitmapImage();
+                img.BeginInit();
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.StreamSource = ms;
+                img.EndInit();
+                img.Freeze();
+                return img;
             }
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
     }
 
 }

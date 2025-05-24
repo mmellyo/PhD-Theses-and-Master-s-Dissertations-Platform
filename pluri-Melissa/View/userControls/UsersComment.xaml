@@ -31,7 +31,7 @@
             <Border Height="70" Width="70">
                     <Ellipse Width="60" Height="60" Stroke="Gray" StrokeThickness="1">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding user_profilepic, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="{Binding CommentorProfilePic}" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
             </Border>
@@ -57,10 +57,10 @@
                             TextWrapping="Wrap"
                             Width="185">
                             <Hyperlink 
-    Command="{Binding CommentUsernameClickCommand}" 
-    CommandParameter="{Binding}">
-    <Run Text="{Binding Username}" />
-</Hyperlink>
+                                    Command="{Binding CommentUsernameClickCommand}" 
+                                    CommandParameter="{Binding}">
+                                    <Run Text="{Binding CommentUsername, Mode=OneWay}" />
+                            </Hyperlink>
                     </TextBlock>
                     <!-- ETOILES -->
                 </StackPanel>
@@ -83,7 +83,7 @@
                     <Button Grid.Row="2"
                             Content="{Binding ToggleButtonText}" 
                             Visibility="{Binding ShowToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Command="{Binding DataContext.ToggleCommentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            Command="{Binding ToggleCommentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                             CommandParameter="{Binding}"
                             HorizontalAlignment="Left" 
                             Padding="5,2"

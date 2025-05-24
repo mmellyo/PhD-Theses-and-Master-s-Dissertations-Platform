@@ -24,9 +24,6 @@ namespace Project.View
             
         }
 
-        private void ArticleCard_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

@@ -13,7 +13,6 @@ namespace Project.ViewModels
 
         public string title => _article.title;
         public string description => _article.description;
-        public List<UserModel> authors => _article.authors;
         public List<string> keywords => _article.keywords;
         public string date => _article.date;
         public string type => _article.type;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Project.Stores;
+using Project.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,11 @@ namespace Project.View.userControls
         public SideBar_prof()
         {
             InitializeComponent();
+        }
+
+        public void SetViewModel(int user_id, NavigationStore navigationStore)
+        {
+            this.DataContext = new MemberSideBarViewModel(user_id, navigationStore);
         }
     }
 }

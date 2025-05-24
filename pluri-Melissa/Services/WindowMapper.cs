@@ -18,19 +18,19 @@ namespace Project.Services
         public WindowMapper()
         {
             // Register everything
-            Registermapping<EmailVerificationViewModel, EmailVerificationView>();
+            //Registermapping<EmailVerificationViewModel, EmailVerificationView>();
             //Registermapping<SignUpViewModel, SignUp>();
             //Registermapping<LoginViewModel, Login>();
             //Registermapping<WelcomeViewModel, WelcomeView>();
             //Registermapping<HomePageViewModel, HomePage>();
-            Registermapping<MODCommentViewModel, MODcommentView>();
-            Registermapping<CommentViewModel, ThesesView>();
-            Registermapping<SideBarViewModel, AdminSpace>();
+            //Registermapping<MODCommentViewModel, MODcommentView>();
+            //Registermapping<CommentViewModel, ThesesView>();
+            //Registermapping<SideBarViewModel, AdminSpace>();
             Registermapping<MyProfileViewModel, MyProfileView>();
-            Registermapping<rechercheWinViewModel, rechercheWin>();
-            Registermapping<ResultPageViewModel, Resultaaat>();
-            Registermapping<RechercheAvanceViewModel, rechercheAvance>();
-            Registermapping<UserProfileViewModel, UserProfileView>();
+            //Registermapping<rechercheWinViewModel, rechercheWin>();
+            //Registermapping<ResultPageViewModel, Resultaaat>();
+            //Registermapping<RechercheAvanceViewModel, rechercheAvance>();
+            //Registermapping<UserProfileViewModel, UserProfileView>();
 
 
 

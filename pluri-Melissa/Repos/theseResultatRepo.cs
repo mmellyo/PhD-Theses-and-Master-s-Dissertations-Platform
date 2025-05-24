@@ -25,48 +25,75 @@ namespace Project.Repos
 
                 if (!string.IsNullOrWhiteSpace(auteur))
                 {
-                    conditions.Add("nomAuteur LIKE @auteur");
-                    cmd.Parameters.AddWithValue("@auteur", auteur + "%");
+                    conditions.Add("(u.user_name LIKE @auteur OR CONCAT(w.first_name, ' ', w.last_name) LIKE @auteur)");
+                    cmd.Parameters.AddWithValue("@auteur", "%" + auteur + "%");
                 }
                 if (!string.IsNullOrWhiteSpace(encadrant))
                 {
-                    conditions.Add("NomEncadrant LIKE @encadrant");
-                    cmd.Parameters.AddWithValue("@encadrant", encadrant + "%");
+                    conditions.Add("sup.user_name LIKE @encadrant");
+                    cmd.Parameters.AddWithValue("@encadrant", "%" + encadrant + "%");
                 }
                 if (!string.IsNullOrWhiteSpace(these))
                 {
-                    conditions.Add("nomThese LIKE @these");
-                    cmd.Parameters.AddWithValue("@these", these + "%");
+                    conditions.Add("a.title LIKE @these");
+                    cmd.Parameters.AddWithValue("@these", "%" + these + "%");
                 }
                 if (!string.IsNullOrWhiteSpace(motcle))
                 {
-                    conditions.Add("MotCles LIKE @motcle");
-                    cmd.Parameters.AddWithValue("@motcle", motcle + "%");
+                    conditions.Add("k.keyword LIKE @motcle");
+                    cmd.Parameters.AddWithValue("@motcle", "%" + motcle + "%");
                 }
                 if (!string.IsNullOrWhiteSpace(langue))
                 {
-                    conditions.Add("Langue = @langue");
+                    conditions.Add("a.language = @langue");
                     cmd.Parameters.AddWithValue("@langue", langue);
                 }
                 if (!string.IsNullOrWhiteSpace(dep))
                 {
-                    conditions.Add("Departement = @dep");
+                    conditions.Add("a.department = @dep");
                     cmd.Parameters.AddWithValue("@dep", dep);
                 }
                 if (!string.IsNullOrWhiteSpace(annee))
                 {
-                    conditions.Add("AnneeUniversitaire = @annee");
+                    conditions.Add("a.article_date = @annee");
                     cmd.Parameters.AddWithValue("@annee", annee);
                 }
                 if (!string.IsNullOrWhiteSpace(fac))
                 {
-                    conditions.Add("Faculte = @faculte");
-                    cmd.Parameters.AddWithValue("@faculte", fac);
+                    conditions.Add("a.faculty = @fac");
+                    cmd.Parameters.AddWithValue("@fac", fac);
                 }
 
-                string sql = "SELECT * FROM theses";
+                string sql = @"
+                SELECT 
+                a.article_id,
+                a.title AS nomThese,
+                a.summary AS resume,
+                a.faculty AS Faculte,
+                a.department AS Departement,
+                a.language AS Langue,
+                a.article_type AS Diplome,
+                a.article_date AS AnneeUniversitaire,
+                GROUP_CONCAT(DISTINCT k.keyword SEPARATOR ', ') AS MotCles,
+                GROUP_CONCAT(DISTINCT 
+                    COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name)
+                    SEPARATOR ', ') AS nomAuteur,
+                MAX(sup.user_name) AS NomEncadrant
+            FROM articles a
+            LEFT JOIN users u ON a.poster_id = u.user_id
+            LEFT JOIN written_by w ON a.article_id = w.article_id
+            LEFT JOIN supervised_by sb ON a.article_id = sb.article_id
+            LEFT JOIN users sup ON sb.supervisor_id = sup.user_id
+            LEFT JOIN used_keywords uk ON uk.article_id = a.article_id
+            LEFT JOIN keywords k ON uk.keyword_id = k.keyword_id
+        ";
+
                 if (conditions.Count > 0)
+                {
                     sql += " WHERE " + string.Join(" AND ", conditions);
+                }
+
+                sql += " GROUP BY a.article_id";
 
                 cmd.CommandText = sql;
 
@@ -76,17 +103,17 @@ namespace Project.Repos
                     {
                         resultats.Add(new theseResultat
                         {
-                            TheseId = Convert.ToInt32(reader["these_id"]),
-                            NomThese = reader["nomThese"].ToString(),
-                            NomAuteur = reader["nomAuteur"].ToString(),
-                            MotCles = reader["MotCles"].ToString(),
-                            Faculte = reader["Faculte"].ToString(),
-                            Departement = reader["Departement"].ToString(),
-                            NomEncadrant = reader["NomEncadrant"].ToString(),
-                            Langue = reader["Langue"].ToString(),
-                            Diplome = reader["Diplome"].ToString(),
-                            AnneeUniversitaire = reader["AnneeUniversitaire"].ToString(),
-                            Resume = reader["Resume"].ToString(),
+                            TheseId = Convert.ToInt32(reader["article_id"]),
+                            NomThese = reader["nomThese"]?.ToString() ?? "",
+                            Resume = reader["resume"]?.ToString() ?? "",
+                            Faculte = reader["Faculte"]?.ToString() ?? "",
+                            Departement = reader["Departement"]?.ToString() ?? "",
+                            Langue = reader["Langue"]?.ToString() ?? "",
+                            Diplome = reader["Diplome"]?.ToString() ?? "",
+                            AnneeUniversitaire = reader["AnneeUniversitaire"]?.ToString() ?? "",
+                            MotCles = reader["MotCles"]?.ToString() ?? "",
+                            NomAuteur = reader["nomAuteur"]?.ToString() ?? "",
+                            NomEncadrant = reader["NomEncadrant"]?.ToString() ?? ""
                         });
                     }
                 }
@@ -99,7 +126,7 @@ namespace Project.Repos
 
 
 
-        public List<theseResultat> rechercheThese(string key)
+        /*public List<theseResultat> rechercheThese(string key)
         {
             List<theseResultat> results = new List<theseResultat>();
 
@@ -108,26 +135,26 @@ namespace Project.Repos
                 connection.Open();
                 string sql = @"
                             SELECT t.*, 
-       MAX(u.user_name) AS nomAuteur,
-       MAX(u.user_faculte) AS user_faculte, 
-       MAX(u.user_departement) AS user_departement,
-       GROUP_CONCAT(k.keyword SEPARATOR ', ') AS MotCles
-FROM theses t
-JOIN written_by_users w ON t.these_id = w.these_id
-JOIN user u ON w.user_id = u.user_id
-LEFT JOIN used_keywords uk ON t.these_id = uk.these_id
-LEFT JOIN keywords k ON uk.keyword_id = k.keyword_id
-WHERE t.nomThese LIKE @key 
-   OR u.user_name LIKE @key 
-   OR k.keyword LIKE @key
-   OR u.user_faculte LIKE @key
-   OR u.user_departement LIKE @key
-   OR t.NomEncadrant LIKE @key
-   OR t.Langue LIKE @key
-   OR t.Diplome LIKE @key
-   OR t.AnneeUniversitaire LIKE @key
-GROUP BY t.these_id
-";
+                            MAX(u.user_name) AS nomAuteur,
+                            MAX(u.user_faculte) AS user_faculte, 
+                            MAX(u.user_departement) AS user_departement,
+                            GROUP_CONCAT(k.keyword SEPARATOR ', ') AS MotCles
+                            FROM theses t
+                            JOIN written_by_users w ON t.these_id = w.these_id
+                            JOIN user u ON w.user_id = u.user_id
+                            LEFT JOIN used_keywords uk ON t.these_id = uk.these_id
+                            LEFT JOIN keywords k ON uk.keyword_id = k.keyword_id
+                            WHERE t.nomThese LIKE @key 
+                            OR u.user_name LIKE @key 
+                            OR k.keyword LIKE @key
+                            OR u.user_faculte LIKE @key
+                            OR u.user_departement LIKE @key
+                            OR t.NomEncadrant LIKE @key
+                            OR t.Langue LIKE @key
+                            OR t.Diplome LIKE @key
+                            OR t.AnneeUniversitaire LIKE @key
+                            GROUP BY t.these_id
+                            ";
 
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
@@ -159,6 +186,83 @@ GROUP BY t.these_id
             }
 
             return results;
+        }*/
+
+        public List<theseResultat> rechercheThese(string key)
+        {
+            List<theseResultat> results = new List<theseResultat>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                string sql = @"
+            SELECT 
+                a.article_id,
+                a.title AS nomThese,
+                a.summary AS resume,
+                a.faculty AS user_faculte,
+                a.department AS user_departement,
+                a.language AS Langue,
+                a.article_type AS Diplome,
+                a.article_date AS AnneeUniversitaire,
+                
+                -- Authors: combine from users and written_by
+                GROUP_CONCAT(DISTINCT 
+                    COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name)
+                    SEPARATOR ', '
+                ) AS nomAuteur,
+                -- Supervisor name from users via supervised_by
+                MAX(sup.user_name) AS NomEncadrant
+            FROM articles a
+            LEFT JOIN users u ON a.poster_id = u.user_id
+            LEFT JOIN written_by w ON a.article_id = w.article_id
+            LEFT JOIN supervised_by sb ON a.article_id = sb.article_id
+            LEFT JOIN users sup ON sb.supervisor_id = sup.user_id
+            WHERE 
+                a.title LIKE @key
+                OR a.summary LIKE @key
+                OR u.user_name LIKE @key
+                OR CONCAT(w.first_name, ' ', w.last_name) LIKE @key
+                OR sup.user_name LIKE @key
+                OR a.faculty LIKE @key
+                OR a.department LIKE @key
+                OR a.language LIKE @key
+                OR a.article_type LIKE @key
+                OR a.article_date LIKE @key
+            GROUP BY a.article_id
+        ";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@key", "%" + key + "%");
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            theseResultat data = new theseResultat
+                            {
+                                TheseId = Convert.ToInt32(reader["article_id"]),
+                                NomThese = reader["nomThese"]?.ToString() ?? "",
+                                NomAuteur = reader["nomAuteur"]?.ToString() ?? "",
+                                Faculte = reader["user_faculte"]?.ToString() ?? "",
+                                Departement = reader["user_departement"]?.ToString() ?? "",
+                                NomEncadrant = reader["NomEncadrant"]?.ToString() ?? "",
+                                Langue = reader["Langue"]?.ToString() ?? "",
+                                Diplome = reader["Diplome"]?.ToString() ?? "",
+                                AnneeUniversitaire = reader["AnneeUniversitaire"]?.ToString() ?? "",
+                                Resume = reader["resume"]?.ToString() ?? ""
+                            };
+                            results.Add(data);
+                        }
+                    }
+                }
+            }
+
+            return results;
         }
+
     }
-    }
+
+
+}

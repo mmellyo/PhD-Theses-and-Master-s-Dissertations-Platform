@@ -6,164 +6,133 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using Mysqlx.Prepare;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
+using Project.Stores;
+using Project.Utils;
 
 namespace Project.ViewModels
 {
     public class MODCommentViewModel : ViewModelBase
     {
-        
-        //fields
-        private IUserSessionService _userSession;
-        private UserRepos _userRepos;
-        private readonly CommentRepo _commentRepo;
-        private readonly TheseRepo _theseRepo;
-        private IReportsRepo _reportsRepo;
-        private ViewModelLocator _viewModelLocator;
-        private Comment _approvedComment;
-        IWindowManager _windowManager;
-        private int commentId;
-        private int cId;
+        //useful 
+        private int userid;
+        private NavigationStore navigationStore;
+        private TheseRepo theseRepo;
 
-        public string Email { get; set; }
-        public string Username { get; set; }
-        public string CommentText { get; set; }
-        public int TheseId { get; set; }
-        public int UserId { get; }
-        public ICommentService CommentService { get; }
-        public ObservableCollection<Comment> FlaggedComments { get; set; }
-
-
-
-        //commands
-       // public ICommand ApproveCommand { get; set; }
-       // public ICommand DenyCommand { get; set; }
-        public ICommand MODDisplayTheseCommand { get; set; }
-
-        
-
-
-
-            //contructor   
-            public MODCommentViewModel(IUserSessionService userSession, ICommentService commentService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        //top bar infos
+        private string _userName;
+        public string Username
+        {
+            get => _userName;
+            set
             {
-
-                //fields 
-                 _userSession = userSession;
-                 _userRepos = new UserRepos();
-                 _reportsRepo = new ReportsRepo();
-                _commentRepo = new CommentRepo();
-                _theseRepo = new TheseRepo();
-
-
-                _windowManager = windowManager;
-                _viewModelLocator = viewModelLocator;
-                CommentService = commentService;
-                _windowManager = windowManager;
-
-                FlaggedComments = new ObservableCollection<Comment>();
-
-
-                Email = _userSession.Email;
-                Username = _userSession.Username;
-                UserId = _userRepos.GetUserId(Email);
-
-                LoadFlaggedComments();
-
-
-
-
-            //commands
-            MODDisplayTheseCommand = new ViewModelCommand(
-            execute: obj =>
-            {
-                _theseRepo.ShowPdf(2);
-                // switch to these with that id
-                //_windowManager.CloseWindow();
-                //_windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
-                //_viewModelLocator.CommentViewModel.TheseId = TheseId;
-
-
+                _userName = value;
+                OnPropertyChanged(nameof(Username));
             }
-            // canExecute: obj =>  !string.IsNullOrWhiteSpace(InputVerificationCode) && InputVerificationCode.Length >= 6
+        }
+
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
+        private string _userrole;
+        public string User_role
+        {
+            get => _userrole;
+            set
+            {
+                _userrole = value;
+                OnPropertyChanged(nameof(User_role));
+            }
+        }
+
+        private ImageSource _userpic;
+        public ImageSource user_profilepic
+        {
+            get => _userpic;
+            set
+            {
+                _userpic = value;
+                OnPropertyChanged(nameof(user_profilepic));
+            }
+        }
+
+
+        //side bar
+        public object SideBarViewModel { get; }
+
+        //top bar
+        private UserRepos UserRepos;
+
+        //Items Contorl
+        public ObservableCollection<CommentsViewModel> ModComments { get; set; }
+        private List<CommentModel> CommentModels { get; set; }
+        private string _comment;
+        public string Comment
+        {
+            get => _comment;
+            set
+            {
+                _comment = value;
+                OnPropertyChanged(nameof(Comment));
+            }
+        }
+
+        private string _result;
+        public string Result
+        {
+            get => _result;
+            set
+            {
+                _result = value;
+                OnPropertyChanged(nameof(Result));
+            }
+        }
+
+        private CommentRepo _commentRepo;
+
+        //constructor
+        public MODCommentViewModel(int user_id, NavigationStore _navigationStore)
+        {
+            this.userid = user_id;
+            this.navigationStore = _navigationStore;
+            this.theseRepo = new TheseRepo();
+            this.UserRepos = new UserRepos();
+            this._commentRepo = new CommentRepo();
+
+            //items control
+            CommentModels = _commentRepo.LoadAutoFlaggedComments();
+            ModComments = new ObservableCollection<CommentsViewModel>(
+                CommentModels.Select(comment => new CommentsViewModel(comment, navigationStore, userid, comment.user_id))
             );
 
+
+            //side bar
+            SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
+
+            //top bar
+            _userName = UserRepos.GetuserName(user_id);
+            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
+            Email = UserRepos.GetuserEmail(user_id);
+            User_role = UserRepos.GetUserRole(user_id);
+
         }
-
-
-        private void LoadFlaggedComments()
-        {
-            FlaggedComments.Clear();
-
-            foreach (var c in _reportsRepo.LoadFlaggedComments())
-            {
-                if (c.State == 2)
-                    continue; // Skip this cmnt if its state is 2 (approved)
-
-                var comment = new Comment
-                {
-                                 
-                    CommentText = c.CommentText,
-                    commentId = _commentRepo.GetCommentId(CommentText),
-
-                    TheseId = c.TheseId,
-                    //TEMP
-                    //Username = "melly",
-                    //UserId = 1,
-
-                    //original
-                    Username = this.Username,
-                    UserId = c.UserId,
-                    State = c.State        
-                };
-
-                //each cmnt with its own commands
-                comment.ApproveCommand = new ViewModelCommand(
-                    execute: obj =>
-                    {
-                        cId = _commentRepo.GetCommentId(comment.CommentText);
-
-                        // Update comment state in db from 1 (flagged) to 2 (approved)
-                        bool success = _commentRepo.UpdateCommentState(cId, 2);
-
-                        MessageBox.Show(success ? "Comment approved successfully!" : "Approving comment failed.");
-
-                        if (success) { 
-                        // Display cmnt in theseView
-                        CommentService.DisplayComment(comment.Username, comment.CommentText);
-
-                        // Remove from flagged cmnts list
-                        FlaggedComments.Remove(comment);
-                        }
-                    }
-                );
-
-                comment.DenyCommand = new ViewModelCommand(
-                    execute: obj =>
-                    {
-                        cId = _commentRepo.GetCommentId(comment.CommentText);
-                        // Update comment state in db from 1 (flagged) to 3 (denied)
-                        bool success = _commentRepo.UpdateCommentState(cId, 3);
-                        MessageBox.Show(success ? "Comment denied successfully!" : "Denying comment failed.");
-                        if (success)
-                        {
-                            // Remove from flagged comments list
-                            FlaggedComments.Remove(comment);
-                        }
-                    }
-                );
-
-                FlaggedComments.Add(comment);
-            }
-        }
-    
+    }
 
 }
 
 
 
-}
+
 

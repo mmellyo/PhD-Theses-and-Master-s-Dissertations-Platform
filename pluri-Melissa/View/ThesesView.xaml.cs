@@ -17,7 +17,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for ThesesView.xaml
     /// </summary>
-    public partial class ThesesView : Window
+    public partial class ThesesView : UserControl
     {
         public ThesesView()
         {

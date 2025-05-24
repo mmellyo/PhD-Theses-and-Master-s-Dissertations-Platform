@@ -1,25 +1,23 @@
-﻿<Window x:Class="Project.View.AdminSpace"
+﻿<UserControl x:Class="Project.View.AdminSpace"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
-        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" DataContext="{Binding HomePageViewModel, Source={StaticResource ViewModelLocator}}"
+        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" 
         mc:Ignorable="d"
-        Title="Home" Height="700" Width="1238"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown">
+         Height="700" Width="1238"
+        
+        >
     
     
-    <Grid>
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0" DataContext="{Binding SideBarViewModel, Source={StaticResource ViewModelLocator}}" />
+        <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0" />
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -85,4 +83,4 @@
 
         </Grid>
     </Grid>
-</Window>
+</UserControl>

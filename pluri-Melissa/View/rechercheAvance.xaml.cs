@@ -19,7 +19,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for rechercheAvance.xaml
     /// </summary>
-    public partial class rechercheAvance : Window
+    public partial class rechercheAvance : UserControl
     {
         public rechercheAvance()
         {

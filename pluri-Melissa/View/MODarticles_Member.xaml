@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Project.View.MODarticles_Member"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View"
+             xmlns:userControls="clr-namespace:Project.View.userControls" 
+             xmlns:viewmodels="clr-namespace:Project.ViewModels" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1238">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <ContentControl Content="{Binding SideBarViewModel}" Grid.Column="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:UserSideBarViewModel}">
+                    <userControls:SideBar_user Visibility="{Binding isUser}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:MemberSideBarViewModel}">
+                    <userControls:SideBar_prof Visibility="{Binding isMember}"/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+
+            <userControls:TopBarView Grid.Column="1"/>
+
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500*"/>
+
+                </Grid.ColumnDefinitions>
+                <ScrollViewer x:Name="myrecommended"
+                            Background="#F1F1F1"
+                          Grid.Column="0"
+                          VerticalScrollBarVisibility="Hidden">
+                    <ItemsControl ItemsSource="{Binding Articles}" HorizontalAlignment="Center" Margin="0,10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <userControls:Article Width="700" Height="100" Margin="0,10"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

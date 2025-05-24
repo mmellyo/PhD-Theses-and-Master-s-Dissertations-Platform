@@ -17,7 +17,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for rechercheWin.xaml
     /// </summary>
-    public partial class rechercheWin : Window
+    public partial class rechercheWin : UserControl
     {
         public rechercheWin()
         {

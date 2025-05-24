@@ -36,24 +36,17 @@ namespace Project.Commands
                 //navigate to the adminspace if the user is an admin 
                 if (_viewModel.LoginEmail.Equals("theses.usthb@gmail.com"))
                 {
-                    _navigationStore.CurrentViewModel = new AdminSpaceViewModel(_navigationStore);
+                    _navigationStore.CurrentViewModel = new AdminSpaceViewModel(_navigationStore, _viewModel.UserId);
                 }
 
-                //else navigate to the homepage of the user 
-                else
-                {
-                    //if its a teacher
-                    if (_viewModel.LoginEmail.Contains("@edu.usthb.dz"))
-                    {
-                        _navigationStore.CurrentViewModel = new HomePage_profViewModel(_viewModel.UserId, _navigationStore);
-                    }
+                    
 
                     //if its a regular user
                     else
                     {
                         _navigationStore.CurrentViewModel = new HomePageViewModel(_navigationStore, _viewModel.UserId);
                     }
-                }
+                
             }
             else
             {

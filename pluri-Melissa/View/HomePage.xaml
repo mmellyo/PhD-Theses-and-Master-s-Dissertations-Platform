@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
-        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" 
+        xmlns:userControls="clr-namespace:Project.View.userControls" 
+        xmlns:viewmodels="clr-namespace:Project.ViewModels" 
         mc:Ignorable="d"
         Height="700" Width="1238">
     <Grid>
@@ -13,7 +14,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <userControls:SideBar_prof x:Name="SideBar" Grid.Column="0"/>
+        <ContentControl Content="{Binding SideBarViewModel}" Grid.Column="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:UserSideBarViewModel}">
+                    <userControls:SideBar_user Visibility="{Binding isUser}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:MemberSideBarViewModel}">
+                    <userControls:SideBar_prof Visibility="{Binding isMember}"/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -21,65 +31,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Top"
-                        Grid.Column="1"
-                        Background="#0093ED"
-                        Height="70">
-                <Grid Width="1034">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="1">
-                        <TextBlock Text="Accueil"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,13,0,3"
-                                   Foreground="White"
-                                   FontSize="15"
-                                   FontWeight="semiBold"/>
-                        <TextBlock Text="Apprenez en plus sure notre application."
-                                   HorizontalAlignment="Center"
-                                   Foreground="White"
-                                   Opacity="0.7"
-                                   FontSize="12"/>
-                    </StackPanel>
+            
+            <userControls:TopBarView Grid.Column="1"/>
 
-                    <StackPanel Grid.Column="2"
-                                Orientation="Horizontal">
-                        <Grid Width="344">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="99*"/>
-                                <ColumnDefinition Width="71*"/>
-                                <ColumnDefinition Width="174*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Hamida Djafaar"
-                                           Foreground="White"
-                                           Margin="10,14,0,0"
-                                           FontWeight="SemiBold"/>
-                                <TextBlock 
-                                           Text="djafaar.hamida@etu.usthb.dz"
-                                           Foreground="White"
-                                           Margin="10,0,0,0"
-                                           FontSize="9"
-                                           />
-                                <TextBlock Text="Etudiant(e)"
-                                           Foreground="White"
-                                           Margin="10,0,0,0"
-                                           FontSize="9"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
+             
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="500*"/>
-                    <ColumnDefinition Width="83*" />
+                    
                 </Grid.ColumnDefinitions>
                 <ScrollViewer x:Name="myrecommended"
                                 Background="#F1F1F1"
@@ -96,7 +55,7 @@
                                                           Date="{Binding date}"
                                                           Color="CadetBlue"
                                                           Margin="0,10,0,10"
-                                                          Click="ArticleCard_Click"/>
+                                                          />
                                 
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

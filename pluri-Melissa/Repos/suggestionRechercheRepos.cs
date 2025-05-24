@@ -23,20 +23,24 @@ namespace Project.Repos
             {
                 connection.Open();
                 string sql = @"
-                SELECT DISTINCT t.nomThese, u.user_name AS NomAuteur, k.keyword AS MotCles
-                FROM theses t
-                JOIN written_by_users w ON t.these_id = w.these_id
-                JOIN user u ON u.user_id = w.user_id
-                LEFT JOIN used_keywords uk ON uk.these_id = t.these_id
-                LEFT JOIN keywords k ON k.keyword_id = uk.keyword_id
-                WHERE t.nomThese LIKE @key 
-                   OR u.user_name LIKE @key 
-                   OR k.keyword LIKE @key";
+                                SELECT DISTINCT 
+                                a.title AS NomThese,
+                                COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name) AS NomAuteur,
+                                k.keyword AS MotCles
+                                FROM articles a
+                                LEFT JOIN users u ON a.poster_id = u.user_id
+                                LEFT JOIN written_by w ON a.article_id = w.article_id
+                                LEFT JOIN used_keywords uk ON uk.article_id = a.article_id
+                                LEFT JOIN keywords k ON k.keyword_id = uk.keyword_id
+                                WHERE 
+                                a.title LIKE @key
+                                OR u.user_name LIKE @key
+                                OR CONCAT(w.first_name, ' ', w.last_name) LIKE @key
+                                OR k.keyword LIKE @key";
 
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
                 {
-                    cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@key", key + "%");
+                    cmd.Parameters.AddWithValue("@key", "%" + key + "%");
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -44,8 +48,8 @@ namespace Project.Repos
                         {
                             suggestionRecherche data = new suggestionRecherche
                             {
-                                NomThese = reader["nomThese"].ToString(),
-                                NomAuteur = reader["NomAuteur"].ToString(),
+                                NomThese = reader["NomThese"]?.ToString() ?? "",
+                                NomAuteur = reader["NomAuteur"]?.ToString() ?? "",
                                 MotCles = reader["MotCles"]?.ToString() ?? ""
                             };
                             list.Add(data);

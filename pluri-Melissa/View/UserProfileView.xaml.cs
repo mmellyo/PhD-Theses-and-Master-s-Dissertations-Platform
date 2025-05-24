@@ -17,7 +17,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for UserProfileView.xaml
     /// </summary>
-    public partial class UserProfileView : Window
+    public partial class UserProfileView : UserControl
     {
         public UserProfileView()
         {

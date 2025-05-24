@@ -14,6 +14,9 @@ using gestion.Model;
 using System.Collections.ObjectModel;
 using MySqlX.XDevAPI.Common;
 using MailKit.Search;
+using Project.Stores;
+using Project.Commands;
+using System.Windows.Media;
 
 namespace Project.ViewModels
 {
@@ -99,6 +102,9 @@ namespace Project.ViewModels
         }
 
         private bool _isAdvancedSearch;
+        private NavigationStore navigationStore;
+        private int userid;
+
         public bool IsAdvancedSearch
         {
             get => _isAdvancedSearch;
@@ -129,9 +135,58 @@ namespace Project.ViewModels
         //commands
         public ICommand RechercherCommand { get; }
 
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
+
+        public object SideBarViewModel { get; }
+
+        public ICommand UploadCommand { get; }
+
+        private string _userName;
+        public string Username
+        {
+            get => _userName;
+            set
+            {
+                _userName = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+        private string _userrole;
+        public string User_role
+        {
+            get => _userrole;
+            set
+            {
+                _userrole = value;
+                OnPropertyChanged(nameof(User_role));
+            }
+        }
+
+        private ImageSource _userpic;
+        public ImageSource user_profilepic
+        {
+            get => _userpic;
+            set
+            {
+                _userpic = value;
+                OnPropertyChanged(nameof(user_profilepic));
+            }
+        }
 
         //constructor
-        public RechercheAvanceViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        /*public RechercheAvanceViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
             //fields
             _userModel = new UserModel();
@@ -165,11 +220,50 @@ namespace Project.ViewModels
                     _windowManager.ShowWindow(_viewModelLocator.ResultPageViewModel);
                 }
             );
+        }*/
+
+        public RechercheAvanceViewModel(NavigationStore navigationStore, int userid)
+        {
+            this.navigationStore = navigationStore;
+            this.userid = userid;
+            _userModel = new UserModel();
+            _userRepos = new UserRepos();
+            _theseRepo = new TheseRepo();
+            _reportRepo = new ReportsRepo();
+            _theseResultatRepo = new theseResultatRepo();
+            TheseService = new TheseService();
+
+            if (TheseService.Theses == null)
+            {
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+            }
+
+            RechercherCommand = new SearchCommand(this, navigationStore, userid);
+            UploadCommand = new NavigateCommand<UploadViewModel>(navigationStore, () => new UploadViewModel(navigationStore, userid));
+
+            _userName = _userRepos.GetuserName(userid);
+            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(_userRepos.GetProfilepicFromId(userid));
+            Email = _userRepos.GetuserEmail(userid);
+            User_role = _userRepos.GetUserRole(userid);
+            Role = _userRepos.GetUserRole(userid);
+
+            if (Role == "Student")
+            {
+                isUser = true;
+                isMember = false;
+                SideBarViewModel = new UserSideBarViewModel(userid, navigationStore);
+            }
+            if (Role == "Member")
+            {
+                isMember = true;
+                isUser = false;
+                SideBarViewModel = new MemberSideBarViewModel(userid, navigationStore);
+            }
+
+            
         }
 
-        
-
-        private List<theseResultat> RechercherAvecFiltres()
+        public List<theseResultat> RechercherAvecFiltres()
         {
             var results = new List<theseResultat>();
             try
@@ -178,8 +272,7 @@ namespace Project.ViewModels
 
                 // Load from DB
                 var resultats = _theseResultatRepo.rechercherAvecFiltres(NomAuteur, NomEncadrant, NomThese, MotCle, Langue, Departement, Annee, Faculte);
-                Console.WriteLine("Resultats count: " + resultats.Count);
-                Console.WriteLine($"Langue used in filter: '{Langue}'");
+                
 
                 if (resultats != null)
                 {

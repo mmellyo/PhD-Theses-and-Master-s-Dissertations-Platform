@@ -37,7 +37,7 @@ namespace Project.Commands
             {
                 user_email = _viewModel.Email,
                 user_password = _viewModel.Password,
-                user_role = "user" //later :P
+                user_role = _userRepos.AssignUserRole(_viewModel.Email) //later :P
             };
 
             //_userSession.Email = this.Email;

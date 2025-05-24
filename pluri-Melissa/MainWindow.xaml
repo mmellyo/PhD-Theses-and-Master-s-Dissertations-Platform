@@ -26,14 +26,36 @@
             <DataTemplate DataType="{x:Type viewmodels:HomePageViewModel}">
                 <view:HomePage/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:HomePage_profViewModel}">
-                <view:HomePage/>
-            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type viewmodels:AdminSpaceViewModel}">
-                <view:HomePage/>
+                <view:AdminSpace/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:EmailVerificationViewModel}">
                 <view:EmailVerificationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:rechercheWinViewModel}">
+                <view:rechercheWin/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RechercheAvanceViewModel}">
+                <view:rechercheAvance/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:UploadViewModel}">
+                <view:Upload/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ResultPageViewModel}">
+                <view:Resultaaat/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ThesePageViewModel}">
+                <view:ThesesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:UserProfileViewModel}">
+                <view:UserProfileView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MemberModArticlesViewModel}">
+                <view:MODarticles_Member/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MODCommentViewModel}">
+                <view:MODcommentView/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

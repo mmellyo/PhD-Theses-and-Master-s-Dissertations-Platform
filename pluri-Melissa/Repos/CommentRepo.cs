@@ -32,7 +32,7 @@ namespace Project.Repos
 
 
 
-                command.CommandText = "INSERT INTO Comments (comment_text, user_id, these_id, state) VALUES (@comment_text, @user_id, @these_id, @state)";
+                command.CommandText = "INSERT INTO Comments (content, commented_by, commented_on, state) VALUES (@comment_text, @user_id, @these_id, @state)";
                 //prevent SQL injection
                 command.Parameters.Add("@comment_text", MySqlDbType.VarChar).Value = commentText;
                 command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = UserId; 
@@ -112,9 +112,79 @@ namespace Project.Repos
         }
 
 
+        public List<CommentModel> LoadTheseComments2(int theseId)
+        {
+            var comments = new List<CommentModel>();
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"
+                                        SELECT u.user_id, u.user_name, c.content, u.user_profilePic, c.comment_id
+                                        FROM comments c
+                                        JOIN users u ON c.commented_by = u.user_id
+                                        WHERE c.commented_on = @TheseId 
+                                        AND c.state NOT IN (1, 3);
+        ";
+
+                command.Parameters.AddWithValue("@TheseId", theseId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comments.Add(new CommentModel
+                        {
+                            comment_id = reader.GetInt32("comment_id"),
+                            user_id = reader.GetInt32("user_id"),
+                            user_name = reader.GetString("user_name"),
+                            content = reader.GetString("content"),
+                            user_image = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"]
+                        });
+                    }
+                }
+            }
+
+            return comments;
+        }
+
+        public List<CommentModel> LoadAutoFlaggedComments()
+        {
+            var comments = new List<CommentModel>();
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"
+                                        SELECT u.user_id, u.user_name, c.content, u.user_profilePic, c.comment_id
+                                        FROM comments c
+                                        JOIN users u ON c.commented_by = u.user_id
+                                        WHERE c.state = 1;
+                                        ";
 
 
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comments.Add(new CommentModel
+                        {
+                            comment_id = reader.GetInt32("comment_id"),
+                            user_id = reader.GetInt32("user_id"),
+                            user_name = reader.GetString("user_name"),
+                            content = reader.GetString("content"),
+                            user_image = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"]
+                        });
+                    }
+                }
+            }
 
+            return comments;
+        }
 
 
         public void UpdateComment(int commentId, string newCommentText)
@@ -129,13 +199,50 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
 
-                command.CommandText = "SELECT comment_id FROM `comments` WHERE comment_text=@comment_text";
+                command.CommandText = "SELECT comment_id FROM `comments` WHERE content=@comment_text";
                 command.Parameters.Add("@comment_text", MySqlDbType.VarChar).Value = comment;
                 var CommentId = command.ExecuteScalar();
                 return Convert.ToInt32(CommentId);
             }
         }
 
+
+        public List<CommentModel> GetUserComments(int user_id)
+        {
+            List<CommentModel> comments = new List<CommentModel>();
+
+            using (var connection = GetConnection()) 
+            using (MySqlCommand command = new MySqlCommand(@"SELECT comment_id, content, commented_on, commented_by, reply_id 
+                         FROM comments 
+                         WHERE commented_by = @userId", connection))
+                {
+                    connection.Open();
+
+                    command.Parameters.AddWithValue("@userId", user_id);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CommentModel comment = new CommentModel
+                            {
+                                comment_id = reader.GetInt32("comment_id"),
+                                content = reader.GetString("content"),
+                                user_id = reader.GetInt32("commented_on"),
+                                article_id = reader.GetInt32("commented_by"),
+                                reply_id =  reader.GetInt32("reply_id")
+                            };
+
+                            comments.Add(comment);
+                        }
+                    }
+                }
+            return comments;
+        }
+
+            
+  
+        
 
 
         public bool UpdateCommentState(int commentId, int newState)
@@ -165,5 +272,6 @@ namespace Project.Repos
             }
         }
 
+        
     }
 }

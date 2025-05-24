@@ -18,7 +18,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for Resultaaat.xaml
     /// </summary>
-    public partial class Resultaaat : Window
+    public partial class Resultaaat : UserControl
     {
         public Resultaaat()
         {

@@ -1,4 +1,5 @@
-﻿using Project.Models;
+﻿using Org.BouncyCastle.Utilities;
+using Project.Models;
 using Project.Repos;
 using Project.Services;
 using Project.Stores;
@@ -57,12 +58,11 @@ namespace Project.Commands
             }
             else
             {
+                int user_id = Int32.Parse(_usermodel.user_id);
                 _emailVerificationViewModel.CodeStatusMessage = "Email verified successfully!)";
-                new NavigateCommand<HomePageViewModel>(_navigationStore, () => new HomePageViewModel(_navigationStore, _usermodel.user_id));
+                new NavigateCommand<HomePageViewModel>(_navigationStore, () => new HomePageViewModel(_navigationStore, user_id));
 
-                //save info (mail / role) in usermodel
-                //_usermodel.SetCurrentUserEmail(Email);
-                // _usermodel.SetCurrentUserRole(_userRepos.AssignUserRole(Email));
+                _userRepos.AssignUserRole(_usermodel.user_email);
 
                 //Assigns the entered email to the SignUpViewModel
 

@@ -24,7 +24,7 @@ namespace Project.Repos
                 command.Connection = connection;
 
 
-                command.CommandText = "INSERT INTO reports (reported_id,reporter_id, reported_type) VALUES (@reported_id, @reporter_id, @reported_type)";
+                command.CommandText = "INSERT INTO reports (comment_reported,reported_by, report_type) VALUES (@reported_id, @reporter_id, @reported_type)";
                 command.Parameters.AddWithValue("@reported_id", CommentId);
 
                 command.Parameters.AddWithValue("@reported_type", "Comment");

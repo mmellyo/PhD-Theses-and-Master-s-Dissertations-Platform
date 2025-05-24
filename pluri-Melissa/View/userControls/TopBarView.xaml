@@ -35,7 +35,21 @@
                    Opacity="0.7"
                    FontSize="12"/>
             </StackPanel>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Command="{Binding UploadCommand}" 
+                        Background="Transparent" Margin="20,0,0,0"
+                        BorderThickness="0"
+                        Padding="0"
+                        Cursor="Hand"
+                        Height="30" Width="30">
 
+                    <Image Source="pack://application:,,,/img/add-button.png"
+                            Stretch="Uniform" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+                </Button>
+                
+            </StackPanel>
             <StackPanel Grid.Column="2"
                 Orientation="Horizontal">
                 <Grid Width="344">
@@ -45,36 +59,13 @@
                         <ColumnDefinition Width="143*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Command="{Binding UploadCommand}" 
-                            Background="Transparent" Margin="70,0,0,0"
-                            BorderThickness="0"
-                            Padding="0"
-                            Cursor="Hand"
-                            Height="10" Width="10">
-
-                        <Image Source="/img/add-button.png"
-                               Stretch="Uniform" 
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
-                    </Button>
-                    <Button Command="{Binding GoToSearcheCommand}" 
-                            Background="Transparent" Margin="40,0,0,0"
-                            BorderThickness="0"
-                            Padding="0"
-                            Cursor="Hand"
-                            Height="9" Width="9">
-
-                        <Image Source="/img/look.png"
-                               Stretch="Uniform" 
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
-                    </Button>
+                   
 
                     <StackPanel Grid.Column="1">
                         <Border Height="70" Width="40">
                             <Ellipse Height="40" VerticalAlignment="Center" Stroke="White" StrokeThickness="1" >
                                 <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding user_profilepic, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill"/>
+                                    <ImageBrush ImageSource="{Binding user_profilepic}" Stretch="UniformToFill"/>
                                 </Ellipse.Fill>
                             </Ellipse>
                         </Border>

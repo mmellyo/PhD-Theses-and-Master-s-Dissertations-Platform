@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows;
 using System.IO;
 using Org.BouncyCastle.Bcpg;
+using Project.Stores;
 
 namespace Project.ViewModels
 {
@@ -43,6 +44,9 @@ namespace Project.ViewModels
         }
 
         private byte[] _userProfilePic;
+        private NavigationStore navigationStore;
+        private string userid;
+
         public byte[] user_profilepic
         {
             get => _userProfilePic;
@@ -129,7 +133,11 @@ namespace Project.ViewModels
 
         }
 
-
+        public MyProfileViewModel(NavigationStore navigationStore, string userid)
+        {
+            this.navigationStore = navigationStore;
+            this.userid = userid;
+        }
 
         public void InitializeWithUserId(int userId)
         {

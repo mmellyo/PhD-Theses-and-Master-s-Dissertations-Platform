@@ -56,17 +56,12 @@
                         <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
                             <TextBlock x:Name="mCle1" Text="{Binding MotCles}" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
                         </Border>
-                        <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
-                            <TextBlock x:Name="mCle2" Text="motcle2" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
-                        </Border>
-                        <Border Background="#9A9A9A" CornerRadius="14" Padding="10,5" Margin="5">
-                            <TextBlock x:Name="mCle3" Text="motcle3" Foreground="White" FontSize="11" FontFamily="Montserrat SemiBold"/>
-                        </Border>
+                        
                     </WrapPanel>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="4" Margin="0,0,25,0">
-                <Border Height="15" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                <Border Height="27" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center" >
                     <Button Content="consulter"
                             Cursor="Hand"
                             Style="{DynamicResource SecondaryButtonsStyle}"

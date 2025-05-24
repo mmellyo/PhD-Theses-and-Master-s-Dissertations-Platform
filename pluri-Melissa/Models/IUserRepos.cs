@@ -28,11 +28,11 @@ namespace Project.Models
 
 
         void Edit(UserModel usermodel);
-        void Removes(int user_id);
+        void Removes(string user_id);
         bool IsUsthbMember(String email);
         string AssignUserRole(string email);
         int GetUserId(string email);
-        UserModel GetById(int user_id);
+        UserModel GetById(string user_id);
         UserModel GetByUsername(string user_name);
         IEnumerable<UserModel> GetByAll();
         //.......else

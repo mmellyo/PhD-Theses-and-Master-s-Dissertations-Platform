@@ -7,10 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using gestion.Model;
+using Project.Commands;
 using Project.Models;
 using Project.Repos;
 using Project.Services;
+using Project.Stores;
+using Project.Utils;
 using SharpVectors.Dom;
 
 namespace Project.ViewModels
@@ -84,24 +88,23 @@ namespace Project.ViewModels
         }
         private readonly ITheseService _theseService;
         private theseResultat _selectedThese;
+        private NavigationStore navigationStore;
+        private int userid;
 
         //commands
-//        public ICommand consulterTheseCommand { get; }
+        //        public ICommand consulterTheseCommand { get; }
 
 
 
         //constructors
-        public ResultPageViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
+        /*public ResultPageViewModel(ITheseService theseService, IWindowManager windowManager, ViewModelLocator viewModelLocator)
         {
             //fields
-            _userModel = new UserModel();
-            _userRepos = new UserRepos();
-            _theseRepo = new TheseRepo();
-            _reportRepo = new ReportsRepo();
-            _theseResultatRepo = new theseResultatRepo();
+            
+            
             _windowManager = windowManager;
             _viewModelLocator = viewModelLocator;
-            TheseService = theseService;
+            
             _theseService = theseService;
 
             // Ensure these collection is initialized
@@ -112,12 +115,7 @@ namespace Project.ViewModels
             }
 
 
-            if (TheseService.Theses.Count == 0)
-            {
-                Console.WriteLine("Theses collection is empty - Loading ALL theses");
-                TheseService.Theses = new ObservableCollection<theseResultat>();
-                LoadResults();
-            }
+            
             else
             {
                 Console.WriteLine("Theses collection is not empty - we came from ADVNCD SEARCH");
@@ -128,6 +126,99 @@ namespace Project.ViewModels
 
 
           
+        }*/
+
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
+
+        public object SideBarViewModel { get; }
+
+        public ICommand UploadCommand { get; }
+
+        private string _userName;
+        public string Username
+        {
+            get => _userName;
+            set
+            {
+                _userName = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+        private string _userrole;
+        public string User_role
+        {
+            get => _userrole;
+            set
+            {
+                _userrole = value;
+                OnPropertyChanged(nameof(User_role));
+            }
+        }
+
+        private ImageSource _userpic;
+        public ImageSource user_profilepic
+        {
+            get => _userpic;
+            set
+            {
+                _userpic = value;
+                OnPropertyChanged(nameof(user_profilepic));
+            }
+        }
+        public ResultPageViewModel(NavigationStore navigationStore, int userid, ITheseService theseService)
+        {
+            this.navigationStore = navigationStore;
+            this.userid = userid;
+            TheseService = theseService;
+            _theseResultatRepo = new theseResultatRepo();
+            _userModel = new UserModel();
+            _userRepos = new UserRepos();
+            _theseRepo = new TheseRepo();
+            _reportRepo = new ReportsRepo();
+
+            if (TheseService.Theses == null)
+            {
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+            }
+
+            if (TheseService.Theses.Count == 0)
+            {
+                TheseService.Theses = new ObservableCollection<theseResultat>();
+                LoadResults();
+            }
+
+            Role = _userRepos.GetUserRole(userid);
+            if (Role == "Student")
+            {
+                isUser = true;
+                isMember = false;
+                SideBarViewModel = new UserSideBarViewModel(userid, navigationStore);
+            }
+            if (Role == "Member")
+            {
+                isMember = true;
+                isUser = false;
+                SideBarViewModel = new MemberSideBarViewModel(userid, navigationStore);
+            }
+
+            UploadCommand = new NavigateCommand<UploadViewModel>(navigationStore, () => new UploadViewModel(navigationStore, userid));
+
+            _userName = _userRepos.GetuserName(userid);
+            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(_userRepos.GetProfilepicFromId(userid));
+            Email = _userRepos.GetuserEmail(userid);
+            User_role = _userRepos.GetUserRole(userid);
         }
 
 
@@ -159,7 +250,8 @@ namespace Project.ViewModels
                             AnneeUniversitaire = r.AnneeUniversitaire,
                             Departement = r.Departement,
                             Resume = r.Resume,
-                            TheseId = r.TheseId
+                            TheseId = r.TheseId,
+                            consulterTheseCommand = new NavigateCommand<ThesePageViewModel>(navigationStore,() => new ThesePageViewModel(navigationStore, userid, r.TheseId))
                         };
                         Console.WriteLine("this.TheseId = r.TheseId; " + this.TheseId);  //works
 
@@ -167,16 +259,8 @@ namespace Project.ViewModels
                         //each thses resultat with its own command
                         try
                         {
-                        result.consulterTheseCommand = new ViewModelCommand(
-                        execute: obj =>
-                        {
-                            int tId = result.TheseId;
-                            _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
-                             Console.WriteLine("TheseId that is sending from RESULTPAGEVM to COMMENTVM is: " + tId);
-                            _windowManager.CloseWindow();
-                            _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                            result.consulterTheseCommand = new NavigateCommand<ThesePageViewModel>(navigationStore, () => new ThesePageViewModel(navigationStore, userid, r.TheseId));
                         }
-                        ); }
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Error creating command: {ex.Message}");

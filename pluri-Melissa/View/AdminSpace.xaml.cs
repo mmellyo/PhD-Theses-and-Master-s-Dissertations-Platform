@@ -19,7 +19,7 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class AdminSpace : Window
+    public partial class AdminSpace : UserControl
     {
         public AdminSpace()
         {
@@ -27,13 +27,6 @@ namespace Project.View
         }
 
 
-        private void Window_MouseDown(Object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
-        }
 
     }
 }

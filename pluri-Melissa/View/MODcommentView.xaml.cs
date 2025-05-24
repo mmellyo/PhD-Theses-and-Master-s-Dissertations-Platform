@@ -17,19 +17,13 @@ namespace Project.View
     /// <summary>
     /// Interaction logic for MODcommentView.xaml
     /// </summary>
-    public partial class MODcommentView : Window
+    public partial class MODcommentView : UserControl
     {
         public MODcommentView()
         {
             InitializeComponent();
         }
 
-        private void Window_MouseDown(Object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
-        }
+        
     }
 }
