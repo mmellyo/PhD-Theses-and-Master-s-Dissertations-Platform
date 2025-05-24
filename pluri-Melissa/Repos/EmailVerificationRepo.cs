@@ -77,7 +77,7 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
 
-                command.CommandText = "SELECT COUNT(*) FROM `User` WHERE user_email = @user_email";
+                command.CommandText = "SELECT COUNT(*) FROM `users` WHERE user_email = @user_email";
 
                 //prevent SQL injection
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;

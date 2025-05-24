@@ -22,10 +22,6 @@ namespace Project.ViewModels
         private UserModel _userModel;
         private bool _isViewVisible = true;
         
-        private readonly IUserSessionService _userSession;
-        private readonly IWindowManager _windowManager;
-        private readonly ViewModelLocator _viewModelLocator;
-
 
 
 

@@ -222,4 +222,48 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="TabItemsStyle2" TargetType="TabItem">
+        <Setter Property="Foreground" Value="#9A9A9A"/>
+        <!-- couleur par défaut -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <StackPanel Orientation="Vertical" Margin="12,0" Cursor="Hand">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  ContentSource="Header"
+                                  RecognizesAccessKey="True"
+                                  Margin="0,10,0,5"
+                                  >
+                            <ContentPresenter.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="FontFamily" Value="Montserrat Medium"/>
+                                    <!-- Ne PAS fixer Foreground ici -->
+                                    <!-- Le Foreground sera lié à celui du TabItem -->
+                                    <Setter Property="Foreground" 
+                                    Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"/>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+
+                        <Border x:Name="Underline"
+                        Height="2"
+                        Width="120"
+                        Background="#0093ED"
+                        CornerRadius="1"
+                        Visibility="Collapsed"
+                        HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Underline" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Foreground" Value="#0093ED"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

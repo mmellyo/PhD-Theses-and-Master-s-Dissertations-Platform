@@ -5,6 +5,7 @@ using Project.Stores;
 using Project.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,9 +36,11 @@ namespace Project.Commands
 
             var user = new UserModel
             {
+                user_name = _userRepos.GetUsernameFromEmail(_viewModel.Email),
                 user_email = _viewModel.Email,
                 user_password = _viewModel.Password,
-                user_role = _userRepos.AssignUserRole(_viewModel.Email) //later :P
+                user_role = _userRepos.AssignUserRole(_viewModel.Email),
+                user_profilepic = File.ReadAllBytes("C:\\Users\\user\\Source\\Repos\\Final-Pluri-fr-fr-ong\\pluri-Melissa\\img\\download_4.jpg") //later :P
             };
 
             //_userSession.Email = this.Email;
@@ -46,7 +49,7 @@ namespace Project.Commands
             int userId = _userRepos.SignUp(user);
             if(userId > 0)
             {
-                new NavigateCommand<EmailVerificationViewModel>(_navigationStore, () => new EmailVerificationViewModel(_navigationStore));
+                _navigationStore.CurrentViewModel = new LoginViewModel(_navigationStore);
             }
 
             //if (success) { _userSession.Email = this.Email; }

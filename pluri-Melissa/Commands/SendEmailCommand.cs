@@ -20,7 +20,6 @@ namespace Project.Commands
         private readonly UserModel _usermodel;
         private readonly EmailVerificationRepo _emailVerificationRepo;
         private readonly EmailVerificationModel _emailVerificationModel;
-        private string StatusMessage;
 
         public SendEmailCommand(EmailVerificationViewModel emailVerificationViewModel, NavigationStore navigationStore) {
             this._emailVerificationViewModel = emailVerificationViewModel;
@@ -50,33 +49,36 @@ namespace Project.Commands
                     MessageBox.Show("An account with this email already exists. Try logging in instead.", "Email Taken", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
-
-                try
+                else
                 {
+                    try
+                    {
 
 
 
-                    string verificationCode = _emailVerificationRepo.GenerateVerificationCode();
-                    _emailVerificationModel.SetVerificationCode(verificationCode);  // Store the code in the model
-                    string storedCode = _emailVerificationModel.GetVerificationCode(); //just to make sure
+                        string verificationCode = _emailVerificationRepo.GenerateVerificationCode();
+                        _emailVerificationModel.SetVerificationCode(verificationCode);  // Store the code in the model
+                        string storedCode = _emailVerificationModel.GetVerificationCode(); //just to make sure
 
+
+                        // Send the email with the generated code
+                        _emailVerificationRepo.SendVerificationEmail(_emailVerificationViewModel.Email, verificationCode);
+                        _emailVerificationViewModel.StatusMessage = "A verification code has been sent to your email. Please enter it below.";
+
+                        // Switch the window
+                        //OnWindowChange?.Invoke();
+
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        _emailVerificationViewModel.StatusMessage = $"Failed to send email: {ex.Message}";
+                        Console.WriteLine($"Error: {ex}");
+                    }
+                }
                     
-                    // Send the email with the generated code
-                    _emailVerificationRepo.SendVerificationEmail(_emailVerificationViewModel.Email, verificationCode);
-                    StatusMessage = "A verification code has been sent to your email. Please enter it below.";
-
-                    // Switch the window
-                    //OnWindowChange?.Invoke();
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    StatusMessage = $"Failed to send email: {ex.Message}";
-                    Console.WriteLine($"Error: {ex}");
-                }
             }
 
 

@@ -58,18 +58,18 @@ namespace Project.Commands
             }
             else
             {
-                int user_id = Int32.Parse(_usermodel.user_id);
                 _emailVerificationViewModel.CodeStatusMessage = "Email verified successfully!)";
-                new NavigateCommand<HomePageViewModel>(_navigationStore, () => new HomePageViewModel(_navigationStore, user_id));
 
-                _userRepos.AssignUserRole(_usermodel.user_email);
+                //save info (mail / role) in usermodel
+                //_usermodel.SetCurrentUserEmail(Email);
+                // _usermodel.SetCurrentUserRole(_userRepos.AssignUserRole(Email));
 
                 //Assigns the entered email to the SignUpViewModel
+                _navigationStore.CurrentViewModel = new SignUpViewModel(_navigationStore);
 
 
 
 
-                // Switch the window to SignUpViewModel
 
             }
         }

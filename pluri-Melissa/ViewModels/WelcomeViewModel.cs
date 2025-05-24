@@ -22,7 +22,7 @@ namespace Project.ViewModels
         public WelcomeViewModel(NavigationStore navigationStore)
         {
             GoToLogin = new NavigateCommand<LoginViewModel>(navigationStore, ()=> new LoginViewModel(navigationStore));
-            GoToSignup = new NavigateCommand<SignUpViewModel>(navigationStore, ()=> new SignUpViewModel(navigationStore));
+            GoToSignup = new NavigateCommand<EmailVerificationViewModel>(navigationStore, ()=> new EmailVerificationViewModel(navigationStore));
         }
 
         // fields 
