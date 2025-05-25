@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:Project.View.userControls"
         xmlns:viewmodels="clr-namespace:Project.ViewModels" 
         mc:Ignorable="d"
-        Height="700" Width="1238">
+        Height="2000" Width="1238">
 
 
 
@@ -250,15 +250,13 @@
                                 <!-- MOT-ClES -->
                                 <Grid Grid.Row="3">
                                     <WrapPanel VerticalAlignment="Top" Margin="33,0,103,0">
-                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Height="30" Width="85">
-                                            <TextBlock Text="{Binding Keyword1}" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Height="30" Margin="5" Width="85">
-                                            <TextBlock Text="{Binding Keyword2}" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                        <Border Background="#0093ED" CornerRadius="16" Padding="10,5" Margin="5" Height="30" Width="85">
-                                            <TextBlock Text="{Binding Keyword3}" Foreground="White" FontSize="10" FontFamily="Montserrat SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
+                                        <ItemsControl ItemsSource="keys">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <uc:keyword />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
                                     </WrapPanel>
                                 </Grid>
                                 <!-- DESCRIPTION -->

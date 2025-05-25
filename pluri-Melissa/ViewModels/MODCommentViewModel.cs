@@ -112,10 +112,8 @@ namespace Project.ViewModels
             this._commentRepo = new CommentRepo();
 
             //items control
-            CommentModels = _commentRepo.LoadAutoFlaggedComments();
-            ModComments = new ObservableCollection<CommentsViewModel>(
-                CommentModels.Select(comment => new CommentsViewModel(comment, navigationStore, userid, comment.user_id))
-            );
+            ModComments = new ObservableCollection<CommentsViewModel>();
+            LoadComments();
 
 
             //side bar
@@ -128,6 +126,20 @@ namespace Project.ViewModels
             User_role = UserRepos.GetUserRole(user_id);
 
         }
+
+
+        public void LoadComments()
+        {
+            CommentModels = _commentRepo.LoadAutoFlaggedComments();
+
+            ModComments.Clear(); // Clear the existing items
+
+            foreach (var comment in CommentModels)
+            {
+                ModComments.Add(new CommentsViewModel(comment, navigationStore, userid, comment.user_id, this));
+            }
+        }
+
     }
 
 }

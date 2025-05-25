@@ -16,15 +16,18 @@ namespace Project.ViewModels
 {
     public class CommentsViewModel : ViewModelBase
     {
+        private MODCommentViewModel viewModel;
         private NavigationStore _navigationStore;
         private CommentModel comment { get;  }
         private TheseRepo theseRepo;
         private UserRepos UserRepos;
-
+        private ReportsRepo reportsRepo;
         public Byte[] CommentorProfilePic => UserRepos.GetProfilepicFromId(comment.user_id);
 
         public string CommentUsername => UserRepos.GetuserName(comment.user_id);
 
+        public int commentid => comment.comment_id;
+        public int reportId => reportsRepo.getReportIdFromComment(comment.comment_id);
         public string DisplayText => comment.content;
 
         public string CommentArticle => theseRepo.GetTitleById(comment.article_id);
@@ -82,10 +85,14 @@ namespace Project.ViewModels
             );
         }
 
-        public CommentsViewModel(CommentModel comment, NavigationStore navigationStore, int user_id, int poster_id)
+        //for admin 
+        public CommentsViewModel(CommentModel comment, NavigationStore navigationStore, int user_id, int poster_id, MODCommentViewModel viewModel)
         {
             this.comment = comment;
+            reportsRepo = new ReportsRepo();
+            UserRepos = new UserRepos();
             _navigationStore = navigationStore;
+            this.viewModel = viewModel;
 
             CommentUsernameClickCommand = new NavigateCommand<UserProfileViewModel>(_navigationStore, () => new UserProfileViewModel(_navigationStore, user_id));
             ToggleCommentCommand = new ViewModelCommand(
@@ -99,9 +106,9 @@ namespace Project.ViewModels
                 canExecute: param => param is Comment
             );
 
-            ApproveCommentCommand = new ApproveCommentCommand(comment.comment_id);
-            DenyCommentCommand = new DenyCommentCommand(comment.comment_id);
-
+            ApproveCommentCommand = new ApproveCommentCommand(comment.comment_id, viewModel);
+            DenyCommentCommand = new DenyCommentCommand(comment.comment_id, viewModel);
+            
         }
 
     }

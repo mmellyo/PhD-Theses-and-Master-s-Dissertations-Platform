@@ -83,12 +83,37 @@ namespace Project.Repos
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "INSERT INTO Reports (reported_id, reported_type, description) VALUES (@id, @type, @desc)";
+                command.CommandText = "INSERT INTO reports (reported_id, reported_type, description) VALUES (@id, @type, @desc)";
                 command.Parameters.AddWithValue("@id", thesisId);
                 command.Parameters.AddWithValue("@type", "Thesis");
                 command.Parameters.AddWithValue("@desc", description);
                 command.ExecuteNonQuery();
             }
+        }
+
+        public int getReportIdFromComment (int comment_id)
+        {
+            int reportid = -1;
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT report_id FROM reports  WHERE comment_reported = @comment_id";
+                command.Parameters.AddWithValue("@comment_id", comment_id);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        reportid = reader.GetInt32("report_id");
+                    }
+                }
+
+            }
+
+            return reportid;
         }
 
     }

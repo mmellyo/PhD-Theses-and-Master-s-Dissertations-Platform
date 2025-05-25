@@ -34,24 +34,168 @@
 
 
                 <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="500*"/>
-
-                    </Grid.ColumnDefinitions>
-                    <ScrollViewer x:Name="myrecommended"
-                        Background="White"
-                      Grid.Column="0"
-                      VerticalScrollBarVisibility="Hidden">
-                        <ItemsControl ItemsSource="{Binding ModComments}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                <userControls:ModComment HorizontalAlignment="Center" Width="800" Margin="10,10"/>
-
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <Grid Grid.Row="0" Background="White">
+                    <TextBlock Text="Commentaire Auto Signalés" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" FontFamily="Montserrat Bold" FontSize="20"/>
                 </Grid>
+
+                <Grid Grid.Row="1" Background="White">
+                    <TabControl Width="Auto" Height="Auto" BorderBrush="Transparent" >
+                        <TabItem Header="Tout les commentaires" FontFamily="Montserrat Medium" Cursor="Hand" Style="{DynamicResource TabItemsStyle2}" >
+                            <StackPanel Orientation="Vertical">
+                                <Border Margin="0,15,0,0" Background="#7DD8FF" CornerRadius="4" Height="30" Width="982">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Border Margin="24,0,60,0" CornerRadius="2" Width="40" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#0093ED"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="16">
+                                                <TextBlock Text="id" FontSize="12"  FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center" Height="16" Margin="0,0,5,0"/>
+                                                <Viewbox Width="8" Height="8" VerticalAlignment="Center"  RenderTransformOrigin="0.5,0.5">
+                                                    <Viewbox.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform Angle="-90"/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Viewbox.RenderTransform>
+                                                    <Path Data="{StaticResource Filtrer}" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" VerticalAlignment="Top" StrokeEndLineCap="Round" Stretch="Fill" Width="6" Height="9"/>
+                                                </Viewbox>
+                                            </StackPanel>
+                                        </Border>
+                                        <TextBlock Text="Nom" FontFamily="Montserrat SemiBold" FontSize="12" Margin="0,0,105,0" Foreground="White" VerticalAlignment="Center"/>
+                                        <Border Margin="24,0,105,0" CornerRadius="4" Width="175" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#0093ED"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="16">
+                                                <TextBlock Text="Nombre Signalement" FontSize="12"  FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center" Height="16" Margin="0,0,5,0"/>
+                                                <Viewbox Width="8" Height="8" VerticalAlignment="Center"  RenderTransformOrigin="0.5,0.5">
+                                                    <Viewbox.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform Angle="-90"/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Viewbox.RenderTransform>
+                                                    <Path Data="{StaticResource Filtrer}" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" VerticalAlignment="Top" StrokeEndLineCap="Round" Stretch="Fill" Width="6" Height="9"/>
+                                                </Viewbox>
+                                            </StackPanel>
+                                        </Border>
+                                        <TextBlock Text="Contenu" FontFamily="Montserrat SemiBold" FontSize="12" Foreground="White" Margin="0,0,300,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="Action" FontFamily="Montserrat SemiBold" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <ItemsControl ItemsSource="{Binding ModComments}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <userControls:reportedComment Margin="0,10"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                        </TabItem>
+                        <TabItem Header="Commentaires traités" FontFamily="Montserrat Medium" Cursor="Hand" Style="{DynamicResource TabItemsStyle2}">
+                            <StackPanel Orientation="Vertical">
+                                <Border Background="#7DD8FF" Margin="0,15,0,0" CornerRadius="4" Height="30" Width="982">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                        <Border Margin="24,0,60,0" CornerRadius="2" Width="40" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#0093ED"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="16">
+                                                <TextBlock Text="id" FontSize="12"  FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center" Height="16" Margin="0,0,5,0"/>
+                                                <Viewbox Width="8" Height="8" VerticalAlignment="Center"  RenderTransformOrigin="0.5,0.5">
+                                                    <Viewbox.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform Angle="-90"/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Viewbox.RenderTransform>
+                                                    <Path Data="{StaticResource Filtrer}" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" VerticalAlignment="Top" StrokeEndLineCap="Round" Stretch="Fill" Width="6" Height="9"/>
+                                                </Viewbox>
+                                            </StackPanel>
+                                        </Border>
+                                        <TextBlock Text="Nom" FontFamily="Montserrat SemiBold" FontSize="12" Margin="0,0,150,0" Foreground="White" VerticalAlignment="Center"/>
+                                        <Border Margin="24,0,60,0" CornerRadius="4" Width="175" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#0093ED"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="16">
+                                                <TextBlock Text="Nombre Signalement" FontSize="12"  FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center" Height="16" Margin="0,0,5,0"/>
+                                                <Viewbox Width="8" Height="8" VerticalAlignment="Center"  RenderTransformOrigin="0.5,0.5">
+                                                    <Viewbox.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform Angle="-90"/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Viewbox.RenderTransform>
+                                                    <Path Data="{StaticResource Filtrer}" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" VerticalAlignment="Top" StrokeEndLineCap="Round" Stretch="Fill" Width="6" Height="9"/>
+                                                </Viewbox>
+                                            </StackPanel>
+                                        </Border>
+                                        <TextBlock Text="Contenu" FontFamily="Montserrat SemiBold" FontSize="12" Foreground="White" Margin="0,0,80,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="Statut du signalement" FontFamily="Montserrat SemiBold" FontSize="12" Foreground="White" Margin="0,0,80,0" VerticalAlignment="Center" Width="140" />
+                                        <TextBlock Text="Action" FontFamily="Montserrat SemiBold" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <ListBox Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Margin="0,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" SelectionMode="Single" IsHitTestVisible="False">
+                                    <ItemsControl ItemsSource="{Binding ModedComments}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <userControls:reportedComment Margin="0,10"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ListBox>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </Grid>
 
             </Grid>
 

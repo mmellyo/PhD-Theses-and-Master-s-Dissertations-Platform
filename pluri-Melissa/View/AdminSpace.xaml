@@ -4,83 +4,97 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
-        xmlns:userControls="clr-namespace:Project.View.userControls" xmlns:viewmodels="clr-namespace:Project.ViewModels" 
+        xmlns:userControls="clr-namespace:Project.View.userControls" 
+        xmlns:viewmodels="clr-namespace:Project.ViewModels" 
         mc:Ignorable="d"
          Height="700" Width="1238"
         
         >
-    
-    
-    <Grid Background="White">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="240"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+<!--
+    <UserControl.Resources>
+        <Storyboard x:Key="PageEnterAnimation">
+            <DoubleAnimation Storyboard.TargetName="MainContent"
+                       Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                       From="30" To="0" Duration="0:0:0.4" />
+            <DoubleAnimation Storyboard.TargetName="MainContent"
+                       Storyboard.TargetProperty="Opacity"
+                       From="0" To="1" Duration="0:0:0.4" />
+        </Storyboard>
+    </UserControl.Resources>
+-->
 
-        <userControls:SideBar_admin x:Name="SideBarAdmin" Grid.Column="0" />
-
-        <Grid Grid.Column="1">
+    <Grid Background="#0093ED">
+        <Grid Background="#0093ED" x:Name="MainContent" Opacity="1" >
+            <Grid.RenderTransform>
+                <TranslateTransform Y="0" />
+            </Grid.RenderTransform>
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="250"/>
+                <RowDefinition Height="180"/>
             </Grid.RowDefinitions>
+            <Border Margin="0,0,15,0" CornerRadius="16" Width="175" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D9363E"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Background="Transparent" BorderBrush="Transparent" Command="{Binding Logout}">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="21" Height="20" VerticalAlignment="Center">
+                                <Path Data="{StaticResource Logout}" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="20" Height="21"/>
+                            </Viewbox>
+                            <TextBlock Margin="5,0,0,0" Text=" Se Deconnecter" FontSize="13" FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
+                </StackPanel>
+            </Border>
+            <Grid Grid.Row="1">
+                <TextBlock Text="Bienvenu, Yacine !" FontSize="36" FontFamily="Montserrat SemiBold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="2">
+                <TextBlock Text="Par quoi souhaitez-vous commencer aujourd’hui ?" FontSize="24" FontFamily="Montserrat Medium" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="3">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <Button Height="250" Background="Transparent" BorderBrush="Transparent" Command="{Binding CommentaireSIGNALER}">
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,0">
+                            <Border Height="150" Width="150" Background="White" CornerRadius="12" Margin="0,0,0,10" Cursor="Hand">
+                                <Viewbox Width="90" Height="90" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource CommentaireSIGNALER}" Stroke="#0093ED" StrokeThickness="8" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="90" Height="90"/>
+                                </Viewbox>
+                            </Border>
+                            <TextBlock Text="GESTION DES COMMENTAIRES" FontSize="24" FontFamily="Montserrat Medium" MaxWidth="210" TextWrapping="Wrap" TextAlignment="Center" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Height="250" Background="Transparent" BorderBrush="Transparent" Command="{Binding ThesesSIGNALER}">
+                        <StackPanel Orientation="Vertical">
+                            <Border Height="150" Width="150" Background="White" CornerRadius="12" Margin="0,0,0,10" Cursor="Hand">
+                                <Viewbox Width="75" Height="83" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource ThesesSIGNALER}" Stroke="#0093ED" StrokeThickness="5" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="75" Height="83"/>
+                                </Viewbox>
+                            </Border>
+                            <TextBlock Text="GESTION DES THÈSES" FontSize="24" FontFamily="Montserrat Medium" MaxWidth="210" TextWrapping="Wrap" TextAlignment="Center" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="4">
+                <Image Source="/img/beautifullogo.png" Width="283.5" Height="87.52" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
 
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Top"
-                        Grid.Column="1"
-                        Background="#0093ED"
-                        Height="70">
-                <Grid Width="1034">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="1">
-                        <TextBlock Text="Accueil"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,13,0,3"
-                                   Foreground="White"
-                                   FontSize="15"
-                                   FontWeight="semiBold"/>
-                        <TextBlock Text="Apprenez en plus sure notre application."
-                                   HorizontalAlignment="Center"
-                                   Foreground="White"
-                                   Opacity="0.7"
-                                   FontSize="12"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2"
-                                Orientation="Horizontal">
-                        <Grid Width="344">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="99*"/>
-                                <ColumnDefinition Width="71*"/>
-                                <ColumnDefinition Width="174*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Hamida Djafaar"
-                                           Foreground="White"
-                                           Margin="10,14,0,0"
-                                           FontWeight="SemiBold"/>
-                                <TextBlock 
-                                           Text="djafaar.hamida@etu.usthb.dz"
-                                           Foreground="White"
-                                           Margin="10,0,0,0"
-                                           FontSize="9"
-                                           />
-                                <TextBlock Text="Etudiant(e)"
-                                           Foreground="White"
-                                           Margin="10,0,0,0"
-                                           FontSize="9"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-
+            </Grid>
         </Grid>
     </Grid>
+
 </UserControl>
