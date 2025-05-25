@@ -54,10 +54,15 @@ namespace Project.ViewModels
 
         public ICommand ResettingPasswordCommand { get; }
         public ICommand BrowseRecoveryFileCommand { get; }
-        
+        public ICommand GoLoginCommand { get; }
+        public ICommand GoHomeCommand { get; }
+
 
         public ForgotPasswordViewModel(NavigationStore navigationStore)
         {
+            GoHomeCommand = new NavigateCommand<WelcomeViewModel>(navigationStore, () => new WelcomeViewModel(navigationStore));
+            GoLoginCommand = new NavigateCommand<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore));
+
             ResettingPasswordCommand = new ResettingPasswordCommand(this, navigationStore);
             BrowseRecoveryFileCommand = new BrowseRecoveryFileCommand(this, navigationStore);
         }
