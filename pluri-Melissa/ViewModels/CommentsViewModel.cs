@@ -1,6 +1,7 @@
 ﻿using Org.BouncyCastle.Asn1.X509;
 using Project.Commands;
 using Project.Models;
+using Project.Repos;
 using Project.Stores;
 using System;
 using System.CodeDom;
@@ -17,12 +18,16 @@ namespace Project.ViewModels
     {
         private NavigationStore _navigationStore;
         private CommentModel comment { get;  }
+        private TheseRepo theseRepo;
+        private UserRepos UserRepos;
 
-        public Byte[] CommentorProfilePic => comment.user_image;
+        public Byte[] CommentorProfilePic => UserRepos.GetProfilepicFromId(comment.user_id);
 
-        public string CommentUsername => comment.user_name;
+        public string CommentUsername => UserRepos.GetuserName(comment.user_id);
 
         public string DisplayText => comment.content;
+
+        public string CommentArticle => theseRepo.GetTitleById(comment.article_id);
         
         
         public ICommand CommentUsernameClickCommand { get; set; }
@@ -31,14 +36,40 @@ namespace Project.ViewModels
 
         //modding
         public ICommand DenyCommentCommand { get; set; }
+                    
+
         public ICommand ApproveCommentCommand { get; set; }
 
+        //profile
+        public ICommand CommentArticleClickCommand { get; set; }
+        //for article page
         public CommentsViewModel(CommentModel comment, NavigationStore navigationStore, int user_id) 
         {
             this.comment = comment;
             _navigationStore = navigationStore;
 
             CommentUsernameClickCommand = new NavigateCommand<UserProfileViewModel>(_navigationStore, () => new UserProfileViewModel(_navigationStore, user_id));
+            ToggleCommentCommand = new ViewModelCommand(
+                execute: param =>
+                {
+                    if (param is Comment comment)
+                    {
+                        comment.IsExpanded = !comment.IsExpanded;
+                    }
+                },
+                canExecute: param => param is Comment
+            );
+        }
+        //for profile
+        public CommentsViewModel(int user_id, CommentModel comment, NavigationStore navigationStore)
+        {
+            this.comment = comment;
+            this.theseRepo = new TheseRepo();
+            this.UserRepos = new UserRepos();
+            _navigationStore = navigationStore;
+
+            CommentUsernameClickCommand = new NavigateCommand<UserProfileViewModel>(_navigationStore, () => new UserProfileViewModel(_navigationStore, user_id));
+            CommentArticleClickCommand = new NavigateCommand<ThesePageViewModel>(_navigationStore, () => new ThesePageViewModel(navigationStore, user_id, comment.article_id));
             ToggleCommentCommand = new ViewModelCommand(
                 execute: param =>
                 {

@@ -29,7 +29,6 @@ namespace Project.Commands
 
             _viewModel.UserId = _userRepos.AuthenticateUser(_viewModel.LoginEmail, _viewModel.LoginPassword);    
 
-            MessageBox.Show($"Login in {_viewModel.Username}");
 
             if((_viewModel.UserId) != -1)
             {

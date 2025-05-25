@@ -212,7 +212,7 @@ namespace Project.Repos
             List<CommentModel> comments = new List<CommentModel>();
 
             using (var connection = GetConnection()) 
-            using (MySqlCommand command = new MySqlCommand(@"SELECT comment_id, content, commented_on, commented_by, reply_id 
+            using (MySqlCommand command = new MySqlCommand(@"SELECT comment_id, content, commented_on, commented_by 
                          FROM comments 
                          WHERE commented_by = @userId", connection))
                 {
@@ -228,9 +228,9 @@ namespace Project.Repos
                             {
                                 comment_id = reader.GetInt32("comment_id"),
                                 content = reader.GetString("content"),
-                                user_id = reader.GetInt32("commented_on"),
-                                article_id = reader.GetInt32("commented_by"),
-                                reply_id =  reader.GetInt32("reply_id")
+                                user_id = reader.GetInt32("commented_by"),
+                                article_id = reader.GetInt32("commented_on")
+                                
                             };
 
                             comments.Add(comment);
@@ -272,6 +272,29 @@ namespace Project.Repos
             }
         }
 
-        
+        internal List<int>? GetCommentId(int userid)
+        {
+            List<int> comments = new List<int>();
+
+            using (var connection = GetConnection())
+            using (MySqlCommand command = new MySqlCommand(@"SELECT comment_id 
+                         FROM comments 
+                         WHERE commented_by = @userId", connection))
+            {
+                connection.Open();
+
+                command.Parameters.AddWithValue("@userId", userid);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int comment_id = reader.GetInt32("comment_id");
+                        comments.Add(comment_id);
+                    }
+                }
+            }
+            return comments;
+        }
     }
 }

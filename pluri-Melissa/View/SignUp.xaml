@@ -73,7 +73,7 @@
 
 
                     <Button 
-                                Command="{Binding DataContext.GoLoginCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                Command="{Binding GoLoginCommand}" 
                                 Background="Transparent"
                                 BorderThickness="0"
                                 HorizontalAlignment="Left"
@@ -91,7 +91,7 @@
 
 
                     <Button 
-                                Command="{Binding DataContext.GoHomeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                Command="{Binding GoHomeCommand}" 
                                 Background="Transparent"
                                 BorderThickness="0"
                                 HorizontalAlignment="Left"
@@ -267,7 +267,7 @@
                                     FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
                         <Button 
-                                    Command="{Binding DataContext.GologinCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Command="{Binding GoLoginCommand}" 
                                     Background="Transparent"
                                     BorderThickness="0"
                                     HorizontalAlignment="Left"

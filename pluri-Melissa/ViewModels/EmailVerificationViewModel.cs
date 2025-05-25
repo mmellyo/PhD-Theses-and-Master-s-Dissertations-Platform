@@ -249,6 +249,9 @@ namespace Project.ViewModels
         {
             SendEmailCommand = new SendEmailCommand(this, navigationStore);
             VerifyCodeCommand = new VerifyCodeCommand(this, navigationStore);
+
+            GoHomeCommand = new NavigateCommand<WelcomeViewModel>(navigationStore, () => new WelcomeViewModel(navigationStore));
+            GologinCommand = new NavigateCommand<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore));
         }
     }
 }

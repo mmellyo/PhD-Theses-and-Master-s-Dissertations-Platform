@@ -18,6 +18,7 @@ namespace Project.Commands
         private ArticleModel articleModel;
         private UserRepos userRepos;
         private TheseRepo TheseRepo;
+        private int count = 0;
 
         private string _myConnectionString = "server=127.0.0.1;uid=root;pwd=0000;database=projet_pluri";
 
@@ -29,7 +30,7 @@ namespace Project.Commands
             TheseRepo = new TheseRepo();
         }
 
-        public override void Execute(object parameter)
+        /*public override void Execute(object parameter)
         {
             var vm = uploadViewModel;
 
@@ -178,7 +179,170 @@ namespace Project.Commands
             {
                 MessageBox.Show($"Error uploading thesis: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }*/
+
+        public override void Execute(object parameter)
+        {
+            var vm = uploadViewModel;
+
+            if (vm.FileContent == null)
+            {
+                MessageBox.Show("You must select a thesis file.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!(vm.IsLicence || vm.IsMaster || vm.IsDoctorat))
+            {
+                MessageBox.Show("You must select a thesis type (License, Master, or Doctorate).", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                MessageBox.Show("Title is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (vm.supervisors.Count == 0)
+            {
+                MessageBox.Show("Supervisor is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (vm.authors.Count == 0)
+            {
+                MessageBox.Show("At least one writer is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (vm.keywords.Count == 0)
+            {
+                MessageBox.Show("Keywords are required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Faculty))
+            {
+                MessageBox.Show("Faculty is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Year))
+            {
+                MessageBox.Show("Year is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Language))
+            {
+                MessageBox.Show("Language is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Department))
+            {
+                MessageBox.Show("Department is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Summary))
+            {
+                MessageBox.Show("Summary is required.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+
+                using (var connection = new MySqlConnection(_myConnectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        // 1. Insert article
+                        var cmd = new MySqlCommand("INSERT INTO articles (title, summary, article_date, posted_date, poster_id, article_file, article_type, department, faculty, language, visit_number, saves_number) VALUES (@title, @summary, @articledate, @posteddate, @userid, @file, @type, @department, @faculty, @language, @visit_number, @saves_number)", connection, transaction);
+                        cmd.Parameters.AddWithValue("@title", vm.Title);
+                        cmd.Parameters.AddWithValue("@summary", vm.Summary);
+                        cmd.Parameters.AddWithValue("@articledate", vm.Year);
+                        cmd.Parameters.AddWithValue("@department", vm.Department);
+                        cmd.Parameters.AddWithValue("@faculty", vm.Faculty);
+                        cmd.Parameters.AddWithValue("@language", vm.Language);
+                        cmd.Parameters.AddWithValue("@visit_number", 0);
+                        cmd.Parameters.AddWithValue("@saves_number", 0);
+                        cmd.Parameters.AddWithValue("@posteddate", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@userid", userId);
+                        cmd.Parameters.AddWithValue("@file", vm.FileContent);
+                        string thesisType = vm.IsLicence ? "Licence" : vm.IsMaster ? "Master" : "Doctorat";
+                        cmd.Parameters.AddWithValue("@type", thesisType);
+                        cmd.ExecuteNonQuery();
+
+                        long articleId = cmd.LastInsertedId;
+
+                        // 2. Insert keywords
+                        foreach (var kw in vm.keywords)
+                        {
+                            long keywordId = TheseRepo.GetOrInsertKeyword(connection, transaction, kw);
+                            var linkCmd = new MySqlCommand("INSERT INTO used_keywords (keyword_id, article_id) VALUES (@kid, @aid)", connection, transaction);
+                            linkCmd.Parameters.AddWithValue("@kid", keywordId);
+                            linkCmd.Parameters.AddWithValue("@aid", articleId);
+                            linkCmd.ExecuteNonQuery();
+                        }
+
+                        // 3. Insert authors
+                        foreach (var writer in vm.authors)
+                        {
+                            string[] names = writer.Split(' ');
+                            string firstname = names.First();
+                            string lastname = names.Length > 1 ? string.Join(" ", names.Skip(1)) : "";
+                            var authorCmd = new MySqlCommand("INSERT INTO written_by (first_name, last_name, article_id) VALUES (@fn, @ln, @aid)", connection, transaction);
+                            authorCmd.Parameters.AddWithValue("@fn", firstname);
+                            authorCmd.Parameters.AddWithValue("@ln", lastname);
+                            authorCmd.Parameters.AddWithValue("@aid", articleId);
+                            authorCmd.ExecuteNonQuery();
+                        }
+
+                        // 4. insert supervisors
+                        foreach (string name in vm.supervisors)
+                        {
+                            var supervisor = userRepos.GetByUsername(name.Trim());
+                            if (supervisor == null || supervisor.user_role.ToLower() != "member")
+                            {
+                                count++;
+                            }
+                            else
+                            {
+                                var supCmd = new MySqlCommand("INSERT INTO supervised_by (supervisor_id, article_id) VALUES (@sid, @aid)", connection, transaction);
+                                supCmd.Parameters.AddWithValue("@sid", supervisor.user_id);
+                                supCmd.Parameters.AddWithValue("@aid", articleId);
+                                supCmd.ExecuteNonQuery();
+                                var state = new MySqlCommand("UPDATE articles SET article_state = @state WHERE article_id = @article_id", connection, transaction);
+                                state.Parameters.AddWithValue("@state", "Not Approved");
+                                state.Parameters.AddWithValue("@article_id", articleId);
+                                state.ExecuteNonQuery();
+                            }
+                        }
+                        if (count == vm.supervisors.Count)
+                        {
+                            var state = new MySqlCommand("UPDATE articles SET article_state = @state WHERE article_id = @article_id", connection, transaction);
+                            state.Parameters.AddWithValue("@state", "No Contact");
+                            state.Parameters.AddWithValue("@article_id", articleId);
+                            state.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        MessageBox.Show("Thesis uploaded successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                   
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
         }
+
     }
-    
+
 }

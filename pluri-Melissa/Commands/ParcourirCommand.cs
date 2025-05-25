@@ -27,10 +27,13 @@ namespace Project.Commands
             if (success == true) 
             { 
                 string filePath = fileDialogue.FileName;
+                _viewModel.Filename = filePath;
+
                 Byte[] selectedFile = File.ReadAllBytes(filePath);
                 
                 
                     _viewModel.FileContent = selectedFile;
+                
                 
             
             }

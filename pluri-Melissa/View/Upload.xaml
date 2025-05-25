@@ -77,7 +77,7 @@
                                                     <Path Data="{StaticResource Telechargement}" Stroke="#0093ED" StrokeThickness="0.75" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="12" Height="12"/>
                                                 </Viewbox>
                                                 <Button Height="40" Width="125" Command="{Binding ParcourirCommand}">
-                                                    <Border Width="125" Background="#0093ED" Height="40" CornerRadius="12" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Border Width="125" Background="Transparent" Height="40" CornerRadius="12" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                         <TextBlock Text="Parcourir le fichier" FontSize="10" FontFamily="Montserrat Medium" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
                                                         
                                                     </Border>
@@ -142,12 +142,17 @@
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="Nom de votre Encadrant" FontFamily="Montserrat SemiBold" FontSize="14"/>
                                                 <Grid Grid.Row="2">
-                                                    <TextBox x:Name="NomEncadrant" Text="{Binding Encadrant, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220" />
+                                                    <TextBox x:Name="NomEncadrant" MaxLength="200" Text="{Binding Encadrant, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220" />
                                                     <Label Margin="5.5,0,0,0" IsHitTestVisible="False"
                                                             Content="Entrez le nom de votre thèse"
                                                             VerticalAlignment="Center"
                                                             Foreground="#9A9A9A"
                                                             Visibility="{Binding Text.IsEmpty,ElementName=NomEncadrant, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="11"/>
+                                                    <Button Background="Transparent" Width="40" Height="35" HorizontalAlignment="Right" BorderBrush="Transparent" Padding="0" Command="{Binding EnterSup}">
+                                                        <Viewbox Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Cursor="Hand">
+                                                            <Path Data="{StaticResource Verify}" Stroke="#0093ED" StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="40" Height="35"/>
+                                                        </Viewbox>
+                                                    </Button>
                                                 </Grid>
                                             </Grid>
 
@@ -158,12 +163,17 @@
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="Rédigé par :" FontFamily="Montserrat SemiBold" FontSize="14"/>
                                                 <Grid Grid.Row="2">
-                                                    <TextBox x:Name="TrinomeBinome" Text="{Binding Writers, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220" />
+                                                    <TextBox x:Name="TrinomeBinome" MaxLength="200" Text="{Binding Writers, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220" />
                                                     <Label Margin="5.5,0,0,0" IsHitTestVisible="False"
                                                             Content="Entrez le nom de votre binome "
                                                             VerticalAlignment="Center" HorizontalAlignment="Left"
                                                             Foreground="#9A9A9A"
                                                             Visibility="{Binding Text.IsEmpty,ElementName=TrinomeBinome, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="11"/>
+                                                    <Button Background="Transparent" Width="40" Height="35" HorizontalAlignment="Right" BorderBrush="Transparent" Padding="0" Command="{Binding EnterAuthor}">
+                                                        <Viewbox Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Cursor="Hand">
+                                                            <Path Data="{StaticResource Verify}" Stroke="#0093ED" StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="40" Height="35"/>
+                                                        </Viewbox>
+                                                    </Button>
                                                 </Grid>
                                             </Grid>
                                             <Grid Margin="25,0,0,0">
@@ -173,12 +183,19 @@
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="Mot cles :" FontFamily="Montserrat SemiBold" FontSize="14"/>
                                                 <Grid Grid.Row="2">
-                                                    <TextBox x:Name="Keywords" Text="{Binding Keywords, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220" />
+                                                    <TextBox x:Name="Keywords" MaxLength="100" Text="{Binding Keywords, UpdateSourceTrigger=PropertyChanged}" Height="50" Style="{StaticResource ThesesRecherche}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="220"/>
+
                                                     <Label Margin="5.5,0,0,0" IsHitTestVisible="False"
                                                             Content="Entrez les mot cles"
                                                             VerticalAlignment="Center" HorizontalAlignment="Left"
                                                             Foreground="#9A9A9A"
-                                                            Visibility="{Binding Text.IsEmpty,ElementName=TrinomeBinome, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="11"/>
+                                                            Visibility="{Binding Text.IsEmpty,ElementName=Keywords, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Montserrat Medium" FontSize="11"/>
+                                                    <Button Background="Transparent" Width="40" Height="35" HorizontalAlignment="Right" BorderBrush="Transparent" Padding="0" Command="{Binding EnterKeyword}">
+                                                        <Viewbox Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Cursor="Hand">
+                                                            <Path Data="{StaticResource Verify}" Stroke="#0093ED" StrokeThickness="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Fill" Width="40" Height="35"/>
+                                                        </Viewbox>
+                                                    </Button>
+                                                    
                                                 </Grid>
                                             </Grid>
                                         </WrapPanel>

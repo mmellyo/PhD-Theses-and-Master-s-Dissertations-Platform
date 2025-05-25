@@ -17,14 +17,13 @@ namespace Project.ViewModels
 {
     public class UserProfileViewModel : ViewModelBase
     {
-        public string Role;
-        public bool isMember { get; set; }
-        public bool isUser { get; set; }
+        //useful 
+        private int userid;
+        private NavigationStore navigationStore;
+        private TheseRepo theseRepo;
+        private CommentRepo commentRepo;
 
-        public object SideBarViewModel { get; }
-
-        public ICommand UploadCommand { get; }
-
+        //top bar infos
         private string _userName;
         public string Username
         {
@@ -35,6 +34,7 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
+
         private string _email;
         public string Email
         {
@@ -45,6 +45,7 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(Email));
             }
         }
+
         private string _userrole;
         public string User_role
         {
@@ -68,74 +69,107 @@ namespace Project.ViewModels
         }
 
 
-        public  ObservableCollection<ArticleViewModel> Theses { get; set; } = new ObservableCollection<ArticleViewModel>();
-        public ObservableCollection<CommentModel> Comments { get; set; } = new ObservableCollection<CommentModel>();
-        public ObservableCollection<ArticleViewModel> Saved { get; set; } = new ObservableCollection<ArticleViewModel>();
+        //side bar
+        public object SideBarViewModel { get; }
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
+
+        //top bar
+        private UserRepos UserRepos;
+        public ICommand UploadCommand { get; }
+
+        //Saved list
+        public ObservableCollection<MarkedThesesViewModel> SavedArticles { get; set; }
+        private List<int> SavedarticleIdList { get; set; }
+        private List<ArticleModel> SavedarticleModels { get; set; }
+
+        //Posted list
+        public ObservableCollection<MarkedThesesViewModel> PostedArticles { get; set; }
+        private List<int> PostedarticleIdList { get; set; }
+        private List<ArticleModel> PostedarticleModels { get; set; }
+
+        //comment list
+        public ObservableCollection<CommentsViewModel> Comments { get; set; }
+        private List<int> CommentIdList { get; set; }
+        private List<CommentModel> CommentModels { get; set; }
 
 
-        //commands
-        public ICommand GoToTheseCommand { get; }
-
-        UserRepos _userRepos;
-        TheseRepo theseRepo;
-        CommentRepo commentRepo;
-       
-
-        public UserProfileViewModel(NavigationStore navigationStore, int userId)
+        //constructor
+        public UserProfileViewModel(NavigationStore _navigationStore, int user_id)
         {
-            _userRepos = new UserRepos();
-            theseRepo = new TheseRepo();
-            commentRepo = new CommentRepo();
-            Role = _userRepos.GetUserRole(userId);
-            InitializeWithUserId(userId);
+            this.userid = user_id;
+            this.navigationStore = _navigationStore;
+            this.theseRepo = new TheseRepo();
+            this.UserRepos = new UserRepos();
+            this.commentRepo = new CommentRepo();
 
-            List<ArticleModel> Posted = InitialiseTheses(userId);
-            List<ArticleModel> saved = InitialiseSavedTheses(userId);
-            foreach (ArticleModel article in Posted)
+            //saved articles
+            SavedarticleIdList = theseRepo.GetSavedThesesByUser(userid);
+            SavedarticleModels = new List<ArticleModel>();
+
+            foreach (int id in SavedarticleIdList)
             {
-                ArticleViewModel a = new ArticleViewModel(article);
-                Theses.Add(a);
+                SavedarticleModels.Add(theseRepo.GetThesisDetails(id));
             }
-            foreach (ArticleModel article in saved)
+;
+            SavedArticles = new ObservableCollection<MarkedThesesViewModel>(
+                SavedarticleModels.Select(article => new MarkedThesesViewModel(navigationStore, article, userid))
+            );
+
+            //posted articles 
+            PostedarticleIdList = theseRepo.GetThesesByUser(userid);
+            PostedarticleModels = new List<ArticleModel>();
+
+            foreach (int id in PostedarticleIdList)
             {
-                ArticleViewModel a = new ArticleViewModel(article);
-                Saved.Add(a);
+                PostedarticleModels.Add(theseRepo.GetThesisDetails(id));
             }
-            Comments = new ObservableCollection<CommentModel>(InitialiseComments(userId));
+;
+            PostedArticles = new ObservableCollection<MarkedThesesViewModel>(
+                PostedarticleModels.Select(article => new MarkedThesesViewModel(navigationStore, article, userid))
+            );
+
+            //comments 
+            //CommentIdList = commentRepo.GetCommentId(userid);
+            CommentModels = commentRepo.GetUserComments(userid);
+
+            //foreach (int id in PostedarticleIdList)
+            //{
+              //  CommentModels.Add(commentRepo.GetUserComments(user_id));
+            //}
+            Comments = new ObservableCollection<CommentsViewModel>(
+                CommentModels.Select(comment => new CommentsViewModel(user_id, comment, navigationStore))
+            );
 
 
-            Role = _userRepos.GetUserRole(userId);
+
+            //sidebar
+            Role = UserRepos.GetUserRole(user_id);
             if (Role == "Student")
             {
                 isUser = true;
                 isMember = false;
-                SideBarViewModel = new UserSideBarViewModel(userId, navigationStore);
+                SideBarViewModel = new UserSideBarViewModel(user_id, navigationStore);
             }
             if (Role == "Member")
             {
                 isMember = true;
                 isUser = false;
-                SideBarViewModel = new MemberSideBarViewModel(userId, navigationStore);
+                SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
             }
 
-            UploadCommand = new NavigateCommand<UploadViewModel>(navigationStore, () => new UploadViewModel(navigationStore, userId));
-
-            _userName = _userRepos.GetuserName(userId);
-            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(_userRepos.GetProfilepicFromId(userId));
-            Email = _userRepos.GetuserEmail(userId);
-            User_role = _userRepos.GetUserRole(userId);
+            //topbar
+            UploadCommand = new NavigateCommand<UploadViewModel>(navigationStore, () => new UploadViewModel(navigationStore, user_id));
+            _userName = UserRepos.GetuserName(user_id);
+            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
+            Email = UserRepos.GetuserEmail(user_id);
+            User_role = UserRepos.GetUserRole(user_id);
 
         }
 
-        public List<ArticleModel> InitialiseSavedTheses(int user_id)
-        {
-            List<ArticleModel> these = new List<ArticleModel>();
 
-            these = theseRepo.GetSavedThesesByUser(user_id);
-
-            return these;
-        }
-
+        
         public List<CommentModel> InitialiseComments(int user_id)
         {
             var comments = new List<CommentModel>();
@@ -146,20 +180,13 @@ namespace Project.ViewModels
         }
         public void InitializeWithUserId(int userId)
         {
-            Email = _userRepos.GetuserEmail(userId);
-            _userName = _userRepos.GetuserName(userId);
-            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(_userRepos.GetProfilepicFromId(userId));
+            Email = UserRepos.GetuserEmail(userId);
+            _userName = UserRepos.GetuserName(userId);
+            user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(userId));
         }
 
 
-        public List<ArticleModel> InitialiseTheses (int user_id)
-        {
-            List <ArticleModel> these = new List<ArticleModel>();
-
-            these = theseRepo.GetThesesByUser(user_id);
-
-            return these;
-        }
+        
 
     }
 }

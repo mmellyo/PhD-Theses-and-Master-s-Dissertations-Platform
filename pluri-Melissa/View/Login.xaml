@@ -71,7 +71,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button 
-                            Command="{Binding DataContext.GoSignUpCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                            Command="{Binding GoSignUpCommand}" 
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Left"
@@ -268,7 +268,7 @@
                                     FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
                         <Button 
-                            Command="{Binding DataContext.GoSignUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                            Command="{Binding GoSignUpCommand}" 
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Left"

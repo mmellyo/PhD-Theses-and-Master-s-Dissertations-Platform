@@ -69,7 +69,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button 
-                            Command="{Binding DataContext.GologinCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                            Command="{Binding GologinCommand}" 
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Left"
@@ -87,7 +87,7 @@
 
 
                     <Button 
-                            Command="{Binding DataContext.GoHomeCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                            Command="{Binding GoHomeCommand}" 
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Left"
@@ -323,7 +323,7 @@
                                 FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
                         <Button 
-                                Command="{Binding DataContext.GologinCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                Command="{Binding GologinCommand}" 
                                 Background="Transparent"
                                 BorderThickness="0"
                                 HorizontalAlignment="Left"

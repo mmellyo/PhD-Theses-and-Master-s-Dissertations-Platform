@@ -86,7 +86,7 @@ namespace Project.ViewModels
         public LoginViewModel(NavigationStore navigationStore)
         {
             GoHomeCommand = new NavigateCommand<WelcomeViewModel>(navigationStore, () => new WelcomeViewModel(navigationStore));
-            GoSignUpCommand = new NavigateCommand<SignUpViewModel>(navigationStore, () => new SignUpViewModel(navigationStore));
+            GoSignUpCommand = new NavigateCommand<EmailVerificationViewModel>(navigationStore, () => new EmailVerificationViewModel(navigationStore));
 
             usermodel = new UserModel();
             

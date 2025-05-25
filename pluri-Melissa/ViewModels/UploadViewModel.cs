@@ -34,8 +34,17 @@ namespace Project.ViewModels
             }
         }
 
+        public string _Filename;
+        public string Filename
+        {
+            get => _Filename;
+            set
+            {
+                _Filename = value;
+                OnPropertyChanged(nameof(Filename));
+            }
+        }
         
-
         public string _title;
         public string Title
         {
@@ -47,7 +56,7 @@ namespace Project.ViewModels
             }
         }
 
-        public string _encadrant;
+        private string _encadrant;
         public string Encadrant
         {
             get => _encadrant;
@@ -264,6 +273,8 @@ namespace Project.ViewModels
         public ICommand UploadCommand { get; }
         public ICommand UploadArticleCommand { get; }
 
+
+
         private string _userName;
         public string Username
         {
@@ -309,7 +320,19 @@ namespace Project.ViewModels
 
         private UserRepos userRepos;
 
-        
+        //entering commands
+        public ICommand EnterKeyword { get;  }
+        public ICommand EnterAuthor { get; }
+        public ICommand EnterSup { get; }
+
+        //keywords
+        public List<string> keywords { get; set; } = new List<string>();
+
+        //authors
+        public List<string> authors { get; set; } = new List<string>();
+
+        //supervisors
+        public List<string> supervisors { get; set; } = new List<string>();
 
         public UploadViewModel(NavigationStore navigationStore, int userId)
         {
@@ -333,6 +356,11 @@ namespace Project.ViewModels
                 isUser = false;
                 SideBarViewModel = new MemberSideBarViewModel(userId, navigationStore);
             }
+
+            EnterKeyword = new EnterkeywordCommand(this);
+            EnterAuthor = new EnterAuthorCommand(this);
+            EnterSup = new EnterSupCommand(this);
+
 
             UploadCommand = new NavigateCommand<UploadViewModel>(navigationStore, () => new UploadViewModel(navigationStore, userId));
 

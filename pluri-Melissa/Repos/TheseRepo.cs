@@ -107,7 +107,8 @@ namespace Project.Repos
                 SELECT 
                 a.article_id, a.title, a.summary, a.article_date,
                 a.department,
-                a.faculty 
+                a.faculty,
+                a.language, a.article_type
                 FROM articles a
                 
                 WHERE a.article_id = @articleId", connection))
@@ -123,6 +124,8 @@ namespace Project.Repos
                     thesis.date = reader.GetString("article_date");
                     thesis.department = reader.GetString("department");
                     thesis.faculty = reader.GetString("faculty");
+                    thesis.language = reader.GetString("language");
+                    thesis.type = reader.GetString("article_type");
                 }
             }
 
@@ -205,14 +208,12 @@ namespace Project.Repos
             return insertCmd.LastInsertedId;
         }
 
-        public List<ArticleModel> GetThesesByUser(int user_id)
+        public List<int> GetThesesByUser(int user_id)
         {
-            List<ArticleModel> theses = new List<ArticleModel>();
+            List<int> theses = new List<int>();
 
             string query = @"
-                SELECT a.article_id, a.title, a.summary, a.language, a.faculty, a.department, 
-                a.article_date, a.visit_number, a.saves_number,
-                u.user_name AS supervisorUsername
+                SELECT a.article_id
                 FROM articles a
                 LEFT JOIN supervised_by sb ON a.article_id = sb.article_id
                 LEFT JOIN users u ON sb.supervisor_id = u.user_id
@@ -228,21 +229,9 @@ namespace Project.Repos
                 {
                     while (reader.Read())
                     {
-                        var thesis = new ArticleModel
-                        {
-                            id = reader["article_id"] != DBNull.Value ? reader.GetInt32("article_id") : 0,
-                            title = reader["title"] != DBNull.Value ? reader.GetString("title") : string.Empty,
-                            description = reader["summary"] != DBNull.Value ? reader.GetString("summary") : string.Empty,
-                            language = reader["language"] != DBNull.Value ? reader.GetString("language") : string.Empty,
-                            faculty = reader["faculty"] != DBNull.Value ? reader.GetString("faculty") : string.Empty,
-                            department = reader["department"] != DBNull.Value ? reader.GetString("department") : string.Empty,
-                            date = reader["article_date"] != DBNull.Value ? reader.GetString("article_date") : string.Empty,
-                            visits = reader["visit_number"] != DBNull.Value ? reader.GetInt32("visit_number") : 0,
-                            saves = reader["saves_number"] != DBNull.Value ? reader.GetInt32("saves_number") : 0,
+                        int articleId = reader.GetInt32("article_id");
 
-                        };
-
-                        theses.Add(thesis);
+                        theses.Add(articleId);
                     }
                 }
             }
@@ -250,12 +239,12 @@ namespace Project.Repos
             return theses;
         }
 
-        public List<ArticleModel> GetSavedThesesByUser(int user_id)
+        public List<int> GetSavedThesesByUser(int user_id)
         {
-            List<ArticleModel> theses = new List<ArticleModel>();
+            List<int> theses = new List<int>();
 
             string query = @"
-                        SELECT a.article_id, a.title, a.summary, a.article_date, a.language
+                        SELECT a.article_id
                         FROM saved_articles sa
                         JOIN articles a ON sa.article_id = a.article_id
                         WHERE sa.user_id = @userId";
@@ -269,18 +258,9 @@ namespace Project.Repos
                 {
                     while (reader.Read())
                     {
-                        var thesis = new ArticleModel
-                        {
-                            id = reader.GetInt32("article_id"),
-                            title = reader.GetString("title"),
-                            description = reader.GetString("summary"),
-                            language = reader.GetString("language"),
-                            date = reader.GetString("article_date"),
-                            
 
-                        };
-
-                        theses.Add(thesis);
+                        int id = reader.GetInt32("article_id");
+                        theses.Add(id);
                     }
                 }
             }
@@ -376,6 +356,59 @@ namespace Project.Repos
                 connection.Open();
                 cmd.Parameters.AddWithValue("@article_id", article_id);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+
+        public byte[]? GetPdfBytesFromDatabase(int article_id)
+        {
+            try
+            {
+                using var connection = GetConnection();
+                using var command = new MySqlCommand
+                {
+                    Connection = connection,
+                    CommandText = "SELECT article_file FROM `articles` WHERE article_id = @article_id"
+                };
+                command.Parameters.AddWithValue("@article_id", article_id);
+
+                connection.Open();
+                var result = command.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                    return (byte[])result;
+
+                Console.WriteLine("No PDF found for the given article_id.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                return null;
+            }
+        }
+
+        public string GetTitleById(int article_id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT title FROM `articles` WHERE article_id = @these_id";
+                command.Parameters.AddWithValue("@these_id", article_id);
+
+                var result = command.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("No title found for this thesis.");
+                    return null;
+                }
             }
         }
     }
