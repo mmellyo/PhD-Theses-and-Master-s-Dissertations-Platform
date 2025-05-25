@@ -23,6 +23,8 @@ namespace Project.Models
         public string user_password { get; set; }
         public string user_role { get; set; }
         public byte[] user_profilepic { get; set; }
+        public string user_faculty { get; set; } 
+
 
         public ImageSource pfp { get; set; }
 

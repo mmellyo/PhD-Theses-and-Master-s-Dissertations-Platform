@@ -9,7 +9,7 @@ namespace Project.Repos
 
         public RepoBase()
         {
-            _myConnectionString = "server=127.0.0.1;uid=root;pwd=#Yacinestpasla3;database=pluri_bd";
+            _myConnectionString = "server=127.0.0.1;uid=root;pwd=Mellybookclub;database=pluri";
         }
 
         protected MySqlConnection GetConnection()
