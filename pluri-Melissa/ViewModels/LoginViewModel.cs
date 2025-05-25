@@ -78,7 +78,7 @@ namespace Project.ViewModels
 
         public ICommand RecoverPasswordCommand { get; }
         public ICommand ShowPasswordCommand { get; }
-        public ICommand RememberPasswordCommand { get; }
+        public ICommand ForgotPasswordCommand { get; }
         public ICommand GoSignUpCommand { get; }
         public ICommand GoHomeCommand { get; }
 
@@ -94,8 +94,11 @@ namespace Project.ViewModels
            
             LoginCommand = new LoginCommand(this, navigationStore);
 
-                     
-           
+
+            ForgotPasswordCommand = new NavigateCommand<ForgotPasswordViewModel>(navigationStore, () => new ForgotPasswordViewModel(navigationStore));
+
+
+
         }
 
 

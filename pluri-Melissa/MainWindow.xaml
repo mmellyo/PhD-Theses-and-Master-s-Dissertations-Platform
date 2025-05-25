@@ -57,6 +57,10 @@
             <DataTemplate DataType="{x:Type viewmodels:MODCommentViewModel}">
                 <view:MODcommentView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ForgotPasswordViewModel}">
+                <view:ForgotPasswordView/>
+            </DataTemplate>
+
         </ContentControl.Resources>
     </ContentControl>
 </Window>

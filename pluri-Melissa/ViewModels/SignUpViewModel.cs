@@ -71,6 +71,7 @@ namespace Project.ViewModels
         //public ICommand AddItemCommand { get; set; }
         //public ICommand SignUpCommand { get; set; }
 
+    
         public ICommand GoLoginCommand { get; }
         public ICommand GoHomeCommand { get; }
 

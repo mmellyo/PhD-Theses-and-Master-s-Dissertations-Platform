@@ -410,6 +410,24 @@ namespace Project.Repos
         }
 
 
+        public bool ResetPassword(string username, string newPassword)
+        {
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = "UPDATE `users` SET user_password = @password WHERE user_name = @user_name";
+                command.Parameters.Add("@password", MySqlDbType.VarChar).Value = hashedPassword;
+                command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = username;
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
 
 
 

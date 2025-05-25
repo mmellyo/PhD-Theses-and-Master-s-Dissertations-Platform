@@ -19,7 +19,7 @@ namespace Project.Models
 
         public void SendCommentToAdmin(string recipientEmail, string verificationCode,  int TheseId);
 
-
+        public void CreateRecoveryFile(string email, string username);
 
     }
 }

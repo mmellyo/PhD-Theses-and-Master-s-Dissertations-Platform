@@ -46,6 +46,7 @@ namespace Project.Services
         public MyProfileViewModel MyProfileViewModel => _provider.GetRequiredService<MyProfileViewModel>();
         public RechercheAvanceViewModel RechercheAvanceViewModel => _provider.GetRequiredService<RechercheAvanceViewModel>();
 
+        public ForgotPasswordViewModel ForgotPasswordViewModel => _provider.GetRequiredService<ForgotPasswordViewModel>();
 
 
 
