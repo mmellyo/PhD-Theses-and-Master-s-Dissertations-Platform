@@ -28,8 +28,7 @@
                     Content="OK"
                     Width="100"
                     Margin="0,20,0,0"
-                    HorizontalAlignment="Center"
-                    Click="OkButton_Click"/>
+                    HorizontalAlignment="Center"/>
         </Grid>
     </Border>
 </UserControl>

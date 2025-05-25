@@ -37,6 +37,7 @@
                     <RowDefinition Height="70"/>
                     <RowDefinition Height="80"/>
                     <RowDefinition Height="450"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="600"/>
                 </Grid.RowDefinitions>
                 <!-- TOPBAR -->
@@ -77,69 +78,18 @@
                         <ColumnDefinition Width="410"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Border Width="374" HorizontalAlignment="Center" VerticalAlignment="Top" Height="400" Margin="0,0,20,0" Background="#D6F5FF">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="55"/>
-                                    <RowDefinition Height="85"/>
-                                    <RowDefinition Height="70"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Grid>
-                                    <TextBlock Text="À propos de l'auteur" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="33,0,35,0"/>
-                                </Grid>
-                                <!-- INFORMATION DE L'AUTEUR -->
-                                <Grid Grid.Row="1">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="33,15,15,0" Height="70" Width="200">
-                                        <Border Height="60" Width="60">
-                                            <Ellipse Height="60" VerticalAlignment="Center" Stroke="White" StrokeThickness="1" >
-                                                <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding imageUtilisateur}" Stretch="UniformToFill"/>
-                                                </Ellipse.Fill>
-                                            </Ellipse>
-                                        </Border>
-                                        <StackPanel Orientation="Vertical" Width="135" Margin="10,10,0,10">
-                                            <TextBlock
-                       Margin="0,0,0,0"
-                       FontSize="10"
-                       FontFamily="Montserrat Bold"
-                       Foreground="#0093ED"
-                       TextWrapping="Wrap"
-                       Width="135">
-
-                    <Run Text="{Binding AuthorUsername}"/>
-                                            </TextBlock>
-                                            <TextBlock Text="{Binding AuthorEmail}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,4"/>
-                                            <TextBlock Text="{Binding AuthorRole}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,0"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Grid>
-                                <!-- DESCRIPTION -->
-
-                                <!-- D'AUTRES THESES DE L'AUTEUR 4 THESES MAXIMUM A AFFICHER -->
-                                <Grid Grid.Row="2">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="D’autres thèses :" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="35,0,140,0"/>
-                                        <TextBlock Text="Voir tout" FontSize="13" FontFamily="Montserrat Bold" VerticalAlignment="Center" Foreground="#FF0093ED" TextDecorations="Underline"/>
-                                    </StackPanel>
-                                </Grid>
-                                <Grid Grid.Row="3">
-                                    <ItemsControl VerticalAlignment="Center" HorizontalAlignment="Center" Height="80" Width="280" ItemsSource="{Binding PageDeGardeOtherProjects}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </Grid>
-                            </Grid>
-                        </Border>
-                    </Grid>
+                    <!-- PreviewFIRST PAGE TAE PDF -->
+                    <Border Height="310" Width="220">
+                        <Image Source="{Binding apercutaepdf}" Stretch="Uniform">
+                            <Image.Effect>
+                                <DropShadowEffect 
+                                    Color="Black" 
+                                    BlurRadius="50" 
+                                    ShadowDepth="5" 
+                                    Opacity="0.25"/>
+                            </Image.Effect>
+                        </Image>
+                    </Border>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="400"/>
@@ -261,19 +211,6 @@
                                         </Border>
                                     </WrapPanel>
                                 </Grid>
-                                <!-- DESCRIPTION -->
-                                <Grid Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                    <TextBlock Margin="33,0,0,0"
-                                           FontSize="10"
-                                           Height="70"
-                                           FontFamily="Montserrat"
-                                           TextWrapping="Wrap"
-                                           Width="510">
-
-                                    <Run Text="Resume :" FontWeight="Bold" Foreground="Black"/>
-                                    <Run Text="{Binding Description}" FontWeight="SemiBold" Foreground="#9A9A9A"/>
-                                    </TextBlock>
-                                </Grid>
                                 <!-- VISITER/ENREGISTRER/FACULTE -->
                                 <Grid Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <StackPanel Margin="33,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -349,9 +286,77 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!-- A PROPOS DE L'AUTEUR -->
-                    
+                    <Grid>
+                        <Border Width="374" HorizontalAlignment="Center" VerticalAlignment="Top" Height="400" Margin="0,0,20,0" Background="#D6F5FF">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="55"/>
+                                    <RowDefinition Height="85"/>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <TextBlock Text="À propos de l'auteur" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="33,0,35,0"/>
+                                </Grid>
+                                <!-- INFORMATION DE L'AUTEUR -->
+                                <Grid Grid.Row="1">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="33,15,15,0" Height="70" Width="200">
+                                        <Border Height="60" Width="60">
+                                            <Ellipse Height="60" VerticalAlignment="Center" Stroke="White" StrokeThickness="1" >
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding imageUtilisateur}" Stretch="UniformToFill"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                        </Border>
+                                        <StackPanel Orientation="Vertical" Width="135" Margin="10,10,0,10">
+                                            <TextBlock
+                                                       Margin="0,0,0,0"
+                                                       FontSize="10"
+                                                       FontFamily="Montserrat Bold"
+                                                       Foreground="#0093ED"
+                                                       TextWrapping="Wrap"
+                                                       Width="135">
+                                                    <Run Text="{Binding AuthorUsername}"/>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding AuthorEmail}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,4"/>
+                                            <TextBlock Text="{Binding AuthorRole}" FontSize="8" FontFamily="Montserrat Bold" Foreground="#4CBBFF" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <!-- DESCRIPTION -->
+                                <!-- D'AUTRES THESES DE L'AUTEUR 4 THESES MAXIMUM A AFFICHER -->
+                                <Grid Grid.Row="2">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="D’autres thèses :" FontSize="13" FontFamily="Montserrat SemiBold" VerticalAlignment="Center" Margin="35,0,140,0"/>
+                                        <TextBlock Text="Voir tout" FontSize="13" FontFamily="Montserrat Bold" VerticalAlignment="Center" Foreground="#FF0093ED" TextDecorations="Underline"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <ItemsControl VerticalAlignment="Center" HorizontalAlignment="Center" Height="80" Width="280" ItemsSource="{Binding PageDeGardeOtherProjects}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
                     <!-- RESUME -->
-                    
+                    <Grid Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock
+                                    Height="70"
+                                    Width="510" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="13" FontFamily="Montserrat" MaxHeight="800" MaxWidth="450" Foreground="Black" Margin="30,60,0,0">
+                                    <Run Text="Resume :" FontWeight="Bold" Foreground="Black"/>
+                                    <Run Text="{Binding Description}" FontWeight="SemiBold" Foreground="#9A9A9A"/>
+                        </TextBlock>
+                    </Grid>
+
                 </Grid>
                 <!-- COMMENTAIRES -->
                 <Grid Grid.Row="4">
