@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Project.Models;
 using MySql.Data.MySqlClient;
+using System.Windows;
+using System.IO;
 
 namespace Project.Repos
 {
@@ -93,5 +95,34 @@ namespace Project.Repos
         {
             string Commenter = UserName;
         }
+
+        public void CreateRecoveryFile(string email, string username)
+        {
+            try
+            {
+                var salt = CryptoHelper.GenerateSalt();
+                var key = CryptoHelper.DeriveKey(email, salt);
+                var encrypted = CryptoHelper.Encrypt(username, key);
+
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "backup.reset");
+
+                using (var fs = File.Create(filePath))
+                using (var bw = new BinaryWriter(fs))
+                {
+                    bw.Write(salt.Length);
+                    bw.Write(salt);
+                    bw.Write(encrypted.Length);
+                    bw.Write(encrypted);
+                }
+
+                MessageBox.Show("Recovery file created on your desktop.", "Success");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to create recovery file.\n" + ex.Message, "Error");
+            }
+        }
+
+
     }
 }

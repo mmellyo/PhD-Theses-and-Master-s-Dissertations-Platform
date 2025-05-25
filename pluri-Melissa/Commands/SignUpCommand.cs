@@ -18,12 +18,14 @@ namespace Project.Commands
         private readonly SignUpViewModel _viewModel;
         private readonly NavigationStore _navigationStore;
         private readonly UserRepos _userRepos;
+        private readonly EmailVerificationRepo _emailVerificationRepo;
 
         public SignUpCommand(SignUpViewModel viewModel, NavigationStore navigationStore)
         {
             _viewModel = viewModel;
             _navigationStore = navigationStore;
             _userRepos = new UserRepos();
+            _emailVerificationRepo = new EmailVerificationRepo();
         }
 
         public override void Execute(object parameter)
@@ -34,23 +36,37 @@ namespace Project.Commands
                 return;
             }
 
+
             var user = new UserModel
             {
                 user_name = _userRepos.GetUsernameFromEmail(_viewModel.Email),
                 user_email = _viewModel.Email,
                 user_password = _viewModel.Password,
                 user_role = _userRepos.AssignUserRole(_viewModel.Email),
-                user_profilepic = File.ReadAllBytes("C:\\Users\\user\\Source\\Repos\\Final-Pluri-fr-fr-ong\\pluri-Melissa\\img\\download_4.jpg") //later :P
+                // user_profilepic = File.ReadAllBytes("C:\\Users\\user\\Source\\Repos\\Final-Pluri-fr-fr-ong\\pluri-Melissa\\img\\download_4.jpg") //later :P
+
             };
 
             //_userSession.Email = this.Email;
             //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";
 
             int userId = _userRepos.SignUp(user);
-            if(userId > 0)
+
+            if (userId > 0)
             {
+                MessageBox.Show(
+                                   "A recovery file will be created to help you reset your password in case you forget it.\n\n" +
+                                   "This file is essential. Keep it somewhere safe. If you lose it, you may not be able to recover your account.\n\n" +
+                                   "Do you want to continue?",
+                                   "Important: Recovery File",
+                                   MessageBoxButton.YesNo,
+                                   MessageBoxImage.Warning
+                                );
+
+                _emailVerificationRepo.CreateRecoveryFile(user.user_email, user.user_name);
                 _navigationStore.CurrentViewModel = new LoginViewModel(_navigationStore);
             }
+
 
             //if (success) { _userSession.Email = this.Email; }
 
