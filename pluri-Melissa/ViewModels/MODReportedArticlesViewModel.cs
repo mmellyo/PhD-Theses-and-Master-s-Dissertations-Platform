@@ -81,6 +81,11 @@ namespace Project.ViewModels
             this.navigationStore = _navigationStore;
             this.theseRepo = new TheseRepo();
             this.UserRepos = new UserRepos();
+            this._commentRepo = new CommentRepo();
+
+            //items control
+            ModManComments = new ObservableCollection<CommentsViewModel>();
+            LoadComments();
 
             articleIdList = theseRepo.getReportedArticles();
             articleModels = new List<ArticleModel>();
@@ -100,5 +105,20 @@ namespace Project.ViewModels
             User_role = UserRepos.GetUserRole(user_id);
 
         }
+
+
+        public void LoadComments()
+        {
+            CommentModels = _commentRepo.LoadManFlaggedComments();
+
+            ModComments.Clear(); // Clear the existing items
+
+            foreach (var comment in CommentModels)
+            {
+                ModComments.Add(new CommentsViewModel(comment, navigationStore, userid, comment.user_id, this));
+            }
+        }
+
     }
+}
 }

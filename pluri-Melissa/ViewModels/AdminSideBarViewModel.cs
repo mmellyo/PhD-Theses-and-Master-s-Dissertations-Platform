@@ -55,7 +55,7 @@ namespace Project.ViewModels
 
         public AdminSideBarViewModel(int user_id, NavigationStore navigationStore)
         {
-            this.user_id = user_id;
+          //  this.user_id = user_id;
             this.navigationStore = navigationStore;
 
             ToggleGestion1Command = new ViewModelCommand(_ => IsGestion1Expanded = !IsGestion1Expanded);

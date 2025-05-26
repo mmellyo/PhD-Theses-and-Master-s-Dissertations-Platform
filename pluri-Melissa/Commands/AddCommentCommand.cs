@@ -143,12 +143,12 @@ namespace Project.Commands
                 //save cmnt in db (reports)
                 _reportsRepo.ReportComment(CommentId, null);
 
-
+                _pageViewModel.Comment = string.Empty;
 
                 //temp switching to MODcmnt
                 //_windowManager.CloseWindow();
                 // _emailVerificationRepo.SendCommentToAdmin(Username, Comment, TheseId);
-            
+
             }
         }
     }

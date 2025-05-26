@@ -191,8 +191,6 @@ namespace Project.Repos
         public List<theseResultat> rechercheThese(string key)
         {
             var results = new List<theseResultat>();
-
-            // Ne lance pas la requête si la clé est vide ou null
             if (string.IsNullOrWhiteSpace(key))
                 return results;
 
@@ -201,40 +199,43 @@ namespace Project.Repos
                 connection.Open();
 
                 string sql = @"
-            SELECT 
-                a.article_id,
-                a.title AS nomThese,
-                a.summary AS resume,
-                a.faculty AS user_faculte,
-                a.department AS user_departement,
-                a.language AS Langue,
-                a.article_type AS Diplome,
-                a.article_date AS AnneeUniversitaire,
-                GROUP_CONCAT(DISTINCT 
-                    COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name)
-                    SEPARATOR ', '
-                ) AS nomAuteur,
-                MAX(sup.user_name) AS NomEncadrant
-            FROM articles a
-            LEFT JOIN users u ON a.poster_id = u.user_id
-            LEFT JOIN written_by w ON a.article_id = w.article_id
-            LEFT JOIN supervised_by sb ON a.article_id = sb.article_id
-            LEFT JOIN users sup ON sb.supervisor_id = sup.user_id
-            WHERE 
-                a.title LIKE @key
-                OR a.summary LIKE @key
-                OR u.user_name LIKE @key
-                OR CONCAT(w.first_name, ' ', w.last_name) LIKE @key
-                OR sup.user_name LIKE @key
-                OR a.faculty LIKE @key
-                OR a.department LIKE @key
-                OR a.language LIKE @key
-                OR a.article_type LIKE @key
-                OR a.article_date LIKE @key
-            GROUP BY a.article_id
-            HAVING COUNT(*) > 0
-        ";
-
+                                    SELECT 
+                                        a.article_id,
+                                        a.title AS nomThese,
+                                        a.summary AS resume,
+                                        a.faculty AS user_faculte,
+                                        a.department AS user_departement,
+                                        a.language AS Langue,
+                                        a.article_type AS Diplome,
+                                        a.article_date AS AnneeUniversitaire,
+                                        GROUP_CONCAT(DISTINCT 
+                                            COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name)
+                                            SEPARATOR ', '
+                                        ) AS nomAuteur,
+                                        MAX(sup.user_name) AS NomEncadrant,
+                                        GROUP_CONCAT(DISTINCT k.keyword SEPARATOR ', ') AS MotCles
+                                    FROM articles a
+                                    LEFT JOIN users u ON a.poster_id = u.user_id
+                                    LEFT JOIN written_by w ON a.article_id = w.article_id
+                                    LEFT JOIN supervised_by sb ON a.article_id = sb.article_id
+                                    LEFT JOIN users sup ON sb.supervisor_id = sup.user_id
+                                    LEFT JOIN used_keywords uk ON a.article_id = uk.article_id
+                                    LEFT JOIN keywords k ON uk.keyword_id = k.keyword_id
+                                    WHERE 
+                                        a.title LIKE @key
+                                        OR a.summary LIKE @key
+                                        OR u.user_name LIKE @key
+                                        OR CONCAT(w.first_name, ' ', w.last_name) LIKE @key
+                                        OR sup.user_name LIKE @key
+                                        OR a.faculty LIKE @key
+                                        OR a.department LIKE @key
+                                        OR a.language LIKE @key
+                                        OR a.article_type LIKE @key
+                                        OR a.article_date LIKE @key
+                                        OR k.keyword LIKE @key
+                                    GROUP BY a.article_id
+                                    HAVING COUNT(*) > 0
+                                            ";
                 using (var cmd = new MySqlCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("@key", "%" + key + "%");
@@ -253,7 +254,7 @@ namespace Project.Repos
                                 Langue = reader["Langue"]?.ToString() ?? "",
                                 Diplome = reader["Diplome"]?.ToString() ?? "",
                                 AnneeUniversitaire = reader["AnneeUniversitaire"]?.ToString() ?? "",
-                                MotCles = "",  // ici tu peux charger les mots clés si besoin avec une requête à part
+                                MotCles = reader["MotCles"]?.ToString() ?? "",
                                 NomAuteur = reader["nomAuteur"]?.ToString() ?? "",
                                 NomEncadrant = reader["NomEncadrant"]?.ToString() ?? ""
                             });
