@@ -15,6 +15,7 @@ using Project.Stores;
 using Project.Commands;
 using System.Windows.Media;
 using System.Data;
+using System.Windows;
 
 
 //this will search - get results - send them to resultvm
@@ -139,6 +140,11 @@ namespace Project.ViewModels
         {
             Suggestions = new ObservableCollection<suggestionRecherche>();
 
+
+            OpenAdvancedSearchCommand = new NavigateCommand<RechercheAvanceViewModel>(
+                navigationStore,
+                () => new RechercheAvanceViewModel(navigationStore, userid)
+            );
             TheseService = new TheseService();
 
             if (TheseService.Theses == null)
@@ -202,7 +208,54 @@ namespace Project.ViewModels
             TheseService.Theses.Clear();
             foreach (var item in resultats)
             {
-                TheseService.Theses.Add(item);
+                var result = new theseResultat
+                {
+                    NomThese = item.NomThese,
+                    NomAuteur = item.NomAuteur,
+                    MotCles = item.MotCles,
+                    Faculte = item.Faculte,
+                    NomEncadrant = item.NomEncadrant,
+                    Langue = item.Langue,
+                    Diplome = item.Diplome,
+                    AnneeUniversitaire = item.AnneeUniversitaire,
+                    Departement = item.Departement,
+                    Resume = item.Resume,
+                    TheseId = item.TheseId
+                };
+
+                //each thses resultat with its own command
+
+                try
+                {
+                    result.consulterTheseCommand = new ViewModelCommand(
+                    execute: obj =>
+                    {
+
+                        MessageBox.Show("Vous allez consulter cette these", "Consulter These", MessageBoxButton.OK, MessageBoxImage.Information);
+                        int tId = result.TheseId;
+                        navigationStore.CurrentViewModel = new ThesePageViewModel(navigationStore, userid, tId);
+                        MessageBox.Show("TheseId that is sending from ADVNCVM to THESEPAGEVM is: " + tId, "TheseId", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                        //go to ThesePageViewModel
+
+                        //  _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
+                        // Console.WriteLine("TheseId that is sending from ADVNCVM to COMMENTVM is: " + tId);
+                        // _windowManager.CloseWindow();
+                        // _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                    }
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error creating command: {ex.Message}");
+                }
+
+
+
+
+                TheseService.Theses.Add(result);
+
             }
         }
 

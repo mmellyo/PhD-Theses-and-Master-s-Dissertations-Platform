@@ -22,7 +22,7 @@ namespace Project
             NavigationStore navigationStore = new NavigationStore();
 
 
-            navigationStore.CurrentViewModel = new ThesePageViewModel(navigationStore, 1, 4);
+            navigationStore.CurrentViewModel = new WelcomeViewModel(navigationStore);
 
             MainWindow = new MainWindow()
             {

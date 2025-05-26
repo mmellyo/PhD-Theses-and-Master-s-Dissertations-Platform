@@ -57,7 +57,7 @@ namespace Project.ViewModels
 
         public AdminSideBarViewModel(int user_id, NavigationStore navigationStore)
         {
-            this.user_id = user_id;
+          //  this.user_id = user_id;
             this.navigationStore = navigationStore;
 
             ToggleGestion1Command = new ViewModelCommand(_ => IsGestion1Expanded = !IsGestion1Expanded);
@@ -69,7 +69,7 @@ namespace Project.ViewModels
             //to do
             NavigateReportedThesesCommand = new NavigateCommand<RechercheAvanceViewModel>(navigationStore, () => new RechercheAvanceViewModel(navigationStore, user_id));
             //to do 
-            NavigateProfileCommand = new NavigateCommand<UserProfileViewModel>(navigationStore, () => new UserProfileViewModel(navigationStore, user_id));
+            //NavigateProfileCommand = new NavigateCommand<UserProfileViewModel>(navigationStore, () => new UserProfileViewModel(navigationStore, user_id));
         }
     }
 }

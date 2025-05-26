@@ -99,7 +99,7 @@ namespace Project.ViewModels
         private CommentRepo _commentRepo;
 
         //constructor
-        public MODCommentViewModel(int user_id, NavigationStore _navigationStore)
+        public MODManuallyComments(int user_id, NavigationStore _navigationStore)
         {
             this.userid = user_id;
             this.navigationStore = _navigationStore;
@@ -109,7 +109,7 @@ namespace Project.ViewModels
 
             //items control
             ModManComments = new ObservableCollection<CommentsViewModel>();
-            LoadComments();
+         //   LoadComments();
 
 
             //side bar
@@ -123,7 +123,7 @@ namespace Project.ViewModels
 
         }
 
-
+        /*
         public void LoadComments()
         {
             CommentModels = _commentRepo.LoadManFlaggedComments();
@@ -134,8 +134,7 @@ namespace Project.ViewModels
             {
                 ModComments.Add(new CommentsViewModel(comment, navigationStore, userid, comment.user_id, this));
             }
-        }
+        }*/
 
     }
-}
 }

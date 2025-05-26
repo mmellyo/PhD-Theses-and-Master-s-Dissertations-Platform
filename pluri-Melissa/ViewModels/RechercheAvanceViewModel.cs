@@ -325,11 +325,19 @@ namespace Project.ViewModels
                             result.consulterTheseCommand = new ViewModelCommand(
                             execute: obj =>
                             {
+                            
+                                MessageBox.Show("Vous allez consulter cette these", "Consulter These", MessageBoxButton.OK, MessageBoxImage.Information);
                                 int tId = result.TheseId;
-                                _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
-                                Console.WriteLine("TheseId that is sending from ADVNCVM to COMMENTVM is: " + tId);
-                                _windowManager.CloseWindow();
-                                _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
+                                navigationStore.CurrentViewModel = new ThesePageViewModel(navigationStore, userid, tId);
+                                MessageBox.Show("TheseId that is sending from ADVNCVM to THESEPAGEVM is: " + tId, "TheseId", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                                //go to ThesePageViewModel
+
+                              //  _viewModelLocator.CommentViewModel.InitializeWithTheseId(tId);
+                               // Console.WriteLine("TheseId that is sending from ADVNCVM to COMMENTVM is: " + tId);
+                               // _windowManager.CloseWindow();
+                               // _windowManager.ShowWindow(_viewModelLocator.CommentViewModel);
                             }
                             );
                         }

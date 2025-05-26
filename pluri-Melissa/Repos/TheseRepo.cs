@@ -127,8 +127,8 @@ namespace Project.Repos
                     thesis.faculty = reader.GetString("faculty");
                     thesis.language = reader.GetString("language");
                     thesis.type = reader.GetString("article_type");
-                    thesis.visits = reader.GetInt32("visit_number");
-                    thesis.saves = reader.GetInt32("saves_number");
+               //     thesis.visits = reader.GetInt32("visit_number");
+               //     thesis.saves = reader.GetInt32("saves_number");
                 }
             }
 
