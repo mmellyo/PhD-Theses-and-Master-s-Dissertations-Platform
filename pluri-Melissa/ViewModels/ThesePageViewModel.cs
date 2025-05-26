@@ -7,46 +7,38 @@ using Project.View.userControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using PdfiumViewer;
 
 namespace Project.ViewModels
 {
     public class ThesePageViewModel : ViewModelBase
     {
+        // useful
         private NavigationStore navigationStore;
         public int userid;
         public int theseId;
-
-
-        public string Apercutaepdf { get; set; }
-               
-
-
-
-
-
-    
-
-
-        public ICommand SaveCommand { get; set; }
-        public ICommand DownloadCommand { get; set; }
-        public ICommand ShareCommand { get; set; }
-        public ICommand ReportCommand { get; set; }
-
-
         private TheseRepo _repo;
 
-
+        //sidebar
         public string Role;
         public bool isMember { get; set; }
         public bool isUser { get; set; }
 
         public object SideBarViewModel { get; }
 
+
+        // top bar
         public ICommand UploadCommand { get; }
 
         private string _userName;
@@ -140,9 +132,24 @@ namespace Project.ViewModels
                 OnPropertyChanged(nameof(imageUtilisateur));
             }
         }
+        public ObservableCollection<BitmapImage> BySameUploader { get; set; }
+
+
+
 
 
         //article
+        private string _Apercutaepdf;
+        public string Apercutaepdf
+        {
+            get => _Apercutaepdf;
+            set
+            {
+                _Apercutaepdf = value;
+                OnPropertyChanged(nameof(Apercutaepdf));
+            }
+        }
+
         private string _Title;
         public string Title
         {
@@ -198,39 +205,6 @@ namespace Project.ViewModels
             }
         }
 
-        private string _Keyword1;
-        public string Keyword1
-        {
-            get => _Keyword1;
-            set
-            {
-                _Keyword1 = value;
-                OnPropertyChanged(nameof(Keyword1));
-            }
-        }
-
-        private string _Keyword2;
-        public string Keyword2
-        {
-            get => _Keyword2;
-            set
-            {
-                _Keyword2 = value;
-                OnPropertyChanged(nameof(Keyword2));
-            }
-        }
-
-        private string _Keyword3;
-        public string Keyword3
-        {
-            get => _Keyword3;
-            set
-            {
-                _Keyword3 = value;
-                OnPropertyChanged(nameof(Keyword3));
-            }
-        }
-
         private string _Description;
         public string Description
         {
@@ -275,6 +249,42 @@ namespace Project.ViewModels
             }
         }
 
+        public ObservableCollection<string> keys { get; set; } = new ObservableCollection<string>();
+        private List<string> _keys {  get; set; }
+        public ObservableCollection<string> Encadrant { get; set; } = new ObservableCollection<string>();
+        private List<string> _encadrants { get; set; }
+        public ObservableCollection<string> Authors { get; set; } = new ObservableCollection<string>();
+        private List<string> _authors { get; set; }
+
+        public ImageSource apercutaepdf => LoadPdfImage(theseId);
+
+        public ICommand SaveCommand { get; set; }
+        public ICommand DownloadCommand { get; set; }
+        public ICommand ShareCommand { get; set; }
+        public ICommand ReportCommand { get; set; }
+
+        private bool _isReportPopupVisible;
+        public bool IsReportPopupVisible
+        {
+            get => _isReportPopupVisible;
+            set
+            {
+                _isReportPopupVisible = value;
+                OnPropertyChanged(nameof(IsReportPopupVisible));
+            }
+        }
+
+        private ReportFormViewModel _reportViewModel;
+        public ReportFormViewModel ReportViewModel
+        {
+            get => _reportViewModel;
+            set
+            {
+                _reportViewModel = value;
+                OnPropertyChanged(nameof(ReportViewModel));
+            }
+        }
+
 
         //Comment stuff
         public ICommand AddCommentCommand { get; set; }
@@ -316,8 +326,6 @@ namespace Project.ViewModels
             _repo = new TheseRepo();
             _commentRepo = new CommentRepo();
             loadThese();
-            SaveCommand = new SaveCommand(navigationStore, this);
-
             UserRepos UserRepos = new UserRepos();
 
             //side bar
@@ -359,13 +367,40 @@ namespace Project.ViewModels
             _AnneeUniv = article.date;
             _Departement = article.department;
             _Faculte = article.faculty;
-            _AuteurString = article.uploader;
-            _Keyword1 = article.keywords[0];
-            _Keyword2 = article.keywords[1];
-            //_Keyword3 = article.keywords[2];
-            _NomEncadrant = article.supervisor;
             _Enregistrement = article.saves.ToString();
             _Visite = article.visits.ToString();
+            _repo.IncVisitCount(theseId);
+
+            _keys = _repo.GetKeywords(theseId);
+            _encadrants = _repo.getSupervisors(theseId);
+            _authors = _repo.getAuthors(theseId);
+
+            keys.Clear();
+            foreach (var keyword in _keys)
+            {
+                keys.Add(keyword);
+            }
+
+            Encadrant.Clear();
+            foreach (var supervisor in _encadrants)
+            {
+                Encadrant.Add(supervisor);
+            }
+
+            Authors.Clear();
+            foreach (var author in _authors)
+            {
+                Authors.Add(author);
+            }
+
+
+
+
+
+            SaveCommand = new SaveCommand(navigationStore, this);
+            DownloadCommand = new DownloadCommand(navigationStore, this);
+            ReportCommand = new ReportCommand(navigationStore, this);
+
 
             //author
             _AuthorUsername = article.uploader;
@@ -386,9 +421,7 @@ namespace Project.ViewModels
             Faculte = article.faculty;
             AnneeUniv = article.date;
             NomEncadrant = article.supervisor;
-            Keyword1 = article.keywords.FirstOrDefault();
-            Keyword2 = article.keywords.Skip(1).FirstOrDefault();
-            Keyword3 = article.keywords.Skip(2).FirstOrDefault();
+            
 
             UserModel user = _repo.GetUploaderInfo(theseId);
             Username = user.user_name;
@@ -396,6 +429,41 @@ namespace Project.ViewModels
             Role = user.user_role;
 
 
+        }
+        private ImageSource LoadPdfImage(int articleId)
+        {
+            byte[]? pdfBytes = _repo.GetPdfBytesFromDatabase(articleId);
+            ImageSource PdfFirstPageImage;
+
+            PdfFirstPageImage = GetFirstPageImage(pdfBytes);
+
+            return PdfFirstPageImage;
+        }
+
+        private ImageSource GetFirstPageImage(byte[] pdfBytes)
+        {
+            using var stream = new MemoryStream(pdfBytes);
+            using var document = PdfDocument.Load(stream);
+            using var image = document.Render(0, 300, 300, true); // Render first page
+            return BitmapToImageSource((Bitmap)image);
+        }
+
+
+
+        private BitmapImage BitmapToImageSource(Bitmap bitmap)
+        {
+            using MemoryStream memory = new();
+            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+            memory.Position = 0;
+
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapImage.StreamSource = memory;
+            bitmapImage.EndInit();
+            bitmapImage.Freeze();
+
+            return bitmapImage;
         }
     }
 }

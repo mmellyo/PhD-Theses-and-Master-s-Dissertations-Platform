@@ -116,5 +116,22 @@ namespace Project.Repos
             return reportid;
         }
 
+        public void SubmitReport(int article_id, int user_id, string finalReason, string selected, string v)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "INSERT INTO reports (content, report_type, date_reported, reported_by, article_reported, reason) VALUES (@content, @type, @date, @by, @article, @reason)";
+                command.Parameters.AddWithValue("@content", finalReason);
+                command.Parameters.AddWithValue("@type", v);
+                command.Parameters.AddWithValue("@date", DateTime.Now);
+                command.Parameters.AddWithValue("@by", user_id);
+                command.Parameters.AddWithValue("@article", article_id);
+                command.Parameters.AddWithValue("@reason", selected);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

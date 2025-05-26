@@ -190,11 +190,16 @@ namespace Project.Repos
 
         public List<theseResultat> rechercheThese(string key)
         {
-            List<theseResultat> results = new List<theseResultat>();
+            var results = new List<theseResultat>();
+
+            // Ne lance pas la requête si la clé est vide ou null
+            if (string.IsNullOrWhiteSpace(key))
+                return results;
 
             using (var connection = GetConnection())
             {
                 connection.Open();
+
                 string sql = @"
             SELECT 
                 a.article_id,
@@ -205,13 +210,10 @@ namespace Project.Repos
                 a.language AS Langue,
                 a.article_type AS Diplome,
                 a.article_date AS AnneeUniversitaire,
-                
-                -- Authors: combine from users and written_by
                 GROUP_CONCAT(DISTINCT 
                     COALESCE(CONCAT(w.first_name, ' ', w.last_name), u.user_name)
                     SEPARATOR ', '
                 ) AS nomAuteur,
-                -- Supervisor name from users via supervised_by
                 MAX(sup.user_name) AS NomEncadrant
             FROM articles a
             LEFT JOIN users u ON a.poster_id = u.user_id
@@ -230,30 +232,31 @@ namespace Project.Repos
                 OR a.article_type LIKE @key
                 OR a.article_date LIKE @key
             GROUP BY a.article_id
+            HAVING COUNT(*) > 0
         ";
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                using (var cmd = new MySqlCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("@key", "%" + key + "%");
 
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            theseResultat data = new theseResultat
+                            results.Add(new theseResultat
                             {
                                 TheseId = Convert.ToInt32(reader["article_id"]),
                                 NomThese = reader["nomThese"]?.ToString() ?? "",
-                                NomAuteur = reader["nomAuteur"]?.ToString() ?? "",
+                                Resume = reader["resume"]?.ToString() ?? "",
                                 Faculte = reader["user_faculte"]?.ToString() ?? "",
                                 Departement = reader["user_departement"]?.ToString() ?? "",
-                                NomEncadrant = reader["NomEncadrant"]?.ToString() ?? "",
                                 Langue = reader["Langue"]?.ToString() ?? "",
                                 Diplome = reader["Diplome"]?.ToString() ?? "",
                                 AnneeUniversitaire = reader["AnneeUniversitaire"]?.ToString() ?? "",
-                                Resume = reader["resume"]?.ToString() ?? ""
-                            };
-                            results.Add(data);
+                                MotCles = "",  // ici tu peux charger les mots clés si besoin avec une requête à part
+                                NomAuteur = reader["nomAuteur"]?.ToString() ?? "",
+                                NomEncadrant = reader["NomEncadrant"]?.ToString() ?? ""
+                            });
                         }
                     }
                 }
@@ -261,6 +264,7 @@ namespace Project.Repos
 
             return results;
         }
+
 
     }
 

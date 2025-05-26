@@ -1,0 +1,244 @@
+﻿<UserControl x:Class="Project.View.userControls.ReportFormControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Project.View.userControls"
+             xmlns:utils="clr-namespace:Project.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="380" d:DesignWidth="400">
+    <UserControl.Resources>
+        <utils:RadioMatchConverter x:Key="RadioMatchConverter"/>
+        <!-- Style Radio Button -->
+        <Style x:Key="BlueRadioButton" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+
+                        <Border Background="Transparent">
+                            <Grid Margin="5" Cursor="Hand">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- RadioBox Circle -->
+                                <Grid Width="20" Height="20" VerticalAlignment="Center">
+                                    <!-- Border Circle in Light Blue-->
+                                    <Ellipse x:Name="borderCircle" Stroke="#C1E5FF" 
+                                 StrokeThickness="2" Fill="White"/>
+                                    <!-- Inner Circle in white-->
+                                    <Ellipse x:Name="centerDot" Width="10" Height="10" 
+                                 Fill="White" Visibility="Hidden"/>
+
+                                </Grid>
+
+                                <!-- Texte -->
+                                <ContentPresenter Grid.Column="1"
+                                      VerticalAlignment="Center"
+                                      Margin="5,0,0,0"/>
+
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- When checked -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="centerDot" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="centerDot" Property="Fill" Value="#008CFF"/>
+                            </Trigger>
+
+                            <!-- Hover unchecked -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="centerDot" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="centerDot" Property="Fill" Value="#EEEEEE"/>
+                            </MultiTrigger>
+
+                            <!-- When neither checked nor hovered: hide the dot -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="False"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="centerDot" Property="Visibility" Value="Hidden"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <!-- Style for the TextBox -->
+        <Style x:Key="BlueTextBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border BorderBrush="#C1E5FF" 
+                            BorderThickness="2"
+                            CornerRadius="4" 
+                            Background="White">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                                <TextBlock x:Name="Espace"
+                                       Text="Entrez votre raison du signalement ...."
+                                       FontSize="18"
+                                       Foreground="Gray"
+                                       Margin="5,2,0,0"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Top"
+                                       Visibility="Collapsed" />
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="Espace"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+                            </Trigger>
+
+                            <Trigger Property="Text" Value=" ">
+                                <Setter TargetName="Espace"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style Signaler button -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#008CFF"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="6"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#006ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#004C99"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#777777"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style Cancel button -->
+        <Style x:Key="CancelButton" TargetType="Button">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="#E9ECEF"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+            Background="{TemplateBinding Background}"
+            CornerRadius="6"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DEE2E6"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#CED4DA"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#777777"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="Transparent">
+        <Border Background="White" CornerRadius="10" Padding="20"
+            Width="400" Height="380"  HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Signalement"
+                       FontSize="22"
+                       FontWeight="SemiBold"
+                       Foreground="Black"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Margin="0,0,0,20"/>
+
+                <!-- Radio Button -->
+                <RadioButton Content="Contenu inapproprie" Style="{StaticResource BlueRadioButton}" GroupName="Reasons" 
+                            IsChecked="{Binding SelectedReason, Converter={StaticResource RadioMatchConverter}, ConverterParameter=Contenu inapproprie}"/>
+                <RadioButton Content="Soumission en double" Style="{StaticResource BlueRadioButton}" GroupName="Reasons"
+                            IsChecked="{Binding SelectedReason, Converter={StaticResource RadioMatchConverter}, ConverterParameter=Soumission en double}"/>
+                <RadioButton Content="Plagiarism" Style="{StaticResource BlueRadioButton}" GroupName="Reasons"
+                            IsChecked="{Binding SelectedReason, Converter={StaticResource RadioMatchConverter}, ConverterParameter=Plagiarism}"/>
+                <RadioButton Content="Autre..." Style="{StaticResource BlueRadioButton}" GroupName="Reasons"
+                            IsChecked="{Binding SelectedReason, Converter={StaticResource RadioMatchConverter}, ConverterParameter=Autre...}"/>
+
+                <!-- TextBox for the reason -->
+                <TextBox Style="{StaticResource BlueTextBox}"
+                     BorderBrush="Gray"
+                     BorderThickness="1"
+                     Text="{Binding Reason, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True"
+                     Height="40"
+                     Margin="0,20,0,0"
+                     Background="White"/>
+
+                <!-- TextBox for the reason -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button Content="Annuler" Style="{StaticResource CancelButton}" Margin="0,0,30,0" Command="{Binding Cancel}"/>
+                    <Button Content="Signaler" Style="{StaticResource ModernButton}" Command="{Binding Report}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+
+
+    </Grid>
+</UserControl>

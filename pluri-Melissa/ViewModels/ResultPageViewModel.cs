@@ -251,7 +251,7 @@ namespace Project.ViewModels
                             Departement = r.Departement,
                             Resume = r.Resume,
                             TheseId = r.TheseId,
-                            consulterTheseCommand = new NavigateCommand<ThesePageViewModel>(navigationStore,() => new ThesePageViewModel(navigationStore, userid, r.TheseId))
+                            //consulterTheseCommand = new NavigateCommand<ThesePageViewModel>(navigationStore,() => new ThesePageViewModel(navigationStore, userid, r.TheseId))
                         };
                         Console.WriteLine("this.TheseId = r.TheseId; " + this.TheseId);  //works
 

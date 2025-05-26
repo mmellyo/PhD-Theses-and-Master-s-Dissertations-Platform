@@ -175,12 +175,13 @@ namespace Project.ViewModels
             OpenResultPageCommand = new NavigateCommand<ResultPageViewModel>(navigationStore, ()=> new ResultPageViewModel(navigationStore, userid, TheseService));
         }
 
-        
+
         private void Recherche(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(key) || key.Length < 3)
             {
                 Suggestions.Clear();
+                TheseService.Theses.Clear();
                 return;
             }
 
@@ -194,6 +195,16 @@ namespace Project.ViewModels
             {
                 Suggestions.Add(get);
             }
+
+            var theseRepo = new theseResultatRepo();
+            var resultats = theseRepo.rechercheThese(key);
+
+            TheseService.Theses.Clear();
+            foreach (var item in resultats)
+            {
+                TheseService.Theses.Add(item);
+            }
         }
+
     }
 }

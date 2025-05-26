@@ -10,6 +10,7 @@ using MaterialDesignThemes.Wpf;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Utilities;
 using Project.Models;
+using Project.View.userControls;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
@@ -108,7 +109,7 @@ namespace Project.Repos
                 a.article_id, a.title, a.summary, a.article_date,
                 a.department,
                 a.faculty,
-                a.language, a.article_type
+                a.language, a.article_type, a.article_file, a.visit_number, a.saves_number
                 FROM articles a
                 
                 WHERE a.article_id = @articleId", connection))
@@ -126,6 +127,8 @@ namespace Project.Repos
                     thesis.faculty = reader.GetString("faculty");
                     thesis.language = reader.GetString("language");
                     thesis.type = reader.GetString("article_type");
+                    thesis.visits = reader.GetInt32("visit_number");
+                    thesis.saves = reader.GetInt32("saves_number");
                 }
             }
 
@@ -410,6 +413,147 @@ namespace Project.Repos
                     return null;
                 }
             }
+        }
+
+        public void IncVisitCount(int theseId)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                command.Connection = connection;
+                command.CommandText = @"
+                                    UPDATE articles
+                                    SET visit_number = visit_number + 1
+                                    WHERE article_id = @articleId"
+                ;
+
+                command.Parameters.AddWithValue("@articleId", theseId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void IncSaveCount(int theseId)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                command.Connection = connection;
+                command.CommandText = @"
+                                    UPDATE articles
+                                    SET saves_number = saves_number + 1
+                                    WHERE article_id = @articleId"
+                ;
+
+                command.Parameters.AddWithValue("@articleId", theseId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public byte[] loadFileByte(int theseId)
+        {
+            byte[] fileData = null;
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand("SELECT article_file FROM articles WHERE article_id = @fileId", connection))
+            {
+                command.Parameters.AddWithValue("@fileId", theseId);
+                connection.Open();
+                var reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    fileData = (byte[])reader["article_file"];
+                }
+            }
+            return fileData;
+        }
+
+        public List<string>? GetKeywords(int theseId)
+        {
+            List<string> keywords = new List<string>();
+
+            string query = @"
+                SELECT k.keyword
+                FROM keywords k 
+                JOIN used_keywords uk ON uk.article_id = k.keyword_id
+                WHERE uk.article_id = @supervisorId ;
+                ";
+
+            using (var connection = GetConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@supervisorId", theseId);
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string keyword = reader.GetString("keyword");
+                        keywords.Add(keyword);
+                    }
+                }
+            }
+
+            return keywords;
+        }
+
+        public List<string>? getSupervisors(int theseId)
+        {
+            List<string> names = new List<string>();
+
+            string query = @"
+                SELECT u.user_name
+                FROM users u
+                JOIN supervised_by sb ON sb.supervisor_id = u.user_id
+                WHERE sb.article_id = @supervisorId ;
+                ";
+
+            using (var connection = GetConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@supervisorId", theseId);
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString("user_name");
+                        names.Add(name);
+                    }
+                }
+            }
+
+            return names;
+        }
+
+        public List<string>? getAuthors(int theseId)
+        {
+            List<string> names = new List<string>();
+
+            string query = @"
+                SELECT CONCAT(wb.first_name, ' ', wb.last_name) AS name
+                FROM written_by wb
+                WHERE wb.article_id = @supervisorId ;
+                ";
+
+            using (var connection = GetConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@supervisorId", theseId);
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString("name");
+                        names.Add(name);
+                    }
+                }
+            }
+
+            return names;
         }
     }
 }

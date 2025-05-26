@@ -27,6 +27,7 @@ namespace Project.ViewModels
         public string CommentUsername => UserRepos.GetuserName(comment.user_id);
 
         public int commentid => comment.comment_id;
+        public int user_id;
         public int reportId => reportsRepo.getReportIdFromComment(comment.comment_id);
         public string DisplayText => comment.content;
 
@@ -46,11 +47,34 @@ namespace Project.ViewModels
         //profile
         public ICommand CommentArticleClickCommand { get; set; }
         //for article page
+        private bool _isReportPopupVisible;
+        public bool IsReportCommentPopupVisible
+        {
+            get => _isReportPopupVisible;
+            set
+            {
+                _isReportPopupVisible = value;
+                OnPropertyChanged(nameof(IsReportCommentPopupVisible));
+            }
+        }
+
+        private ReportCommentFormViewModel _reportViewModel;
+        public ReportCommentFormViewModel ReportViewModel
+        {
+            get => _reportViewModel;
+            set
+            {
+                _reportViewModel = value;
+                OnPropertyChanged(nameof(ReportViewModel));
+            }
+        }
+        public ICommand ReportComment { get; set; }
         public CommentsViewModel(CommentModel comment, NavigationStore navigationStore, int user_id) 
         {
+            this.user_id = user_id;
             this.comment = comment;
             _navigationStore = navigationStore;
-
+            UserRepos = new UserRepos();
             CommentUsernameClickCommand = new NavigateCommand<UserProfileViewModel>(_navigationStore, () => new UserProfileViewModel(_navigationStore, user_id));
             ToggleCommentCommand = new ViewModelCommand(
                 execute: param =>
@@ -62,6 +86,8 @@ namespace Project.ViewModels
                 },
                 canExecute: param => param is Comment
             );
+
+            ReportComment = new ReportCommentCommand(navigationStore, this);
         }
         //for profile
         public CommentsViewModel(int user_id, CommentModel comment, NavigationStore navigationStore)
@@ -73,6 +99,7 @@ namespace Project.ViewModels
 
             CommentUsernameClickCommand = new NavigateCommand<UserProfileViewModel>(_navigationStore, () => new UserProfileViewModel(_navigationStore, user_id));
             CommentArticleClickCommand = new NavigateCommand<ThesePageViewModel>(_navigationStore, () => new ThesePageViewModel(navigationStore, user_id, comment.article_id));
+            
             ToggleCommentCommand = new ViewModelCommand(
                 execute: param =>
                 {

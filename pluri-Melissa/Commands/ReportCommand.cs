@@ -22,7 +22,8 @@ namespace Project.Commands
 
         public override void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            _thesePageViewModel.ReportViewModel = new ReportFormViewModel(() => _thesePageViewModel.IsReportPopupVisible = false, _thesePageViewModel.userid, _thesePageViewModel.theseId);
+            _thesePageViewModel.IsReportPopupVisible = true;
         }
     }
 }

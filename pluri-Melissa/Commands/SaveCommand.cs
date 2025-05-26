@@ -14,15 +14,18 @@ namespace Project.Commands
         private ThesePageViewModel viewModel;
         private NavigationStore NavigationStore;
         private UserRepos UserRepos;
+        private TheseRepo TheseRepo;
         public SaveCommand (NavigationStore navigationStore, ThesePageViewModel viewModel)
         {
             this.NavigationStore = navigationStore;
             this.viewModel= viewModel;
             UserRepos = new UserRepos();
+            TheseRepo = new TheseRepo();
         }
         public override void Execute(object parameter)
         {
             UserRepos.SaveArticleForUser(viewModel.theseId, viewModel.userid);
+            TheseRepo.IncSaveCount(viewModel.theseId);
         }
     }
 }
