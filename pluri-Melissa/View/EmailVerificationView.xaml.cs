@@ -46,9 +46,6 @@ namespace Project.View
 
             paletteHelper.SetTheme(theme);
         }
-       
-
-
 
     }
 }

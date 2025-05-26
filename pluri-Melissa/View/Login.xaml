@@ -184,10 +184,10 @@
 
                     
                     
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Mot de passe"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
-                               Margin="0 25 280 5"
+                               Margin="40 25 280 5"
                                HorizontalAlignment="Center"/>
 
                     <CC:BindablePasswordBox Password="{Binding LoginPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -204,7 +204,7 @@
                                 Margin="0,15,130,0">
 
 
-                        <TextBlock Text="Forgot password?"
+                        <TextBlock Text="Mot de passe oublié ?"
                                    Foreground="#8d909f"
                                    FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
                         <Button 
@@ -218,7 +218,7 @@
                                 Padding="0"
                                 Foreground="#4C4E5D" 
                                 Cursor="Hand">
-                         <TextBlock Text="Reset"
+                            <TextBlock Text="Réinitialiser"
                                    Foreground="White"
                                    FontSize="18" FontWeight="Bold" FontFamily="Corbel"
                                    Cursor="Hand"
@@ -275,7 +275,7 @@
                               >
 
 
-                        <TextBlock  Text="Don't have an acoount?"
+                        <TextBlock  Text="Vous n'avez pas de compte ?"
                                     Foreground="#8d909f"
                                     FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
@@ -291,7 +291,7 @@
                             Cursor="Hand">
                             <TextBlock 
                                 Margin="0,0,0,10"
-                                Text="SignUp" FontSize="18" FontWeight="SemiBold"
+                                Text="S'inscrire" FontSize="18" FontWeight="SemiBold"
                                 Padding="0"
                                 VerticalAlignment="Top" />
                         </Button>
@@ -316,7 +316,7 @@
                             Width="500"
            >
 
-                    <TextBlock   Text="Your gateway to academic inspiration."
+                    <TextBlock   Text="Votre passerelle vers l'inspiration académique."
                                  Foreground="White"
                                  TextWrapping="Wrap"
                                  
@@ -330,9 +330,9 @@
                                  FontSize="20" FontWeight="Bold" FontFamily="Arial"
                                  Margin="0,0,70,15" Width="455">
                                  
-                                 <Run Text="Browse, research, and explore insights from" Foreground="White" />
-                                 <Run Text="USTHB Master’s and Doctoral theses" Foreground="#1d77ec" />
-                                  <Run Text="to fuel your academic journey." Foreground="White" />
+                                 <Run Text="Parcourez, recherchez et explorez des idées provenant de" Foreground="White" />
+                                 <Run Text="Mémoires de Master et thèses de Doctorat de l’USTHB" Foreground="#1d77ec" />
+                                  <Run Text="pour nourrir votre parcours académique." Foreground="White" />
                     </TextBlock> 
                 </StackPanel>
 
