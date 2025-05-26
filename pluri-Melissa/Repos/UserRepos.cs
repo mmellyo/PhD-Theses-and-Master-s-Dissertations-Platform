@@ -432,6 +432,23 @@ namespace Project.Repos
         }
 
 
+        public bool DeleteUser(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "DELETE FROM users WHERE user_email = @user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+
+
 
     }
 

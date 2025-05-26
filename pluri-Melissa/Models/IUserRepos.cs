@@ -25,6 +25,7 @@ namespace Project.Models
         public byte[] GetProfilepicFromEmail(string email);
         public byte[] GetProfilepicFromId(int user_id);
         public string GetuserEmail(int user_id);
+        public bool DeleteUser(string email);
 
 
         void Edit(UserModel usermodel);
