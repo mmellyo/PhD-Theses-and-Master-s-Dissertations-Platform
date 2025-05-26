@@ -11,21 +11,24 @@ namespace Project.Commands
 {
     public class SaveCommand : CommandBase
     {
-        private ThesePageViewModel viewModel;
+        private int theseId;
+        private int userid;
+
         private NavigationStore NavigationStore;
         private UserRepos UserRepos;
         private TheseRepo TheseRepo;
-        public SaveCommand (NavigationStore navigationStore, ThesePageViewModel viewModel)
+        public SaveCommand (NavigationStore navigationStore, int theseId, int userid)
         {
             this.NavigationStore = navigationStore;
-            this.viewModel= viewModel;
+            this.theseId = theseId;
+            this.userid = userid;
             UserRepos = new UserRepos();
             TheseRepo = new TheseRepo();
         }
         public override void Execute(object parameter)
         {
-            UserRepos.SaveArticleForUser(viewModel.theseId, viewModel.userid);
-            TheseRepo.IncSaveCount(viewModel.theseId);
+            UserRepos.SaveArticleForUser(theseId, userid);
+            TheseRepo.IncSaveCount(theseId);
         }
     }
 }

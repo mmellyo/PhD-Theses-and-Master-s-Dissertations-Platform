@@ -4,12 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Project.View.userControls"
-             xmlns:customControls="clr-namespace:Project.View.CustomControl"
+             xmlns:customControls="clr-namespace:Project.View.CustomControl" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              x:Name="card"
-             d:DesignHeight="402" Width="500"
+             d:DesignHeight="250" Width="500"
              >
     <Grid Background="White" >
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseLeftButtonDown">
+                <i:InvokeCommandAction Command="{Binding GoToThesis}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -73,59 +78,41 @@
         </StackPanel>
 
         <Separator Grid.Row="0" Margin="0,50,0,0" Height="1" Opacity=".7"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Image Source="/view/Resources/dummy.jpg" Width="100" Height="100"
-                   Margin="20,10,10,10"/>
-            <Image Source="/view/Resources/dummy.jpg" Width="100" Height="100"
-                   Margin="10,10,10,10"/>
-            <Image Source="/view/Resources/dummy.jpg" Width="100" Height="100"
-                   Margin="10,10,10,10"/>
-        </StackPanel>
+        
 
-        <TextBlock Grid.Row="2" Text="{Binding Title, ElementName=card}"
+        <TextBlock Grid.Row="2" Text="{Binding Title}"
                    Margin="20,10,30,10" VerticalAlignment="Center" FontWeight="Bold"  FontSize="17"
                    TextWrapping="Wrap" FontFamily="Montserrat"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <TextBlock Text="{Binding Type, ElementName=card}" Margin="20,10,0,10" Background="{Binding Color, ElementName=card}" 
+            <TextBlock Text="{Binding Type}" Margin="20,10,0,10" Background="#0093ED" 
                        HorizontalAlignment="Center" VerticalAlignment="Center" 
                        Padding="10,5" FontSize="12" FontFamily="Montserrat"/>
-            <TextBlock Text="{Binding Date, ElementName=card}" Margin="0,10,10,10" HorizontalAlignment="center"
+            <TextBlock Text="{Binding Date}" Margin="0,10,10,10" HorizontalAlignment="center"
                        VerticalAlignment="Center" Padding="9" FontSize="12"
                        Opacity="0.7" FontFamily="Montserrat"/>
         </StackPanel>
 
-        <TextBlock Grid.Row="4" Text="{Binding Summary, ElementName=card}" 
+        <TextBlock Grid.Row="4" Text="{Binding Summary}" 
                    Margin="20,10,10,10" TextWrapping="Wrap"
                    VerticalAlignment="Center" FontFamily="Montserrat"/>
 
         
         <StackPanel Orientation="Horizontal" Grid.Row="5" >
-            <customControls:Author authorImage="{Binding Author1_pfp, ElementName=card}" 
-                                   authorName="{Binding Author1_name, ElementName=card}" 
+            <customControls:Author authorImage="{Binding Author1_pfp}" 
+                                   authorName="{Binding Author1_name}" 
                                    Margin="5,0,0,0" FontFamily="Montserrat"/>
-            <customControls:Author authorImage="{Binding Author2_pfp, ElementName=card}" 
-                                   authorName="{Binding Author2_name, ElementName=card}" />
-            <customControls:Author authorImage="{Binding Author3_pfp, ElementName=card}"
-                                   authorName="{Binding Author3_name, ElementName=card}" />
-            <customControls:Author authorImage="{Binding Author4_pfp, ElementName=card}"
-                                   authorName="{Binding Author4_name, ElementName=card}" />
         </StackPanel>
             <Separator Grid.Row="5" Margin="20,25,20,0" Height="1"/>
         
         <StackPanel Orientation="Horizontal" Grid.Row="6" Margin="0,10,0,10">
-            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Download"
+            <Button Style="{StaticResource TertiaryButtonStyle}" Content="Download"
                     Padding="7 2.5" Margin="20, 0, 10, 0" FontFamily="Montserrat"
-                    Click="OnDownloadClick"/>
+                    Command="{Binding Download}"/>
             <Button Style="{StaticResource TertiaryButtonStyle}" Content="Save"
                     Padding="7 2.5" FontFamily="Montserrat"
-                    Click="OnSaveClick"/>
-            <Button Style="{StaticResource TertiaryButtonStyle}" Content="Follow"
-                    Padding="7 2.5" Margin="165,0,10,0" FontFamily="Montserrat"
-                    Click="OnFollowClick"/>
-            <Button Style="{StaticResource TertiaryButtonStyle}" Content="Share"
-                    Padding="7 2.5" FontFamily="Montserrat"
-                    Click="OnShareClick"/>
+                    Command="{Binding Save}"/>
+            
         </StackPanel>
         
     </Grid>

@@ -53,7 +53,6 @@ namespace Project.Models
         public List<string> keywords { get; set; } = new List<string>();
         public string faculty { get; set; }
         public string date { get; set; }
-
-       
+        public double Score { get; internal set; }
     }
 }

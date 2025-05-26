@@ -4,6 +4,7 @@ using Project.Repos;
 using Project.Stores;
 using Project.Utils;
 using Project.View;
+using Project.View.userControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,9 +36,8 @@ namespace Project.ViewModels
         private readonly List<string> unregistered_authors = new List<string>();
         private readonly List<string> faculties = new List<string>();
 
-        public readonly ObservableCollection<ArticleViewModel> _articles;
-        public IEnumerable<ArticleViewModel> ArticleViewModels => _articles;
-
+        public ObservableCollection<ArticleViewModel> ArticleViewModels { get; set; } = new ObservableCollection<ArticleViewModel>();
+        public List<ArticleModel> articles = new List<ArticleModel>();
 
         public string Role;
         public bool isMember { get; set; }
@@ -89,34 +89,23 @@ namespace Project.ViewModels
             }
         }
 
+
+        private TheseRepo theseRepo;
+
         public HomePageViewModel(NavigationStore navigationStore, int user_id)
         {
 
 
             _navigationStore = navigationStore;
             this.user_id = user_id;
-
-            UserModel user1 = new UserModel("malakbenzahia", "Malak Benzahia");
-            authors.Add(user1);
-            unregistered_authors.Add("John Doe");
-            keywords.Add("blah blah");
-            faculties.Add("Faculty of blah");
-
-            ArticleViewModel article1 = new ArticleViewModel(
-                                                    new ArticleModel("these bla bla", "blabla bla bla bla", "these de master",
-                                                    authors, unregistered_authors, keywords, faculties, "september 2023")
-                                        );
-            ArticleViewModel article2 = new ArticleViewModel(
-                                                    new ArticleModel("these bla bla", "blabla bla bla bla", "these de master",
-                                                    authors, unregistered_authors, keywords, faculties, "september 2023")
-                                        );
-            _articles = new ObservableCollection<ArticleViewModel>()
-            {
-                article1,
-                article2
-            };
-
+            theseRepo = new TheseRepo();
             UserRepos = new UserRepos();
+
+            LoadArticles();
+
+            
+
+
 
             Role = UserRepos.GetUserRole(user_id);
             if(Role == "Student")
@@ -141,8 +130,52 @@ namespace Project.ViewModels
 
         }
 
-       
 
+        List<ArticleModel> GenerateFacultyBasedSuggestions(int userId, int maxSuggestions)
+        {
+            // Step 1: Get the user's faculty
+            string userFaculty = UserRepos.GetUserFaculty(userId);
+            List<ArticleModel> facultyArticles = new List<ArticleModel>();
+            // Step 2: Get all articles from the same faculty
+            List<int> facultyArticlesid = theseRepo.GetThesesByFaculty(userFaculty);
+            foreach(int id in facultyArticlesid)
+            {
+                facultyArticles.Add(theseRepo.GetThesisDetails(id));
+            }
+            // Step 3: Score the articles
+            foreach (var article in facultyArticles)
+            {
+                article.Score = ComputeScore(article); // see below
+            }
+
+            // Step 4: Sort by score in descending order
+            facultyArticles.Sort((a, b) => b.Score.CompareTo(a.Score));
+
+            // Step 5: Return top N suggestions
+            return facultyArticles.Take(maxSuggestions).ToList();
+        }
+
+        // Custom scoring function
+        double ComputeScore(ArticleModel article)
+        {
+            // Example weights — adjust as needed
+            double visitWeight = 0.3;
+            double saveWeight = 0.7;
+
+            return (visitWeight * article.visits) + (saveWeight * article.saves);
+        }
+
+        public void LoadArticles()
+        {
+            articles = GenerateFacultyBasedSuggestions(user_id, 20);
+
+            ArticleViewModels.Clear(); // Clear the existing items
+
+            foreach (var article in articles)
+            {
+                ArticleViewModels.Add(new ArticleViewModel(article.id, _navigationStore, user_id));
+            }
+        }
 
     }
 }

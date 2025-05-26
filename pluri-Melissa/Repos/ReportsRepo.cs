@@ -8,7 +8,7 @@ using Project.Models;
 
 namespace Project.Repos
 {
-    public class ReportsRepo : RepoBase, IReportsRepo
+    public class ReportsRepo : RepoBase
     {
         public void ReportAccount(int Account_Id, string description)
         {
@@ -38,33 +38,40 @@ namespace Project.Repos
         }
 
 
-        public List<Comment> LoadFlaggedComments()
+        public List<CommentReportModel> LoadManFlaggedComments()
         {
-            var comments = new List<Comment>();
+            var comments = new List<CommentReportModel>();
 
             using (var connection = GetConnection())
             using (var command = new MySqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
-
                 command.CommandText = @"
-                                        SELECT c.comment_text, c.these_id, c.state
-                                        FROM reports r
-                                        JOIN comments c ON c.comment_id = r.reported_id
-                                        WHERE r.reported_type = 'Comment'
-                                        AND c.state != 2
+                                        SELECT u.user_name, c.content, u.user_profilePic, c.comment_id, r.report_id, r.content AS message, r.reported_by, r.reason
+                                        FROM comments c
+                                        JOIN users u ON c.commented_by = u.user_id
+                                        JOIN reports r ON c.comment_id = r.comment_reported
+                                        WHERE c.state = -1;
+                                        ";
 
-        ";
 
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        comments.Add(new Comment
+                        comments.Add(new CommentReportModel
                         {
-                            CommentText = reader.GetString("comment_text"),
-                            TheseId = reader.GetInt32("these_id")
+                            comment_id = reader.GetInt32("comment_id"),
+                            commentor_name = reader.GetString("user_name"),
+                            Content = reader.GetString("message"),
+                            comment = reader.GetString("content"),
+                            reason = reader.GetString("reason"),
+                            Reporter = reader.GetInt32("reported_by"),
+                            Id = reader.GetInt32("report_id"),
+                            user_image = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"]
+
+
                         });
                     }
                 }
@@ -72,7 +79,6 @@ namespace Project.Repos
 
             return comments;
         }
-
 
 
         //not verified yet

@@ -28,7 +28,6 @@ namespace Project.ViewModels
 
         public int commentid => comment.comment_id;
         public int user_id;
-        public int reportId => reportsRepo.getReportIdFromComment(comment.comment_id);
         public string DisplayText => comment.content;
 
         public string CommentArticle => theseRepo.GetTitleById(comment.article_id);

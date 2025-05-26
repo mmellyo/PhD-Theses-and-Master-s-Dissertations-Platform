@@ -60,6 +60,9 @@
             <DataTemplate DataType="{x:Type viewmodels:ForgotPasswordViewModel}">
                 <view:ForgotPasswordView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MODFlaggedArticlesViewModel}">
+                <view:MODFlaggedArticles/>
+            </DataTemplate>
 
         </ContentControl.Resources>
     </ContentControl>

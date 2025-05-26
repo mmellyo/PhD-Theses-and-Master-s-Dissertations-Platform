@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Project.View
 {
     /// <summary>
-    /// Interaction logic for idk.xaml
+    /// Interaction logic for MODReportedArticlesView.xaml
     /// </summary>
-    public partial class ManuallyFlagged : UserControl
+    public partial class MODReportedArticlesView : UserControl
     {
-        public ManuallyFlagged()
+        public MODReportedArticlesView()
         {
             InitializeComponent();
         }

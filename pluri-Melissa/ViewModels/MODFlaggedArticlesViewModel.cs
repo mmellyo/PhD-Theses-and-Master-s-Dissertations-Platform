@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace Project.ViewModels
 {
-    public class MODManuallyComments : ViewModelBase
+    public class MODFlaggedArticlesViewModel : ViewModelBase
     {
         //useful 
         private int userid;
@@ -65,77 +65,40 @@ namespace Project.ViewModels
         }
 
 
-        //side bar
-        public object SideBarViewModel { get; }
+        
 
         //top bar
         private UserRepos UserRepos;
 
         //Items Contorl
-        public ObservableCollection<CommentsViewModel> ModManComments { get; set; }
-        private List<CommentModel> CommentModels { get; set; }
-        private string _comment;
-        public string Comment
-        {
-            get => _comment;
-            set
-            {
-                _comment = value;
-                OnPropertyChanged(nameof(Comment));
-            }
-        }
-
-        private string _result;
-        public string Result
-        {
-            get => _result;
-            set
-            {
-                _result = value;
-                OnPropertyChanged(nameof(Result));
-            }
-        }
-
-        private CommentRepo _commentRepo;
-
+        public ObservableCollection<MemberArticleViewModel> Articles { get; set; }
+        private List<int> articleIdList { get; set; }
+        private List<ArticleModel> articleModels { get; set; }
         //constructor
-        public MODCommentViewModel(int user_id, NavigationStore _navigationStore)
+        public MODFlaggedArticlesViewModel(int user_id, NavigationStore _navigationStore)
         {
             this.userid = user_id;
             this.navigationStore = _navigationStore;
             this.theseRepo = new TheseRepo();
             this.UserRepos = new UserRepos();
-            this._commentRepo = new CommentRepo();
 
-            //items control
-            ModManComments = new ObservableCollection<CommentsViewModel>();
-            LoadComments();
+            articleIdList = theseRepo.getUnSupervisedArticles(userid);
+            articleModels = new List<ArticleModel>();
 
+            foreach (int id in articleIdList)
+            {
+                articleModels.Add(theseRepo.GetThesisDetails(id));
+            }
+;
+            Articles = new ObservableCollection<MemberArticleViewModel>(
+                articleModels.Select(article => new MemberArticleViewModel(userid, navigationStore, article))
+            );
 
-            //side bar
-            SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
-
-            //top bar
             _userName = UserRepos.GetuserName(user_id);
             user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
             Email = UserRepos.GetuserEmail(user_id);
             User_role = UserRepos.GetUserRole(user_id);
 
         }
-
-
-        public void LoadComments()
-        {
-            CommentModels = _commentRepo.LoadManFlaggedComments();
-
-            ModComments.Clear(); // Clear the existing items
-
-            foreach (var comment in CommentModels)
-            {
-                ModComments.Add(new CommentsViewModel(comment, navigationStore, userid, comment.user_id, this));
-            }
-        }
-
     }
-}
 }

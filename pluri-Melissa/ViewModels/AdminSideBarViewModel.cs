@@ -12,13 +12,11 @@ namespace Project.ViewModels
     public class AdminSideBarViewModel : ViewModelBase
     {
         private readonly NavigationStore navigationStore;
+        private int user_id;
 
-
-        public ICommand NavigateReportedCommentsCommand { get; }
         public ICommand NavigateAutoFlaggedCommentsCommand { get; }
         public ICommand NavigateReportedThesesCommand { get; }
-        public ICommand NavigateReportedAccountsCommand { get; }
-        public ICommand NavigateInboxCommand { get; }
+        public ICommand NavigateNotApprovedTheseCommand { get; }
 
 
 
@@ -65,11 +63,9 @@ namespace Project.ViewModels
 
             NavigateAutoFlaggedCommentsCommand = new NavigateCommand<MODCommentViewModel>(navigationStore, () => new MODCommentViewModel(user_id, navigationStore));
             //to do
-            NavigateReportedCommentsCommand = new NavigateCommand<rechercheWinViewModel>(navigationStore, () => new rechercheWinViewModel(navigationStore, user_id));
-            //to do
-            NavigateReportedThesesCommand = new NavigateCommand<RechercheAvanceViewModel>(navigationStore, () => new RechercheAvanceViewModel(navigationStore, user_id));
-            //to do 
-            NavigateProfileCommand = new NavigateCommand<UserProfileViewModel>(navigationStore, () => new UserProfileViewModel(navigationStore, user_id));
+            NavigateNotApprovedTheseCommand = new NavigateCommand<MODFlaggedArticlesViewModel>(navigationStore, () => new MODFlaggedArticlesViewModel(user_id, navigationStore));
+            //NavigateNotApprovedTheseCommand
+            
         }
     }
 }

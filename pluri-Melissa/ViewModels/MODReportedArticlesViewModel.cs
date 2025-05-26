@@ -8,15 +8,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Project.ViewModels
 {
-    public class MemberModArticlesViewModel : ViewModelBase
+    public class MODReportedArticlesViewModel : ViewModelBase
     {
-
         //useful 
         private int userid;
         private NavigationStore navigationStore;
@@ -68,8 +65,7 @@ namespace Project.ViewModels
         }
 
 
-        //side bar
-        public object SideBarViewModel { get; }
+
 
         //top bar
         private UserRepos UserRepos;
@@ -79,16 +75,16 @@ namespace Project.ViewModels
         private List<int> articleIdList { get; set; }
         private List<ArticleModel> articleModels { get; set; }
         //constructor
-        public MemberModArticlesViewModel(int user_id, NavigationStore _navigationStore)
+        public MODReportedArticlesViewModel(int user_id, NavigationStore _navigationStore)
         {
             this.userid = user_id;
             this.navigationStore = _navigationStore;
             this.theseRepo = new TheseRepo();
             this.UserRepos = new UserRepos();
 
-            articleIdList = theseRepo.getUnSupervisedArticles(userid);
+            articleIdList = theseRepo.getReportedArticles();
             articleModels = new List<ArticleModel>();
-            
+
             foreach (int id in articleIdList)
             {
                 articleModels.Add(theseRepo.GetThesisDetails(id));
@@ -98,14 +94,11 @@ namespace Project.ViewModels
                 articleModels.Select(article => new MemberArticleViewModel(userid, navigationStore, article))
             );
 
-            SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
             _userName = UserRepos.GetuserName(user_id);
             user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
             Email = UserRepos.GetuserEmail(user_id);
             User_role = UserRepos.GetUserRole(user_id);
 
         }
-
-
     }
 }

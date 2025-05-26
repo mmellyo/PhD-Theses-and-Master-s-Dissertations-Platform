@@ -47,42 +47,6 @@ namespace Project.Repos
         }
 
 
-        public List<CommentModel> LoadManFlaggedComments()
-        {
-            var comments = new List<CommentModel>();
-
-            using (var connection = GetConnection())
-            using (var command = new MySqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = @"
-                                        SELECT u.user_id, u.user_name, c.content, u.user_profilePic, c.comment_id
-                                        FROM comments c
-                                        JOIN users u ON c.commented_by = u.user_id
-                                        JOIN reports r ON c.comment_id = r.comment_reported
-                                        ;
-                                        ";
-
-
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        comments.Add(new CommentModel
-                        {
-                            comment_id = reader.GetInt32("comment_id"),
-                            user_id = reader.GetInt32("user_id"),
-                            user_name = reader.GetString("user_name"),
-                            content = reader.GetString("content"),
-                            user_image = reader["user_profilepic"] == DBNull.Value ? null : (byte[])reader["user_profilepic"]
-                        });
-                    }
-                }
-            }
-
-            return comments;
-        }
 
         public void ReportThesis(int thesisId, string description)
         {
