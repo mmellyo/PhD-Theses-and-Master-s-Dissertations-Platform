@@ -37,15 +37,39 @@ namespace Project.Commands
             }
 
 
+            //profile pic
+            string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "img", "download_4.jpg");
+
+            byte[] profilePic;
+
+            if (File.Exists(imagePath))
+            {
+                profilePic = File.ReadAllBytes(imagePath);
+            }
+            else
+            {
+                // Create a gray 1x1 PNG placeholder
+                using (var bmp = new System.Drawing.Bitmap(1, 1))
+                {
+                    bmp.SetPixel(0, 0, System.Drawing.Color.Gray);
+                    using (var ms = new MemoryStream())
+                    {
+                        bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        profilePic = ms.ToArray();
+                    }
+                }
+            }
+
             var user = new UserModel
             {
                 user_name = _userRepos.GetUsernameFromEmail(_viewModel.Email),
                 user_email = _viewModel.Email,
                 user_password = _viewModel.Password,
                 user_role = _userRepos.AssignUserRole(_viewModel.Email),
-                // user_profilepic = File.ReadAllBytes("C:\\Users\\user\\Source\\Repos\\Final-Pluri-fr-fr-ong\\pluri-Melissa\\img\\download_4.jpg") //later :P
-
+                user_faculty = _viewModel.Faculty,
+                user_profilepic = profilePic
             };
+
 
             //_userSession.Email = this.Email;
             //ErrorMessage = $"saved: mail='{user.user_email}', pw='{user.user_password}', role='{repo.AssignUserRole(user.user_email)}'";

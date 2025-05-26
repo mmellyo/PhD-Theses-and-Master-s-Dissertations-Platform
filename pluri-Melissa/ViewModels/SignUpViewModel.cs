@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using Project.Commands;
@@ -29,9 +30,22 @@ namespace Project.ViewModels
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Email { get; set; }
+        public string Faculty { get; set; }
 
 
 
+        public ObservableCollection<string> Faculties { get; } = new ObservableCollection<string>
+        {
+            "Civil Engineering",
+            "Biological Sciences",
+            "Earth Sciences, Geography And Territorial Planning",
+            "Chemistry",
+            "Computer Science",
+            "Electrical Engineering",
+            "Physics",
+            "Process And Mechanical Engineering",
+            "Mathematics"
+        };
 
         public string Username
         {

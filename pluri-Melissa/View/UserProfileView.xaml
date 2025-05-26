@@ -11,7 +11,7 @@
          Height="700" Width="1238">
 
 
-    
+
 
     <Grid Background="White">
         <Grid.ColumnDefinitions>
@@ -43,7 +43,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!-- TOPBAR -->
-                    
+
                     <!-- BOUTTON REVENIR -->
                     <Grid Grid.Row="0">
                         <Border Margin="0,0,0,0" CornerRadius="16" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" >
@@ -115,23 +115,16 @@
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    
-                                    <Grid Grid.Row="2" Margin="0,20,0,0">
-                                        
 
-                                        
+                                    <Grid Grid.Row="2" Margin="0,20,0,0">
+
+
+
 
 
                                         <Grid Grid.Row="0">
-                                            <Button Height="30" Width="200" Background="#0093ED" Command="{Binding ModifyCommand}">
-                                                <Border Width="200" Margin="0,0,0,0" Background="Transparent"  Height="30" CornerRadius="12" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand">
-                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
 
-                                                        <TextBlock Margin="0,0,0,0" Text="Modifier Profile" FontSize="10" FontFamily="Montserrat SemiBold" Foreground="White"  />
-                                                    </StackPanel>
-                                                </Border>
-                                            </Button>
-                                            
+
                                         </Grid>
 
                                     </Grid>
@@ -178,6 +171,71 @@
                                         </ItemsControl>
                                     </ScrollViewer>
                                 </TabItem>
+
+                                <TabItem Header="Paramètres" FontFamily="Montserrat Medium" Style="{DynamicResource TabItemsStyle}">
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Mon compte-->
+                                        <GroupBox Header="Mon compte" Margin="20" FontFamily="Montserrat SemiBold" FontSize="14" Grid.Column="0">
+                                            <StackPanel>
+
+
+                                                <TextBlock Text="Faculté :" Margin="0,10,0,0" FontFamily="Montserrat Medium" Foreground="black" />
+                                                <ComboBox  Width="312"  Height="25"
+                                                            ItemsSource="{Binding Faculties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            SelectedItem="{Binding Faculty}"
+                                                            Style="{StaticResource ThesesComboBox}" HorizontalAlignment="Center" />
+                                                <Button Content="Modifier l'information"       Margin="0,20,0,0"
+
+                                                            Command="{Binding SaveProfileCommand}"
+                                                                                 Background="white"
+                                                                                 Foreground="#1a8aec"
+                                                                                 FontWeight="Bold"
+                                                                                 Padding="10,5"
+                                                                                 BorderThickness="0"
+                                                                                 Cursor="Hand" />
+                                                <TextBlock Text="Photo de profil :" FontFamily="Montserrat Medium" Margin="0,25,0,0" Foreground="black"  />
+                                                <Button Content="Changer la photo"
+                                                Command="{Binding ChangeProfilePictureCommand}"
+                                                             Margin="0,10,0,0"
+                                                             Background="white"
+                                                             Foreground="#1a8aec"
+                                                             FontWeight="Bold"
+                                                             Padding="10,5"
+                                                             BorderThickness="0"
+                                                             Cursor="Hand" />
+
+
+                                            </StackPanel>
+                                        </GroupBox>
+
+                                        <!-- Logout/Delete-->
+                                        <GroupBox Header="Actions" Margin="20" FontFamily="Montserrat SemiBold" FontSize="14" Grid.Column="1">
+                                            <StackPanel>
+                                                <Button Content="Se déconnecter"
+                                                        Command="{Binding LogoutCommand}"
+                                                        Style="{DynamicResource TertiaryButtonStyle}"
+                                                        Foreground="Red"
+                                                        Margin="0,0,0,10"/>
+                                                <Button Content="Supprimer le compte" FontSize="13"
+                                                        Command="{Binding DeleteAccountCommand}"
+                                                        Style="{DynamicResource TertiaryButtonStyle}"
+                                                        Foreground="Red"/>
+                                                <Button Content="Fermer l’application"
+                                                         Command="{Binding ExitCommand}"
+                                                         Style="{DynamicResource TertiaryButtonStyle}"
+                                                         Foreground="Red"/>
+                                            </StackPanel>
+                                        </GroupBox>
+                                    </Grid>
+                                </TabItem>
+
+
+
                             </TabControl>
                         </Grid>
                     </Grid>

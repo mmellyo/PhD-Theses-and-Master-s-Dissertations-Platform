@@ -94,10 +94,39 @@ namespace Project.ViewModels
         private List<int> CommentIdList { get; set; }
         private List<CommentModel> CommentModels { get; set; }
 
+        //settings :
+        public ObservableCollection<string> Faculties { get; } = new ObservableCollection<string>
+        {
+            "Civil Engineering",
+            "Biological Sciences",
+            "Earth Sciences, Geography And Territorial Planning",
+            "Chemistry",
+            "Computer Science",
+            "Electrical Engineering",
+            "Physics",
+            "Process And Mechanical Engineering",
+            "Mathematics"
+        };
+
+
+        //commands
+        public ICommand LogoutCommand { get; }
+        public ICommand DeleteAccountCommand { get; }
+        public ICommand ExitCommand { get; }
+        public ICommand ChangeProfilePictureCommand { get; }
+
 
         //constructor
         public UserProfileViewModel(NavigationStore _navigationStore, int user_id)
         {
+            // LogoutCommand = new LogoutCommand(this, navigationStore);
+            LogoutCommand = new NavigateCommand<WelcomeViewModel>(_navigationStore, () => new WelcomeViewModel(_navigationStore));
+            DeleteAccountCommand = new DeleteAccountCommand(this, _navigationStore);
+            ExitCommand = new ExitCommand(this, _navigationStore);
+            ChangeProfilePictureCommand = new ChangeProfilePictureCommand(this, _navigationStore);
+
+
+
             this.userid = user_id;
             this.navigationStore = _navigationStore;
             this.theseRepo = new TheseRepo();

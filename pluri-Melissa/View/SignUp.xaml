@@ -137,7 +137,7 @@
                 <StackPanel
                     Width="619"
                     Orientation="Vertical"
-                    Margin="0,200,0,-655" HorizontalAlignment="Left">
+                    Margin="0,150,0,-655" HorizontalAlignment="Left">
 
 
                     <TextBlock
@@ -161,7 +161,7 @@
                     <TextBlock Text="Email"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
-                               Margin="0 5 310 5"
+                               Margin="0 0 310 5"
                                HorizontalAlignment="Center"  />
 
                     <TextBox  x:Name="tf_username"
@@ -183,6 +183,19 @@
                         </TextBox.Background>
 
                     </TextBox>
+
+                    <TextBlock Text="Faculty"
+                               Foreground="#8d909f"
+                               FontSize="18" FontWeight="Medium" FontFamily="Corbel"
+                               Margin="0 25 310 5"
+                               HorizontalAlignment="Center"  />
+
+                    <ComboBox  Width="360"  Height="25"
+                                ItemsSource="{Binding Faculties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding Faculty}"
+                                Style="{StaticResource ThesesComboBox}"
+                                VerticalAlignment="Center" HorizontalAlignment="Center" />
+
 
 
 

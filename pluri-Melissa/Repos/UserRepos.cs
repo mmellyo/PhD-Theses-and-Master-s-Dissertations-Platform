@@ -44,14 +44,16 @@ namespace Project.Repos
                 connection.Open();
                 command.Connection = connection;
 
-                string query = "INSERT INTO `users` (user_email, user_password, user_role, user_name, user_profilePic";
-                string values = "VALUES (@user_email, @user_password, @user_role,  @user_name, @profilePic";
+                string query = "INSERT INTO `users` (user_email, user_password, user_role, user_name, user_profilePic,user_faculty";
+                string values = "VALUES (@user_email, @user_password, @user_role,  @user_name, @profilePic ,@user_faculty";
 
                 command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = user.user_email;
                 command.Parameters.Add("@user_password", MySqlDbType.VarChar).Value = hashedPassword;
                 command.Parameters.Add("@user_role", MySqlDbType.VarChar).Value = user.user_role;
                 command.Parameters.Add("@user_name", MySqlDbType.VarChar).Value = user.user_name;
                 command.Parameters.Add("@profilePic", MySqlDbType.Blob).Value = user.user_profilepic;
+                command.Parameters.Add("@user_faculty", MySqlDbType.VarChar).Value = user.user_faculty;
+
                 if (!string.IsNullOrEmpty(user.user_uni))
                 {
                     query += ", user_uni";
@@ -428,6 +430,23 @@ namespace Project.Repos
                 return rowsAffected > 0;
             }
         }
+
+
+        public bool DeleteUser(string email)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "DELETE FROM users WHERE user_email = @user_email";
+                command.Parameters.Add("@user_email", MySqlDbType.VarChar).Value = email;
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
 
 
 
