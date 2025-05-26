@@ -33,7 +33,7 @@ namespace Project.ViewModels
         private readonly IWindowManager _windowManager;
         private readonly ViewModelLocator _viewModelLocator;
 
-       //setter / getter
+        //setter / getter
         public string NomAuteur { get; set; }
         public string NomEncadrant { get; set; }
         public string NomThese { get; set; }
@@ -68,6 +68,38 @@ namespace Project.ViewModels
         }
 
 
+        private void InitializeFilters()
+        {
+            Langues = new ObservableCollection<string> { "Arabe", "Français", "Anglais" };
+            Departements = new ObservableCollection<string>
+    {
+        "Informatique",
+        "Biologie",
+        "Mathématiques",
+        "Physique",
+        "Chimie",
+        "Génie civil",
+        "Génie électrique"
+    };
+            Annees = new ObservableCollection<string>
+    {
+        "2012/2013", "2013/2014", "2014/2015", "2015/2016", "2016/2017",
+        "2017/2018", "2018/2019", "2019/2020", "2020/2021", "2021/2022",
+        "2022/2023", "2023/2024", "2024/2025"
+    };
+            Facultes = new ObservableCollection<string>
+    {
+        "Civil Engineering",
+        "Biological Sciences",
+        "Earth Sciences, Geography And Territorial Planning",
+        "Chemistry",
+        "Computer Science",
+        "Electrical Engineering",
+        "Physics",
+        "Process And Mechanical Engineering",
+        "Mathematics"
+    };
+        }
 
 
         private ObservableCollection<string> _annees;
@@ -120,14 +152,6 @@ namespace Project.ViewModels
 
 
 
-        /// used for dropdowns
-        private void InitializeFilters()
-        {
-            Langues = new ObservableCollection<string> { "Français", "Anglais" };
-            Departements = new ObservableCollection<string> { "Informatique", "Biologie" };
-            Annees = new ObservableCollection<string> { "2020", "2021", "2022", "2023", "2024" };
-            Facultes = new ObservableCollection<string> { "Intelligence artificielle", "cybersécurité" };
-        }
 
 
 
@@ -233,6 +257,9 @@ namespace Project.ViewModels
             _theseResultatRepo = new theseResultatRepo();
             TheseService = new TheseService();
 
+            // 👉 Initialiser les filtres pour les ComboBox
+            InitializeFilters();
+
             if (TheseService.Theses == null)
             {
                 TheseService.Theses = new ObservableCollection<theseResultat>();
@@ -259,9 +286,8 @@ namespace Project.ViewModels
                 isUser = false;
                 SideBarViewModel = new MemberSideBarViewModel(userid, navigationStore);
             }
-
-            
         }
+
 
         public List<theseResultat> RechercherAvecFiltres()
         {
@@ -272,7 +298,7 @@ namespace Project.ViewModels
 
                 // Load from DB
                 var resultats = _theseResultatRepo.rechercherAvecFiltres(NomAuteur, NomEncadrant, NomThese, MotCle, Langue, Departement, Annee, Faculte);
-                
+
 
                 if (resultats != null)
                 {
@@ -331,7 +357,7 @@ namespace Project.ViewModels
         }
 
 
-        }
-
     }
+
+}
 
