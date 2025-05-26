@@ -5,6 +5,7 @@ using Project.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,8 +65,10 @@ namespace Project.ViewModels
             }
         }
 
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
 
-        
 
         //top bar
         private UserRepos UserRepos;
@@ -74,6 +77,8 @@ namespace Project.ViewModels
         public ObservableCollection<MemberArticleViewModel> Articles { get; set; }
         private List<int> articleIdList { get; set; }
         private List<ArticleModel> articleModels { get; set; }
+        public object SideBarViewModel { get; }
+
         //constructor
         public MODFlaggedArticlesViewModel(int user_id, NavigationStore _navigationStore)
         {
@@ -94,10 +99,28 @@ namespace Project.ViewModels
                 articleModels.Select(article => new MemberArticleViewModel(userid, navigationStore, article))
             );
 
+            SideBarViewModel = new AdminSideBarViewModel(user_id, _navigationStore);
+
             _userName = UserRepos.GetuserName(user_id);
             user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
             Email = UserRepos.GetuserEmail(user_id);
             User_role = UserRepos.GetUserRole(user_id);
+
+            Role = UserRepos.GetUserRole(user_id);
+            if (Role == "Student")
+            {
+                isUser = true;
+                isMember = false;
+                SideBarViewModel = new UserSideBarViewModel(user_id, navigationStore);
+            }
+            if (Role == "Admin")
+            {
+                isMember = true;
+                isUser = false;
+                SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
+            }
+            //side bar
+            SideBarViewModel = new AdminSideBarViewModel(user_id, _navigationStore);
 
         }
     }

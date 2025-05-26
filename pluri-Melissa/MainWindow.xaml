@@ -63,6 +63,9 @@
             <DataTemplate DataType="{x:Type viewmodels:MODFlaggedArticlesViewModel}">
                 <view:MODFlaggedArticles/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MODReportedArticlesViewModel}">
+                <view:MODReportedArticlesView/>
+            </DataTemplate>
 
         </ContentControl.Resources>
     </ContentControl>

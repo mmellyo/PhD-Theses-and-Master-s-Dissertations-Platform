@@ -6,6 +6,8 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Project.View"
         xmlns:userControls="clr-namespace:Project.View.userControls"
+                     xmlns:viewmodels="clr-namespace:Project.ViewModels" 
+
         mc:Ignorable="d"
         Height="700"
         Width="1238"
@@ -18,9 +20,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-
-        <!-- Sidebar -->
-        <userControls:SideBar_admin Grid.Column="0" x:Name="SideBarAdmin" Margin="0,0,0,0"/>
+        <ContentControl Content="{Binding SideBarViewModel}" Grid.Column="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:UserSideBarViewModel}">
+                    <userControls:SideBar_user Visibility="{Binding isUser}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:AdminSideBarViewModel}">
+                    <userControls:SideBar_admin Visibility="{Binding isMember}"/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
 
 
         <Grid Grid.Column="1">

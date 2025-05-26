@@ -16,6 +16,7 @@ namespace Project.ViewModels
         public ICommand CommentaireSIGNALER { get; }
         public ICommand ThesesSIGNALER { get; }
 
+        public AdminSideBarViewModel AdminSidebarViewModel { get; }
 
         public AdminSpaceViewModel(NavigationStore navigationStore, int user_id)
         {
@@ -26,7 +27,7 @@ namespace Project.ViewModels
 
             CommentaireSIGNALER = new NavigateCommand<MODCommentViewModel>(navigationStore, ()=> new MODCommentViewModel(user_id, navigationStore));
 
-            //ThesesSIGNALER = new NavigateCommand<MODarticles>
+            ThesesSIGNALER = new NavigateCommand<MODFlaggedArticlesViewModel>(navigationStore, ()=> new MODFlaggedArticlesViewModel(user_id, navigationStore));
 
         }
     }

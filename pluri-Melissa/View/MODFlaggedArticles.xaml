@@ -14,8 +14,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <userControls:SideBar_admin Grid.Column="0"/>
-
+        <ContentControl Content="{Binding SideBarViewModel}" Grid.Column="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:UserSideBarViewModel}">
+                    <userControls:SideBar_user Visibility="{Binding isUser}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:AdminSideBarViewModel}">
+                    <userControls:SideBar_admin Visibility="{Binding isMember}"/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
@@ -23,7 +31,7 @@
             </Grid.RowDefinitions>
 
 
-            <userControls:TopBarView Grid.Column="1"/>
+            <userControls:TopBarView Grid.Column="1" />
 
 
             <Grid Grid.Row="1">

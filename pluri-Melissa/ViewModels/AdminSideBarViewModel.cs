@@ -36,6 +36,8 @@ namespace Project.ViewModels
 
             }
         }
+
+
         public ICommand ToggleGestion2Command { get; }
 
         private bool _IsGestion2Expanded;
@@ -55,16 +57,15 @@ namespace Project.ViewModels
 
         public AdminSideBarViewModel(int user_id, NavigationStore navigationStore)
         {
-          //  this.user_id = user_id;
+            this.user_id = user_id;
             this.navigationStore = navigationStore;
 
             ToggleGestion1Command = new ViewModelCommand(_ => IsGestion1Expanded = !IsGestion1Expanded);
             ToggleGestion2Command = new ViewModelCommand(_ => IsGestion2Expanded = !IsGestion2Expanded);
 
             NavigateAutoFlaggedCommentsCommand = new NavigateCommand<MODCommentViewModel>(navigationStore, () => new MODCommentViewModel(user_id, navigationStore));
-            //to do
             NavigateNotApprovedTheseCommand = new NavigateCommand<MODFlaggedArticlesViewModel>(navigationStore, () => new MODFlaggedArticlesViewModel(user_id, navigationStore));
-            //NavigateNotApprovedTheseCommand
+            NavigateReportedThesesCommand = new NavigateCommand<MODReportedArticlesViewModel>(navigationStore, () => new MODReportedArticlesViewModel(user_id, navigationStore));
             
         }
     }

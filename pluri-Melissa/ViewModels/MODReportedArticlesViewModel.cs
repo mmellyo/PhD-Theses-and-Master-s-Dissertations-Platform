@@ -42,6 +42,8 @@ namespace Project.ViewModels
             }
         }
 
+
+
         private string _userrole;
         public string User_role
         {
@@ -64,7 +66,9 @@ namespace Project.ViewModels
             }
         }
 
-
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
 
 
         //top bar
@@ -72,6 +76,7 @@ namespace Project.ViewModels
 
         //Items Contorl
         public ObservableCollection<MemberArticleViewModel> Articles { get; set; }
+        public object SideBarViewModel { get; }
         private List<int> articleIdList { get; set; }
         private List<ArticleModel> articleModels { get; set; }
         //constructor
@@ -81,13 +86,8 @@ namespace Project.ViewModels
             this.navigationStore = _navigationStore;
             this.theseRepo = new TheseRepo();
             this.UserRepos = new UserRepos();
-            this._commentRepo = new CommentRepo();
 
-            //items control
-            ModManComments = new ObservableCollection<CommentsViewModel>();
-            LoadComments();
-
-            articleIdList = theseRepo.getReportedArticles();
+            articleIdList = theseRepo.getReportedArticles(userid);
             articleModels = new List<ArticleModel>();
 
             foreach (int id in articleIdList)
@@ -98,27 +98,33 @@ namespace Project.ViewModels
             Articles = new ObservableCollection<MemberArticleViewModel>(
                 articleModels.Select(article => new MemberArticleViewModel(userid, navigationStore, article))
             );
+            SideBarViewModel = new AdminSideBarViewModel(user_id, _navigationStore);
 
             _userName = UserRepos.GetuserName(user_id);
             user_profilepic = ByteArrayToImageConverter.LoadImageSourceFromBytes(UserRepos.GetProfilepicFromId(user_id));
             Email = UserRepos.GetuserEmail(user_id);
             User_role = UserRepos.GetUserRole(user_id);
 
-        }
 
 
-        public void LoadComments()
-        {
-            CommentModels = _commentRepo.LoadManFlaggedComments();
 
-            ModComments.Clear(); // Clear the existing items
 
-            foreach (var comment in CommentModels)
+
+
+            Role = UserRepos.GetUserRole(user_id);
+            if (Role == "Student")
             {
-                ModComments.Add(new CommentsViewModel(comment, navigationStore, userid, comment.user_id, this));
+                isUser = true;
+                isMember = false;
+                SideBarViewModel = new UserSideBarViewModel(user_id, navigationStore);
+            }
+            if (Role == "Admin")
+            {
+                isMember = true;
+                isUser = false;
+                SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
             }
         }
-
     }
 }
-}
+

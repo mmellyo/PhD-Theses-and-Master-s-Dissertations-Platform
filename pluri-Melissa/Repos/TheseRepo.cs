@@ -582,14 +582,14 @@ namespace Project.Repos
             return names;
         }
 
-        public List<int>? getReportedArticles()
+        public List<int>? getReportedArticles(int userid)
         {
             List<int> theses_id = new List<int>();
 
             string query = @"
                 SELECT a.article_id
                 FROM articles a
-                JOIN reports r ON r.reported_id = a.article_id 
+                JOIN reports r ON r.article_reported = a.article_id 
                 WHERE r.report_type ='Article';
                 ";
 

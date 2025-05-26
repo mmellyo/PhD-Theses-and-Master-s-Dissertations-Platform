@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +103,10 @@ namespace Project.ViewModels
 
         private CommentRepo _commentRepo;
 
+        public string Role;
+        public bool isMember { get; set; }
+        public bool isUser { get; set; }
+
         //constructor
         public MODCommentViewModel(int user_id, NavigationStore _navigationStore)
         {
@@ -115,9 +120,21 @@ namespace Project.ViewModels
             ModComments = new ObservableCollection<CommentsViewModel>();
             LoadComments();
 
-
+            Role = UserRepos.GetUserRole(user_id);
+            if (Role == "Student")
+            {
+                isUser = true;
+                isMember = false;
+                SideBarViewModel = new UserSideBarViewModel(user_id, navigationStore);
+            }
+            if (Role == "Admin")
+            {
+                isMember = true;
+                isUser = false;
+                SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
+            }
             //side bar
-            SideBarViewModel = new MemberSideBarViewModel(user_id, navigationStore);
+            SideBarViewModel = new AdminSideBarViewModel(user_id, _navigationStore);
 
             //top bar
             _userName = UserRepos.GetuserName(user_id);
