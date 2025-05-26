@@ -504,7 +504,7 @@ Visibility="{Binding IsCommentReportPopupVisible, Converter={StaticResource Bool
 
                             <ScrollViewer VerticalScrollBarVisibility="Visible" Width="380">
                                 <ItemsControl 
-                                            ItemsSource="{Binding Comments}"
+                                            ItemsSource="{Binding CommentService.Comments}"
                                             VerticalAlignment="Stretch"
                                             HorizontalAlignment="Stretch">
 

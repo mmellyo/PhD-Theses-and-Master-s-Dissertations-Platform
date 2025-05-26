@@ -19,6 +19,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PdfiumViewer;
+using Project.Services;
+using System.Windows;
 
 namespace Project.ViewModels
 {
@@ -291,6 +293,8 @@ namespace Project.ViewModels
         public ICommand ToggleCommentCommand { get; set; }
 
         public ObservableCollection<CommentsViewModel> Comments { get; set; }
+        public ICommentService CommentService { get; }
+
         private List<CommentModel> CommentModels { get; set; }
 
         private string _comment;
@@ -320,6 +324,12 @@ namespace Project.ViewModels
 
         public ThesePageViewModel(NavigationStore navigationStore, int userid, int theseId)
         {
+            CommentService = new CommentService();
+            if (CommentService.Comments == null)
+            {
+                CommentService.Comments = new ObservableCollection<Comment>();
+            }
+
             this.navigationStore = navigationStore;
             this.userid = userid;
             this.theseId = theseId;
@@ -345,7 +355,8 @@ namespace Project.ViewModels
 
 
             //comment
-            AddCommentCommand = new AddCommentCommand(this);
+            AddCommentCommand = new AddCommentCommand(this, navigationStore);
+            LoadComments(theseId);
             CommentModels = _commentRepo.LoadTheseComments2(theseId);
             Comments = new ObservableCollection<CommentsViewModel>(
                 CommentModels.Select(comment => new CommentsViewModel(comment, navigationStore, userid))
@@ -410,8 +421,55 @@ namespace Project.ViewModels
 
         }
 
+        private void LoadComments(int TheseId)
+        {
+            Console.WriteLine("loadcomments function is called");
 
-        private void loadThese()
+            try
+            {
+                // Clear both collections
+                CommentService.Comments.Clear();
+                Console.WriteLine("Cleared both comment collections");
+
+                // Load from DB
+                var comments = _commentRepo.LoadTheseComments(TheseId);
+                Console.WriteLine("Loaded comments from repo");
+
+                if (comments != null)
+                {
+                    foreach (var c in comments)
+                    {
+                        var comment = new Comment
+                        {
+                            CommentText = c.CommentText,
+                            Username = c.Username,
+                            TheseId = c.TheseId,
+                            user_profilepic = c.user_profilepic,
+                            commentId = _commentRepo.GetCommentId(c.CommentText),
+                            IsExpanded = false
+                        };
+
+                        CommentService.Comments.Add(comment);
+
+                    }
+
+                    Console.WriteLine($"Loaded {CommentService.Comments.Count} comments successfully");
+                }
+                else
+                {
+                    Console.WriteLine("No comments found for this these");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading comments: {ex.Message}");
+                MessageBox.Show($"Failed to load comments: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+    
+
+private void loadThese()
         {
             ArticleModel article = _repo.GetThesisDetails(theseId);
             Title = article.title;
