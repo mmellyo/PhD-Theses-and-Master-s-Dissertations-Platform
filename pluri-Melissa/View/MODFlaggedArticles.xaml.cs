@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Project.View
 {
     /// <summary>
-    /// Interaction logic for MODManuallyComments.xaml
+    /// Interaction logic for MODFlaggedArticles.xaml
     /// </summary>
-    public partial class MODManuallyComments : UserControl
+    public partial class MODFlaggedArticles : UserControl
     {
-        public MODManuallyComments()
+        public MODFlaggedArticles()
         {
             InitializeComponent();
         }

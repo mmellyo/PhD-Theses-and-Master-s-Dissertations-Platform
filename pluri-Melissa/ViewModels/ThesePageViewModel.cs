@@ -36,7 +36,7 @@ namespace Project.ViewModels
         public string Role;
         public bool isMember { get; set; }
         public bool isUser { get; set; }
-
+        public bool isAdmin { get; set; }
         public object SideBarViewModel { get; }
 
 
@@ -344,13 +344,22 @@ namespace Project.ViewModels
             {
                 isUser = true;
                 isMember = false;
+                isAdmin = false;
                 SideBarViewModel = new UserSideBarViewModel(userid, navigationStore);
             }
             if (Role == "Member")
             {
                 isMember = true;
                 isUser = false;
+                isAdmin = false;
                 SideBarViewModel = new MemberSideBarViewModel(userid, navigationStore);
+            }
+            if (Role == "Admin")
+            {
+                isMember = false;
+                isUser = false;
+                isAdmin = true;
+                SideBarViewModel = new AdminSideBarViewModel(userid, navigationStore);
             }
 
 
@@ -408,8 +417,8 @@ namespace Project.ViewModels
 
 
 
-            SaveCommand = new SaveCommand(navigationStore, this);
-            DownloadCommand = new DownloadCommand(navigationStore, this);
+            SaveCommand = new SaveCommand(navigationStore, this.theseId, this.userid);
+            DownloadCommand = new DownloadCommand(navigationStore, this.theseId);
             ReportCommand = new ReportCommand(navigationStore, this);
 
 

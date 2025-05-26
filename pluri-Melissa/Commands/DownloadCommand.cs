@@ -14,19 +14,19 @@ namespace Project.Commands
     public class DownloadCommand : CommandBase
     {
         private NavigationStore navigationStore;
-        private ThesePageViewModel viewModel;
+        private int theseId;
         private TheseRepo theseRepo;
 
-        public DownloadCommand(NavigationStore navigationStore, ThesePageViewModel viewModel)
+        public DownloadCommand(NavigationStore navigationStore, int theseId)
         {
             this.navigationStore = navigationStore;
-            this.viewModel = viewModel;
+            this.theseId = theseId;
             this.theseRepo = new TheseRepo();
         }
 
         public override void Execute(object parameter)
         {
-            byte[] file = theseRepo.loadFileByte(viewModel.theseId);
+            byte[] file = theseRepo.loadFileByte(theseId);
             if (file == null || file.Length == 0)
             {
                 MessageBox.Show("The file is empty or could not be loaded.");
@@ -35,7 +35,7 @@ namespace Project.Commands
 
             var saveDialog = new Microsoft.Win32.SaveFileDialog
             {
-                FileName = $"article_{viewModel.theseId}",
+                FileName = $"article_{theseId}",
                 DefaultExt = ".pdf", // adjust depending on file type
                 Filter = "PDF documents (*.pdf)|*.pdf|All files (*.*)|*.*"
             };

@@ -447,9 +447,21 @@ namespace Project.Repos
             }
         }
 
+        public string GetUserFaculty(int userId)
+        {
+            using (var connection = GetConnection())
+            using (var command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
 
+                command.CommandText = "SELECT user_faculty FROM `users` WHERE user_id = @user_id";
+                command.Parameters.Add("@user_id", MySqlDbType.Int32).Value = userId;
 
-
+                object result = command.ExecuteScalar();
+                return result != null ? result.ToString() : null;
+            }
+        }
     }
 
 }

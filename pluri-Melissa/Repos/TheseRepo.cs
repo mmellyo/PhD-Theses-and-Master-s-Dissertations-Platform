@@ -45,6 +45,34 @@ namespace Project.Repos
             }
         }
 
+        public List<int> GetThesesByFaculty(string faculty)
+        {
+            List<int> theses = new List<int>();
+
+            string query = @"SELECT article_id
+                     FROM articles
+                     WHERE faculty = @faculty";
+
+            using (MySqlConnection connection = GetConnection())
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@faculty", faculty);
+
+                connection.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        int id = reader.GetInt32("article_id");
+                            
+                        theses.Add(id);
+                    }
+                }
+            }
+
+            return theses;
+        }
 
         public string GetNomEncadrantFromTheseId(int these_id)
         {
@@ -70,21 +98,19 @@ namespace Project.Repos
             }
         }
 
-        public List<int> getSupervisorArticles(int supervisorId)
+        public List<int> getUnSupervisedArticles(int supervisorId)
         {
             List<int> theses_id = new List<int>();
 
             string query = @"
                 SELECT a.article_id
                 FROM articles a
-                JOIN supervised_by sb ON a.article_id = sb.article_id
-                WHERE sb.supervisor_id = @supervisorId AND a.article_state ='Not Approved';
+                WHERE a.article_state ='No Contact';
                 ";
 
             using (var connection = GetConnection())
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
-                cmd.Parameters.AddWithValue("@supervisorId", supervisorId);
                 connection.Open();
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -554,6 +580,34 @@ namespace Project.Repos
             }
 
             return names;
+        }
+
+        public List<int>? getReportedArticles()
+        {
+            List<int> theses_id = new List<int>();
+
+            string query = @"
+                SELECT a.article_id
+                FROM articles a
+                JOIN reports r ON r.reported_id = a.article_id 
+                WHERE r.report_type ='Article';
+                ";
+
+            using (var connection = GetConnection())
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int articleId = reader.GetInt32("article_id");
+                        theses_id.Add(articleId);
+                    }
+                }
+            }
+
+            return theses_id;
         }
     }
 }

@@ -32,6 +32,9 @@
                 <DataTemplate DataType="{x:Type viewmodels:MemberSideBarViewModel}">
                     <uc:SideBar_prof Visibility="{Binding isMember}"/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:AdminSideBarViewModel}">
+                    <uc:SideBar_admin Visibility="{Binding isAdmin}"/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
         <!-- Main Content with TopBar and all your other controls -->
@@ -324,15 +327,7 @@
                             </DataTemplate>
                         </ContentControl.ContentTemplate>
                     </ContentControl>
-                    <ContentControl  x:Name="ReportCommentPopup"
-Content="{Binding ReportCommentFormViewModel}"
-Visibility="{Binding IsCommentReportPopupVisible, Converter={StaticResource BoolToVisibilityConverter}}" Grid.ColumnSpan="2">
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate DataType="{x:Type viewmodels:ReportCommentFormViewModel}">
-                                <uc:ReportCommentFormControl />
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
+                    
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
