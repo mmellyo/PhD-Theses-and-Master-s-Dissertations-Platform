@@ -84,7 +84,7 @@
                                 Foreground="#4C4E5D" 
                                 Cursor="Hand">
                         <TextBlock 
-                                Text="Login" FontSize="18" FontWeight="SemiBold"
+                                Text="Se connecter" FontSize="18" FontWeight="SemiBold"
                                 Padding="0"
                                 VerticalAlignment="Top" />
                     </Button>
@@ -102,7 +102,7 @@
                                 Foreground="#4C4E5D" 
                                 Cursor="Hand">
                         <TextBlock 
-                                Text="Home" FontSize="18" FontWeight="SemiBold"
+                                Text="Accueil" FontSize="18" FontWeight="SemiBold"
                                 Padding="0"
                                 VerticalAlignment="Top" />
                     </Button>
@@ -143,11 +143,11 @@
                     <TextBlock
                         FontSize="30" FontWeight="ExtraBold" FontFamily="Verdana"
                         Margin="20 10 150 5"
-                        HorizontalAlignment="Stretch" Width="250" Height="85"
+                        HorizontalAlignment="Stretch" Width="305" Height="85"
                         TextWrapping="Wrap"
                         Foreground="White">
     
-                        <Run Text="Creat new account" Foreground="White" />
+                        <Run Text="Creer un nouveau comptes" Foreground="White" />
                         <Run Text="." Foreground="#1d77ec" />
 
                     </TextBlock>
@@ -184,7 +184,7 @@
 
                     </TextBox>
 
-                    <TextBlock Text="Faculty"
+                    <TextBlock Text="Faculté"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
                                Margin="0 25 310 5"
@@ -199,7 +199,7 @@
 
 
 
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Mot de passe"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
                                Margin="0 25 280 5"
@@ -212,7 +212,7 @@
                     </CC:BindablePasswordBox>
 
 
-                    <TextBlock Text="Confirme Password"
+                    <TextBlock Text="Confirmer mot de passe"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
                                Margin="70 25 280 5"
@@ -234,7 +234,7 @@
                             Margin="0 20 0 0"
                             Height="50" Width="300"
                             FontSize="18"
-                            Content="Sign Up"
+                            Content="S'inscrire"
                             Foreground="White"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
@@ -275,7 +275,7 @@
                                 HorizontalAlignment="Center"
                               >
 
-                        <TextBlock  Text="already have an acoount?"
+                        <TextBlock  Text="Vous avez déjà un compte ?"
                                     Foreground="#8d909f"
                                     FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
@@ -291,7 +291,7 @@
                                     Cursor="Hand">
                             <TextBlock 
                                     Margin="0,0,0,10"
-                                    Text="Login" FontSize="18" FontWeight="SemiBold"
+                                    Text="se connecter" FontSize="18" FontWeight="SemiBold"
                                     Padding="0"
                                     VerticalAlignment="Top" />
                         </Button>
@@ -316,24 +316,37 @@
                             Width="500"
            >
 
-                    <TextBlock   Text="Your gateway to academic inspiration."
+                    <TextBlock   Text="Votre passerelle vers l'inspiration académique.
+
+
+
+
+
+
+
+
+"
                                  Foreground="White"
                                  TextWrapping="Wrap"
                                  
                                  FontSize="28" FontWeight="ExtraBold" FontFamily="Verdana"
-                                 Margin="0,0,0,15"/>
+                                 />
 
                     <TextBlock 
                                  Foreground="White"
                                  TextWrapping="Wrap"
              
                                  FontSize="20" FontWeight="Bold" FontFamily="Arial"
-                                 Margin="0,0,70,15" Width="455">
-                                 
-                                 <Run Text="Browse, research, and explore insights from" Foreground="White" />
-                                 <Run Text="USTHB Master’s and Doctoral theses" Foreground="#1d77ec" />
-                                  <Run Text="to fuel your academic journey." Foreground="White" />
-                    </TextBlock>
+                                 Margin="0,0,70,15" Width="455"><Run Text="Parcourez, recherchez et explorez des idées provenant de" Foreground="White" /><Run Text=" "/><Run Text="Mémoires de Master et thèses de Doctorat de l’USTHB" Foreground="#1d77ec" /><Run Text=" "/><Run Text="pour nourrir votre parcours académique.
+
+
+
+
+
+
+
+
+" Foreground="White" /></TextBlock>
                 </StackPanel>
 
 

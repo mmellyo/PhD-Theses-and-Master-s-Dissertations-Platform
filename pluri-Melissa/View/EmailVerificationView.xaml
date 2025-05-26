@@ -80,7 +80,7 @@
                             Foreground="#4C4E5D" 
                             Cursor="Hand">
                                 <TextBlock 
-                            Text="Login" FontSize="18" FontWeight="SemiBold"
+                            Text="Se connecter" FontSize="18" FontWeight="SemiBold"
                             Padding="0"
                             VerticalAlignment="Top" />  
                     </Button>
@@ -98,7 +98,7 @@
                             Foreground="#4C4E5D" 
                             Cursor="Hand">
                                     <TextBlock 
-                            Text="Home" FontSize="18" FontWeight="SemiBold"
+                            Text="Accueil" FontSize="18" FontWeight="SemiBold"
                             Padding="0"
                             VerticalAlignment="Top" />                  
                     </Button>
@@ -141,7 +141,7 @@
 
 
 
-                    <TextBlock Text="mail"
+                    <TextBlock Text="e-mail"
                                Foreground="#8d909f"
                                FontSize="18" FontWeight="Medium" FontFamily="Corbel"
                                Margin="0 100 315 5"
@@ -187,7 +187,7 @@
                             Margin="0 5 0 0"
                             Height="50" Width="300"
                             FontSize="18"
-                            Content="send"
+                            Content="Envoyer"
                             Foreground="White"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0" >
 
@@ -227,19 +227,11 @@
                             FontSize="15" FontWeight="Normal" FontFamily="Verdana"
                             Margin="150 10 150 10"
                            HorizontalAlignment="Center"
-                            Width="315" Height="70"
+                            Width="315" Height="78"
                             TextWrapping="Wrap"
-                           >
-    
-                            <Run Text="For student accounts, enter the full email address in the username field
-                                 (example: " Foreground="#8d909f" />
-                            <Run Text="utilisateur@etu.usthb.dz" Foreground="#1d77ec" />
-                             <Run Text=")" Foreground="#8d909f" />
+                           ><Run Foreground="#FF8D909F" Text="Pour les comptes étudiants, saisissez l’adresse e-mail complète dans le champ nom d’utilisateur.                                           (exemple: "/><Run Text=" "/><Run Foreground="#FF1D77EC" Text="utilisateur@etu.usthb.dz"/><Run Text=" "/><Run Foreground="#FF8D909F" Text=")"/></TextBlock>
 
 
-                    </TextBlock>
-
-                    
 
 
 
@@ -252,7 +244,7 @@
 
 
 
-                    <TextBlock Text="entre code"
+                    <TextBlock Text="entrer code"
                                 Foreground="#8d909f"
                                 FontSize="18" FontWeight="Medium" FontFamily="Corbel"
                                 Margin="0 5 280 5"
@@ -275,7 +267,7 @@
                                 Margin="0 20 0 0"
                                 Height="50" Width="300"
                                 FontSize="18"
-                                Content="entre code"
+                                Content="entrer code"
                                 Foreground="White"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth0" >
                         
@@ -318,7 +310,7 @@
                                 HorizontalAlignment="Center"
           >
 
-                        <TextBlock  Text="already have an acoount?"
+                        <TextBlock  Text="Vous avez déjà un compte ?"
                                 Foreground="#8d909f"
                                 FontSize="18" FontWeight="Medium" FontFamily="Corbel"/>
 
@@ -334,7 +326,7 @@
                                 Cursor="Hand">
                                             <TextBlock 
                                 Margin="0,0,0,10"
-                                Text="Login" FontSize="18" FontWeight="SemiBold"
+                                Text="Se connecter" FontSize="18" FontWeight="SemiBold"
                                 Padding="0"
                                 VerticalAlignment="Top" />
                         </Button>
@@ -379,7 +371,7 @@
                  Width="500"
 >
 
-                    <TextBlock   Text="Access to the platform is restricted to USTHB students. Please enter your official USTHB email address to proceed."
+                    <TextBlock   Text="L'accès à la plateforme est réservé aux étudiants de l'USTHB. Veuillez saisir votre adresse e-mail officielle de l'USTHB pour continuer."
                       Foreground="White"
                       TextWrapping="Wrap"
                       
